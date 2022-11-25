@@ -1,7 +1,7 @@
 import React from "react";
 
 function RenderTagsProd({ status }) {
-  if (!status) return "";
+  if (!status || !window.GlobalConfig?.APP?.Prod?.ShowTags) return "";
   return (
     <>
       {status.includes("1") && <div className="ribbon-new">Mới</div>}

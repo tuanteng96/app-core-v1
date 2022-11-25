@@ -188,10 +188,10 @@
             h3 {
                 color: #000;
                 font-size: 14px;
-                @include cut-text-to(2);
+                @include cut-text();
                 margin: 0;
                 padding: 0 10px;
-                min-height: 19px;
+                height: 37px;
             }
         }
         &-price {
