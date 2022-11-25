@@ -2,22 +2,20 @@ import React from "react";
 import { SERVER_APP } from "../../../../constants/config";
 import { checkSale, formatPriceVietnamese } from "../../../../constants/format";
 import { Link } from "framework7-react";
+import RenderTagsProd from "../../../shop/components/RenderTagsProd";
 
 export default class ProductItem extends React.Component {
   constructor() {
     super();
-    this.state = {
-
-    };
+    this.state = {};
   }
+
   render() {
     const { item, source } = this.props;
     return (
-      <Link
-        href={"/shop/detail/" + item.id}
-        className="page-shop__list-item"
-      >
+      <Link href={"/shop/detail/" + item.id} className="page-shop__list-item">
         <div className="page-shop__list-img">
+          <RenderTagsProd status={item?.source?.Status} />
           <img
             src={SERVER_APP + "/Upload/image/" + item.photo}
             alt={item.title}
@@ -29,7 +27,7 @@ export default class ProductItem extends React.Component {
             className={
               "page-shop__list-price " +
               (checkSale(source.SaleBegin, source.SaleEnd, item.pricesale) ===
-                true
+              true
                 ? "sale"
                 : "")
             }

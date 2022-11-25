@@ -18,6 +18,7 @@ import ToolBarBottom from "../../components/ToolBarBottom";
 import CategoriesList from "./components/CategoriesList/CategoriesList/CategoriesList";
 import Skeleton from "react-loading-skeleton";
 import PageNoData from "../../components/PageNoData";
+import RenderTagsProd from "./components/RenderTagsProd";
 
 export default class extends React.Component {
   constructor() {
@@ -219,7 +220,13 @@ export default class extends React.Component {
 
   changeCate = (cate) => {
     const itemView = this.state.itemView;
-    this.setState({ currentId: cate.ID, loading: true, Pi: 1, Count: 0, showPreloader: false });
+    this.setState({
+      currentId: cate.ID,
+      loading: true,
+      Pi: 1,
+      Count: 0,
+      showPreloader: false,
+    });
     this.getDataList(cate.ID, "1", itemView, "", "");
     this.getTitleCate(cate.ID);
   };
@@ -295,6 +302,7 @@ export default class extends React.Component {
                                 src={SERVER_APP + "/Upload/image/" + item.photo}
                                 alt={item.title}
                               />
+                              <RenderTagsProd status={item?.source?.Status} />
                             </div>
                             <div className="page-shop__list-text">
                               <h3>{item.title}</h3>

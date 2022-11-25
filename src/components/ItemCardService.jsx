@@ -23,7 +23,7 @@ export default class ItemCardService extends React.Component {
             className="w-100"
             src={SERVER_APP + "/Upload/image/" + item.Product.Thumbnail}
             onError={(e) => {
-              e.target.src = NoProduct; 
+              e.target.src = NoProduct;
             }}
           />
           <div className="cardservice-item__service-text">
@@ -31,10 +31,13 @@ export default class ItemCardService extends React.Component {
               {item.OrderItem.ProdTitle} <span>({item.Title})</span>
             </h4>
             <ul>
-              <li>
-                <span>Giá trị : </span>
-                <span>{formatPriceVietnamese(item.OrderItem.ToPay)}</span>
-              </li>
+              {!window?.GlobalConfig?.APP?.Services?.PriceCardHide && (
+                <li>
+                  <span>Giá trị : </span>
+                  <span>{formatPriceVietnamese(item.OrderItem.ToPay)}</span>
+                </li>
+              )}
+
               <li>
                 <span>Dùng lần cuối : </span>
                 <span>{maxBookDate(item.Services)}</span>

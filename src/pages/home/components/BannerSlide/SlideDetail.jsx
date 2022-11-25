@@ -58,6 +58,7 @@ export default class SlideList extends React.Component {
               <div className="page-news__detail">
                 <div className="page-news__detail-img">
                   <img
+                    className="w-100"
                     src={`${SERVER_APP}/upload/image/${arrayItem.FileName}`}
                   />
                 </div>
