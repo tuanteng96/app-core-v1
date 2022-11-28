@@ -1,7 +1,7 @@
-import React from "react";
-import { SERVER_APP } from "./../../constants/config";
-import { formatPriceVietnamese, checkSale } from "../../constants/format";
-import _ from "lodash";
+import React from 'react'
+import { SERVER_APP } from './../../constants/config'
+import { formatPriceVietnamese, checkSale } from '../../constants/format'
+import _ from 'lodash'
 import {
   Page,
   Link,
@@ -11,49 +11,50 @@ import {
   Col,
   Searchbar,
   Subnavbar,
-} from "framework7-react";
-import { getStockIDStorage } from "../../constants/user";
-import ShopDataService from "./../../service/shop.service";
-import ToolBarBottom from "../../components/ToolBarBottom";
-import CategoriesList from "./components/CategoriesList/CategoriesList/CategoriesList";
-import Skeleton from "react-loading-skeleton";
-import PageNoData from "../../components/PageNoData";
-import RenderTagsProd from "./components/RenderTagsProd";
+} from 'framework7-react'
+import { getStockIDStorage } from '../../constants/user'
+import ShopDataService from './../../service/shop.service'
+import ToolBarBottom from '../../components/ToolBarBottom'
+import CategoriesList from './components/CategoriesList/CategoriesList/CategoriesList'
+import Skeleton from 'react-loading-skeleton'
+import PageNoData from '../../components/PageNoData'
+import RenderTagsProd from './components/RenderTagsProd'
+import { TruncateLines } from 'react-truncate-lines'
 
 export default class extends React.Component {
   constructor() {
-    super();
+    super()
     this.state = {
       itemView: 8, // Số item hiển thị trên 1 Page
       arrCateList: [],
       Pi: 1,
       Count: 0,
-      titlePage: "",
+      titlePage: '',
       showPreloader: false,
       allowInfinite: true,
-      parentCateID: "",
-      CateID: "",
+      parentCateID: '',
+      CateID: '',
       CateIDall: 662,
       currentId: 0,
       loading: false,
-      keySearch: "",
-    };
+      keySearch: '',
+    }
 
-    this.delayedCallback = _.debounce(this.inputCallback, 400);
+    this.delayedCallback = _.debounce(this.inputCallback, 400)
   }
 
   getDataList = (ID, pi, ps, tag, keys) => {
-    var $$ = this.Dom7;
-    var container = $$(".page-content");
-    container.scrollTop(0, 300);
+    var $$ = this.Dom7
+    var container = $$('.page-content')
+    container.scrollTop(0, 300)
     //ID Cate
     //Trang hiện tại
     //Số sản phẩm trên trang
     // Tag
     //keys Từ khóa tìm kiếm
-    let stockid = getStockIDStorage();
+    let stockid = getStockIDStorage()
     if (!stockid) {
-      stockid = 0;
+      stockid = 0
     }
     ShopDataService.getList(
       ID,
@@ -62,61 +63,61 @@ export default class extends React.Component {
       tag,
       keys,
       stockid,
-      this.state.currentId !== "hot" || this.$f7route.params.cateId !== "hot"
-        ? ""
-        : "3"
+      this.state.currentId !== 'hot' || this.$f7route.params.cateId !== 'hot'
+        ? ''
+        : '3',
     )
       .then((response) => {
-        const { lst, pcount, pi } = response.data.data;
+        const { lst, pcount, pi } = response.data.data
         this.setState({
           arrCateList: lst,
           Pi: pi,
           Count: pcount,
           loading: false,
-        });
+        })
       })
       .catch((e) => {
-        console.log(e);
-      });
-  };
+        console.log(e)
+      })
+  }
   getTitleCate = (id) => {
-    const CateID = id || this.$f7route.params.cateId;
+    const CateID = id || this.$f7route.params.cateId
     ShopDataService.getTitleCate(CateID)
       .then((response) => {
-        const titlePage = response.data.data[0].Title;
+        const titlePage = response.data.data[0].Title
         this.setState({
           titlePage: titlePage,
-        });
+        })
       })
       .catch((e) => {
-        console.log(e);
-      });
-  };
+        console.log(e)
+      })
+  }
   componentDidMount() {
     this.setState({
       loading: true,
-    });
+    })
     this.$f7ready((f7) => {
-      const parentCateID = this.$f7route.params.parentId;
-      const CateID = this.$f7route.params.cateId;
-      const itemView = this.state.itemView;
+      const parentCateID = this.$f7route.params.parentId
+      const CateID = this.$f7route.params.cateId
+      const itemView = this.state.itemView
       this.setState({
         parentCateID: parentCateID,
         CateID: CateID,
         currentId: this.$f7route.params.cateId,
-      });
+      })
 
-      if (CateID === "hot") {
+      if (CateID === 'hot') {
         this.setState({
-          titlePage: "Hôm nay Sale gì ?",
-          isTag: "hot",
-        });
-        this.getDataList(CateID, "1", itemView, "hot", "");
+          titlePage: 'Hôm nay Sale gì ?',
+          isTag: 'hot',
+        })
+        this.getDataList(CateID, '1', itemView, 'hot', '')
       } else {
-        this.getDataList(CateID, "1", itemView, "", "");
-        this.getTitleCate();
+        this.getDataList(CateID, '1', itemView, '', '')
+        this.getTitleCate()
       }
-    });
+    })
   }
   loadMore = () => {
     const {
@@ -128,18 +129,18 @@ export default class extends React.Component {
       itemView,
       isTag,
       keySearch,
-    } = this.state;
+    } = this.state
     if (Pi >= Count) {
-      return false;
+      return false
     }
-    if (showPreloader) return false;
-    this.setState({ showPreloader: true });
-    const CateID = currentId || this.$f7route.params.cateId;
-    let stockid = getStockIDStorage();
-    stockid ? stockid : 0;
+    if (showPreloader) return false
+    this.setState({ showPreloader: true })
+    const CateID = currentId || this.$f7route.params.cateId
+    let stockid = getStockIDStorage()
+    stockid ? stockid : 0
 
-    const tag = isTag && !keySearch ? isTag : "";
-    const keys = keySearch ? keySearch : "";
+    const tag = isTag && !keySearch ? isTag : ''
+    const keys = keySearch ? keySearch : ''
 
     ShopDataService.getList(
       CateID,
@@ -148,91 +149,91 @@ export default class extends React.Component {
       tag,
       keys,
       stockid,
-      this.$f7route.params.cateId === "hot" ? "3" : ""
+      this.$f7route.params.cateId === 'hot' ? '3' : '',
     )
       .then(({ data }) => {
-        const { lst, pcount, pi } = data.data;
-        const arrCateListNew = [...arrCateList, ...lst];
+        const { lst, pcount, pi } = data.data
+        const arrCateListNew = [...arrCateList, ...lst]
         this.setState({
           arrCateList: arrCateListNew,
           isLoading: false,
           Count: pcount,
           showPreloader: false,
           Pi: pi,
-        });
+        })
       })
       .catch((e) => {
-        console.log(e);
-      });
-  };
+        console.log(e)
+      })
+  }
 
   loadRefresh(done) {
     setTimeout(() => {
-      const CateID = this.state.currentId || this.$f7route.params.cateId;
-      const itemView = this.state.itemView;
+      const CateID = this.state.currentId || this.$f7route.params.cateId
+      const itemView = this.state.itemView
 
-      if (CateID === "hot") {
+      if (CateID === 'hot') {
         this.setState({
-          titlePage: "Hôm nay Sale gì ?",
-          isTag: "hot",
-        });
-        this.getDataList(CateID, "1", itemView, "hot", "");
+          titlePage: 'Hôm nay Sale gì ?',
+          isTag: 'hot',
+        })
+        this.getDataList(CateID, '1', itemView, 'hot', '')
       } else {
-        this.getDataList(CateID, "1", itemView, "", this.state.keySearch);
-        this.getTitleCate();
+        this.getDataList(CateID, '1', itemView, '', this.state.keySearch)
+        this.getTitleCate()
       }
       this.setState({
         allowInfinite: true,
         showPreloader: true,
-      });
-      done();
-    }, 1000);
+      })
+      done()
+    }, 1000)
   }
   inputCallback = (value) => {
-    const newCateId = this.state.currentId || 794;
-    const key = value;
-    const itemView = this.state.itemView;
-    this.getDataList(newCateId, "1", itemView, "", key);
+    const newCateId = this.state.currentId || 794
+    const key = value
+    const itemView = this.state.itemView
+    this.getDataList(newCateId, '1', itemView, '', key)
     this.setState({
       keySearch: value,
-    });
-  };
+    })
+  }
   handleInputSearch = (event) => {
-    const key = event.target.value;
-    event.persist();
-    this.delayedCallback(key);
-  };
+    const key = event.target.value
+    event.persist()
+    this.delayedCallback(key)
+  }
 
   hideSearch = () => {
-    const CateID = this.state.currentId || this.$f7route.params.cateId;
-    const itemView = this.state.itemView;
+    const CateID = this.state.currentId || this.$f7route.params.cateId
+    const itemView = this.state.itemView
 
-    if (CateID === "hot") {
-      this.getDataList(CateID, "1", itemView, "hot", "");
+    if (CateID === 'hot') {
+      this.getDataList(CateID, '1', itemView, 'hot', '')
     } else {
-      this.getDataList(CateID, "1", itemView, "", "");
+      this.getDataList(CateID, '1', itemView, '', '')
     }
     this.setState({
       showPreloader: false,
-      keySearch: "",
-    });
-  };
+      keySearch: '',
+    })
+  }
 
   changeCate = (cate) => {
-    const itemView = this.state.itemView;
+    const itemView = this.state.itemView
     this.setState({
       currentId: cate.ID,
       loading: true,
       Pi: 1,
       Count: 0,
       showPreloader: false,
-    });
-    this.getDataList(cate.ID, "1", itemView, "", "");
-    this.getTitleCate(cate.ID);
-  };
+    })
+    this.getDataList(cate.ID, '1', itemView, '', '')
+    this.getTitleCate(cate.ID)
+  }
 
   render() {
-    const { arrCateList, CateID, currentId, loading } = this.state;
+    const { arrCateList, CateID, currentId, loading } = this.state
     return (
       <Page
         name="shop-List"
@@ -271,9 +272,9 @@ export default class extends React.Component {
             onClickClear={() => this.hideSearch()}
             onClickDisable={() => this.hideSearch()}
           ></Searchbar>
-          {this.$f7route.query?.subnav === "1" ||
-          this.$f7route.params.cateId === "hot" ? (
-            ""
+          {this.$f7route.query?.subnav === '1' ||
+          this.$f7route.params.cateId === 'hot' ? (
+            ''
           ) : (
             <Subnavbar className="subnavbar-prod">
               <CategoriesList
@@ -294,29 +295,36 @@ export default class extends React.Component {
                       arrCateList.map((item, index) => (
                         <Col width="50" key={index}>
                           <a
-                            href={"/shop/detail/" + item.id}
+                            href={'/shop/detail/' + item.id}
                             className="page-shop__list-item"
                           >
                             <div className="page-shop__list-img">
                               <img
-                                src={SERVER_APP + "/Upload/image/" + item.photo}
+                                src={SERVER_APP + '/Upload/image/' + item.photo}
                                 alt={item.title}
                               />
                               <RenderTagsProd status={item?.source?.Status} />
                             </div>
                             <div className="page-shop__list-text">
-                              <h3>{item.title}</h3>
+                              <h3>
+                                <TruncateLines
+                                  lines={2}
+                                  ellipsis={<span>...</span>}
+                                >
+                                  {item.title}
+                                </TruncateLines>
+                              </h3>
                               <div
                                 className={
-                                  "page-shop__list-price " +
+                                  'page-shop__list-price ' +
                                   (item.source.IsDisplayPrice !== 0 &&
                                   checkSale(
                                     item.source.SaleBegin,
                                     item.source.SaleEnd,
-                                    item.pricesale
+                                    item.pricesale,
                                   ) === true
-                                    ? "sale"
-                                    : "")
+                                    ? 'sale'
+                                    : '')
                                 }
                               >
                                 {item.source.IsDisplayPrice === 0 ? (
@@ -339,7 +347,7 @@ export default class extends React.Component {
                         </Col>
                       ))
                     ) : (
-                      <PageNoData text={"Không có dữ liêu"} />
+                      <PageNoData text={'Không có dữ liêu'} />
                     )}
                   </React.Fragment>
                 )}
@@ -356,7 +364,7 @@ export default class extends React.Component {
                             <h3>
                               <Skeleton width={125} />
                             </h3>
-                            <div className={"page-shop__list-price sale"}>
+                            <div className={'page-shop__list-price sale'}>
                               <span className="price">
                                 <Skeleton width={60} />
                               </span>
@@ -376,6 +384,6 @@ export default class extends React.Component {
           <ToolBarBottom />
         </Toolbar>
       </Page>
-    );
+    )
   }
 }
