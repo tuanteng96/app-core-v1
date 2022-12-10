@@ -271,28 +271,30 @@ export default class ScheduleSpa extends React.Component {
     } = this.state;
     const { DateTimeBook } = this.props;
 
-    const settingsIndex = {
-      //wrapAround: true,
-      speed: 500,
-      slidesToShow: 4,
-      slidesToScroll: 4,
-      slideIndex: indexCurrent,
-      cellSpacing: 10,
-      renderBottomCenterControls: () => false,
-      renderCenterLeftControls: null,
-      renderCenterRightControls: null,
-      afterChange: (current) => {},
-      beforeChange: (current, next) => {},
-    };
     const settings = {
-      //wrapAround: true,
+      wrapAround: true,
       speed: 500,
       slidesToShow: 4,
       slidesToScroll: 4,
       cellSpacing: 10,
       renderBottomCenterControls: () => false,
       renderCenterLeftControls: null,
-      renderCenterRightControls: null,
+      renderCenterRightControls: ({ nextDisabled, nextSlide }) => (
+        <div
+          className={`support-scroll && ${nextDisabled ? "d-none" : ""}`}
+          onClick={nextSlide}
+        >
+          <div className="support-scroll__text">
+            Chọn khung giờ khác {nextDisabled}
+          </div>
+          <div className="support-scroll__icon">
+            <div className="line"></div>
+            <div className="arrow">
+              <i className="fas fa-chevron-right"></i>
+            </div>
+          </div>
+        </div>
+      ),
       afterChange: (current) => {},
       beforeChange: (current, next) => {},
     };

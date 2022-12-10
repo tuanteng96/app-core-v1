@@ -313,31 +313,32 @@ blockquote {
 
 .ribbon-hot {
     position: absolute;
-    top: 10px;
+    top: 0;
     left: -3px;
     display: flex;
     align-items: center;
-    height: 20px;
     font-weight: 500;
     padding: 0 5px;
     border-top-right-radius: 0.125rem;
     border-bottom-right-radius: 0.125rem;
-    background: var(--ezs-color);
     color: #fff;
     font-size: 12px;
     line-height: 20px;
     pointer-events: none;
-    &::before {
-        content: "";
-        display: inline-block;
-        position: absolute;
-        left: 0;
-        bottom: -0.1875rem;
-        border-top: 0.1875rem solid;
-        border-left: 0.1875rem solid transparent;
-        -webkit-filter: brightness(60%);
-        filter: brightness(60%);
+    img {
+        width: 40px;
     }
+    // &::before {
+    //     content: "";
+    //     display: inline-block;
+    //     position: absolute;
+    //     left: 0;
+    //     bottom: -0.1875rem;
+    //     border-top: 0.1875rem solid;
+    //     border-left: 0.1875rem solid transparent;
+    //     -webkit-filter: brightness(60%);
+    //     filter: brightness(60%);
+    // }
 }
 
 .ribbon-sale {
