@@ -115,6 +115,7 @@ export default class extends React.Component {
         return "bg-login"
       }
     }
+    return ""
   }
 
   render() {
