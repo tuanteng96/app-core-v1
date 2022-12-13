@@ -99,6 +99,24 @@ export default class extends React.Component {
     else if (val === '' || val === '-') this.setState({ phone: val });
   }
 
+  isImage = (icon) => {
+    const ext = ['.jpg', '.jpeg', '.bmp', '.gif', '.png', '.svg']
+    return ext.some((el) => icon.endsWith(el))
+  }
+
+  getClassStyle = () => {
+    if(window?.GlobalConfig?.APP?.Login?.Background) {
+      if(this.isImage(window?.GlobalConfig?.APP?.Login?.Background)) {
+        document.documentElement.style.setProperty("--login-background", `url(${window?.GlobalConfig?.APP?.Login?.Background})`);
+        return "bg-login-img"
+      }
+      else {
+        document.documentElement.style.setProperty("--login-background", window?.GlobalConfig?.APP?.Login?.Background);
+        return "bg-login"
+      }
+    }
+  }
+
   render() {
     const { isLoading, isOpenStock, password, isReload } = this.state;
     return (
@@ -109,7 +127,7 @@ export default class extends React.Component {
               <i className="las la-arrow-left"></i>
             </Link>
           </div>
-          <div className="page-login__content">
+          <div className={`page-login__content ${this.getClassStyle()}`}>
             <div className="page-login__logo">
               <div className="logo">
                 <img

@@ -1,5 +1,5 @@
-import React, { Fragment } from "react";
-import { SERVER_APP } from "./../../constants/config";
+import React, { Fragment } from 'react'
+import { SERVER_APP } from './../../constants/config'
 import {
   delete_cookie,
   getUserLoginStorage,
@@ -7,171 +7,189 @@ import {
   setStockNameStorage,
   setUserLoginStorage,
   setUserStorage,
-} from "../../constants/user";
-import { Page, Link, Toolbar } from "framework7-react";
-import UserService from "../../service/user.service";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import { setSubscribe } from "../../constants/subscribe";
-import { iOS } from "../../constants/helpers";
-import { OPEN_QRCODE, SEND_TOKEN_FIREBASE } from "../../constants/prom21";
-import { ref, set } from "firebase/database";
-import { database } from "../../firebase/firebase";
+} from '../../constants/user'
+import { Page, Link, Toolbar } from 'framework7-react'
+import UserService from '../../service/user.service'
+import { toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
+import { setSubscribe } from '../../constants/subscribe'
+import { iOS } from '../../constants/helpers'
+import { OPEN_QRCODE, SEND_TOKEN_FIREBASE } from '../../constants/prom21'
+import { ref, set } from 'firebase/database'
+import { database } from '../../firebase/firebase'
 
-toast.configure();
+toast.configure()
 
 export default class extends React.Component {
   constructor() {
-    super();
+    super()
     this.state = {
       isLoading: false,
       username: getUserLoginStorage().username,
       password: getUserLoginStorage().password,
       arrNews: [],
       arrBanner: [],
-    };
+    }
   }
 
   loginSubmit = () => {
-    const { username, password } = this.state;
-    if (username === "" || password === "") {
-      toast.error("Vui lòng nhập tài khoản & mật khẩu !", {
+    const { username, password } = this.state
+    if (username === '' || password === '') {
+      toast.error('Vui lòng nhập tài khoản & mật khẩu !', {
         position: toast.POSITION.TOP_LEFT,
         autoClose: 3000,
-      });
-      return;
+      })
+      return
     }
-    const self = this;
-    self.$f7.preloader.show();
+    const self = this
+    self.$f7.preloader.show()
     UserService.login(username, password)
       .then((response) => {
         if (response.data.error) {
-          self.$f7.preloader.hide();
-          toast.error("Tài khoản & mật khẩu không chính xác !", {
+          self.$f7.preloader.hide()
+          toast.error('Tài khoản & mật khẩu không chính xác !', {
             position: toast.POSITION.TOP_LEFT,
             autoClose: 3000,
-          });
+          })
           this.setState({
-            password: "",
-          });
+            password: '',
+          })
         } else {
-          const userData = response.data;
-          const token = userData.token;
-          setUserStorage(token, userData);
+          const userData = response.data
+          const token = userData.token
+          setUserStorage(token, userData)
           SEND_TOKEN_FIREBASE().then(async (response) => {
             if (!response.error && response.Token) {
               await UserService.authSendTokenFirebase({
                 Token: response.Token,
                 ID: userData.ID,
                 Type: userData.acc_type,
-              });
+              })
               setTimeout(() => {
-                self.$f7.preloader.hide();
-                this.$f7router.navigate("/", {
+                self.$f7.preloader.hide()
+                this.$f7router.navigate('/', {
                   animate: true,
-                  transition: "f7-flip",
-                });
-              }, 300);
+                  transition: 'f7-flip',
+                })
+              }, 300)
             } else {
               setSubscribe(userData, () => {
                 setTimeout(() => {
-                  self.$f7.preloader.hide();
-                  this.$f7router.navigate("/", {
+                  self.$f7.preloader.hide()
+                  this.$f7router.navigate('/', {
                     animate: true,
-                    transition: "f7-flip",
-                  });
-                }, 300);
-              });
+                    transition: 'f7-flip',
+                  })
+                }, 300)
+              })
             }
-            userData?.ByStockID && setStockIDStorage(userData.ByStockID);
-            userData?.StockName && setStockNameStorage(userData.StockName);
-            setUserLoginStorage(username, password);
-          });
+            userData?.ByStockID && setStockIDStorage(userData.ByStockID)
+            userData?.StockName && setStockNameStorage(userData.StockName)
+            setUserLoginStorage(username, password)
+          })
         }
       })
-      .catch((e) => console.log(e));
-  };
+      .catch((e) => console.log(e))
+  }
 
   handleChangeInput = (event) => {
-    const target = event.target;
-    const value = target.value;
-    const name = target.name;
+    const target = event.target
+    const value = target.value
+    const name = target.name
 
     this.setState({
       [name]: value,
-    });
-  };
+    })
+  }
 
   onFind(value) {
-    this.setState({ value, watching: false });
+    this.setState({ value, watching: false })
   }
 
   openQRCode = () => {
-    var self = this;
+    var self = this
     OPEN_QRCODE()
       .then((response) => {
-        this.setState({ Code: response.data });
-        const qrcode = iOS() ? response.data?.split('"')[1] : response.data;
-        const qrcodeLogin = qrcode.split("&")[0];
-        const qrcodeStock = qrcode.split("&")[1];
-        self.$f7.dialog.preloader(`Đang xử lý ...`);
+        this.setState({ Code: response.data })
+        const qrcode = iOS() ? response.data?.split('"')[1] : response.data
+        const qrcodeLogin = qrcode.split('&')[0]
+        const qrcodeStock = qrcode.split('&')[1]
+        self.$f7.dialog.preloader(`Đang xử lý ...`)
         UserService.QRCodeLogin(qrcodeLogin)
           .then(({ data }) => {
             if (data.error) {
-              toast.error("Mã QR Code không hợp lệ hoặc hết hạn.", {
+              toast.error('Mã QR Code không hợp lệ hoặc hết hạn.', {
                 position: toast.POSITION.TOP_LEFT,
                 autoClose: 3000,
-              });
-              self.$f7.dialog.close();
+              })
+              self.$f7.dialog.close()
             } else {
-              setUserStorage(data.token, data);
+              setUserStorage(data.token, data)
               SEND_TOKEN_FIREBASE().then(async (response) => {
                 if (!response.error && response.Token) {
                   await UserService.authSendTokenFirebase({
                     Token: response.Token,
                     ID: data.ID,
                     Type: data.acc_type,
-                  });
+                  })
                   set(
                     ref(database, `/qrcode/${qrcodeStock}/${qrcodeLogin}`),
-                    null
+                    null,
                   ).then(() => {
-                    self.$f7.dialog.close();
-                    this.$f7router.navigate("/", {
+                    self.$f7.dialog.close()
+                    this.$f7router.navigate('/', {
                       animate: true,
-                      transition: "f7-flip",
-                    });
-                  });
+                      transition: 'f7-flip',
+                    })
+                  })
                 } else {
                   setSubscribe(data, () => {
                     set(
                       ref(database, `/qrcode/${qrcodeStock}/${qrcodeLogin}`),
-                      null
+                      null,
                     ).then(() => {
-                      self.$f7.dialog.close();
-                      this.$f7router.navigate("/", {
+                      self.$f7.dialog.close()
+                      this.$f7router.navigate('/', {
                         animate: true,
-                        transition: "f7-flip",
-                      });
-                    });
-                  });
+                        transition: 'f7-flip',
+                      })
+                    })
+                  })
                 }
-              });
-              data?.ByStockID && setStockIDStorage(data.ByStockID);
-              data?.StockName && setStockNameStorage(data.StockName);
+              })
+              data?.ByStockID && setStockIDStorage(data.ByStockID)
+              data?.StockName && setStockNameStorage(data.StockName)
             }
           })
-          .catch((err) => self.$f7.dialog.close());
+          .catch((err) => self.$f7.dialog.close())
       })
-      .catch((error) => console.log(error));
-  };
+      .catch((error) => console.log(error))
+  }
+
+  isImage = (icon) => {
+    const ext = ['.jpg', '.jpeg', '.bmp', '.gif', '.png', '.svg']
+    return ext.some((el) => icon.endsWith(el))
+  }
+
+  getClassStyle = () => {
+    if(window?.GlobalConfig?.APP?.Login?.Background) {
+      if(this.isImage(window?.GlobalConfig?.APP?.Login?.Background)) {
+        document.documentElement.style.setProperty("--login-background", `url(${window?.GlobalConfig?.APP?.Login?.Background})`);
+        return "bg-login-img"
+      }
+      else {
+        document.documentElement.style.setProperty("--login-background", window?.GlobalConfig?.APP?.Login?.Background);
+        return "bg-login"
+      }
+    }
+  }
 
   render() {
-    const { isLoading, password, username } = this.state;
+    const { isLoading, password, username } = this.state
     return (
       <Page noNavbar noToolbar name="login">
         <div
-          className={`page-wrapper page-login ${iOS() && "page-login-iphone"}`}
+          className={`page-wrapper page-login ${iOS() && 'page-login-iphone'}`}
         >
           <div className="page-login__back">
             <Link
@@ -179,21 +197,21 @@ export default class extends React.Component {
                 if (
                   this.$f7router.history[
                     this.$f7router.history.length - 2
-                  ]?.indexOf("/profile/") > -1
+                  ]?.indexOf('/profile/') > -1
                 ) {
-                  this.$f7router.navigate(`/`);
+                  this.$f7router.navigate(`/`)
                 } else {
-                  this.$f7router.back();
+                  this.$f7router.back()
                 }
               }}
             >
               <i className="las la-arrow-left"></i>
             </Link>
           </div>
-          <div className="page-login__content">
+          <div className={`page-login__content ${this.getClassStyle()}`}>
             <div className="page-login__logo">
               <div className="logo">
-                <img src={SERVER_APP + "/app/images/logo-app.png"} />
+                <img src={SERVER_APP + '/app/images/logo-app.png'} />
               </div>
               <div className="title">Xin chào, Bắt đầu đăng nhập nào</div>
             </div>
@@ -213,9 +231,9 @@ export default class extends React.Component {
                     <div
                       className="clear-value"
                       onClick={() => {
-                        delete_cookie("USN");
-                        delete_cookie("PWD");
-                        this.setState({ username: "" });
+                        delete_cookie('USN')
+                        delete_cookie('PWD')
+                        this.setState({ username: '' })
                       }}
                     >
                       <i className="las la-times"></i>
@@ -235,8 +253,8 @@ export default class extends React.Component {
                     <div
                       className="clear-value"
                       onClick={() => {
-                        delete_cookie("PWD");
-                        this.setState({ password: "" });
+                        delete_cookie('PWD')
+                        this.setState({ password: '' })
                       }}
                     >
                       <i className="las la-times"></i>
@@ -248,8 +266,8 @@ export default class extends React.Component {
                     type="button"
                     onClick={() => this.loginSubmit()}
                     className={
-                      "btn-login btn-me" +
-                      (isLoading === true ? " loading" : "")
+                      'btn-login btn-me' +
+                      (isLoading === true ? ' loading' : '')
                     }
                   >
                     <span>Đăng nhập</span>
@@ -277,6 +295,6 @@ export default class extends React.Component {
           </div>
         </div>
       </Page>
-    );
+    )
   }
 }
