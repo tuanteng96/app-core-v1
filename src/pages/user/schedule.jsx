@@ -44,7 +44,11 @@ const CustomOption = ({ children, data, ...props }) => {
           count={5}
           size={20}
           activeColor="#f3cd00"
-          value={data.source.AverRate > 5 ? 5 : Math.round(data.source.AverRate*2)/2}
+          value={
+            data.source.AverRate > 5
+              ? 5
+              : Math.round(data.source.AverRate * 2) / 2
+          }
           edit={false}
           isHalf={true}
         />
@@ -72,11 +76,11 @@ export default class extends React.Component {
         stock: getStockIDStorage(),
         nameStock: getStockNameStorage(),
         AtHome: false,
-        time: ""
+        time: "",
       },
       isParams: true,
       options: [],
-      StaffSelected: ""
+      StaffSelected: "",
     };
   }
 
@@ -209,7 +213,8 @@ export default class extends React.Component {
   };
 
   submitBooks = () => {
-    const { DateTimeBook, serviceNote, selectedService, StaffSelected } = this.state;
+    const { DateTimeBook, serviceNote, selectedService, StaffSelected } =
+      this.state;
     const infoUser = getUser();
     const self = this;
     if (!infoUser) {
@@ -279,7 +284,7 @@ export default class extends React.Component {
               },
               serviceNote: "",
               isParams: false,
-              StaffSelected: ""
+              StaffSelected: "",
             });
             this.nextStep();
           }, 300);
@@ -401,7 +406,7 @@ export default class extends React.Component {
       height,
       serviceNote,
       options,
-      StaffSelected
+      StaffSelected,
     } = this.state;
     return (
       <Page
@@ -534,7 +539,7 @@ export default class extends React.Component {
           style={{ height: "auto", "--f7-sheet-bg-color": "#fff" }}
           opened={sheetOpened}
           onSheetClosed={() => this.closeSheet()}
-          swipeToClose
+          //swipeToClose
           swipeToStep
           backdrop
         >
@@ -622,16 +627,18 @@ export default class extends React.Component {
                       Nhân viên thực hiện
                     </div>
                     <Select
+                      //isSearchable
                       isClearable
                       classNamePrefix="select"
                       options={options}
-                      menuPlacement="top"
                       placeholder="Chọn nhân viên"
                       value={StaffSelected}
                       onChange={(value) =>
                         this.setState({ StaffSelected: value })
                       }
                       components={{ Option: CustomOption }}
+                      //menuIsOpen
+                      //menuPosition="fixed"
                     />
                   </div>
                 )}
