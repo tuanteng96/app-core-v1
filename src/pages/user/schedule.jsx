@@ -540,7 +540,7 @@ export default class extends React.Component {
           opened={sheetOpened}
           onSheetClosed={() => this.closeSheet()}
           //swipeToClose
-          swipeToStep
+          //swipeToStep
           backdrop
         >
           <div className="sheet-modal-swipe-step">
@@ -637,6 +637,8 @@ export default class extends React.Component {
                         this.setState({ StaffSelected: value })
                       }
                       components={{ Option: CustomOption }}
+                      blurInputOnSelect={true}
+                      noOptionsMessage={() => 'Không có nhân viên.'}
                       //menuIsOpen
                       //menuPosition="fixed"
                     />
