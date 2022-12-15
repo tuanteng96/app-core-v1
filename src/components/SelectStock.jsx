@@ -30,17 +30,14 @@ export default class SelectStock extends React.Component {
   async getStock() {
     UserService.getStock().then((response) => {
       const CurrentStockID = response.data.data.CurrentStockID;
-      const ListStock = response.data.data.all;
-      const arrStock = [];
-
-      ListStock.map((item) => {
-        if (item.ID !== 778) {
-          arrStock.push(item);
-        }
-      });
+      let ListStock = response.data.data.all;
+      const StocksNotBook = window?.GlobalConfig?.StocksNotBook || "";
+      ListStock = ListStock
+        ? ListStock.filter((o) => o.ID !== 778 && !StocksNotBook.includes(o.ID))
+        : "";
       this.setState({
         CurrentStockID: CurrentStockID,
-        arrStock: arrStock,
+        arrStock: ListStock,
       });
     });
   }

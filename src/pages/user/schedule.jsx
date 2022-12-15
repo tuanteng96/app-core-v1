@@ -73,8 +73,16 @@ export default class extends React.Component {
       height: 0,
       DateTimeBook: {
         date: moment(new Date()).format("DD/MM/YYYY"),
-        stock: getStockIDStorage(),
-        nameStock: getStockNameStorage(),
+        stock:
+          window?.GlobalConfig?.StocksNotBook &&
+          window?.GlobalConfig?.StocksNotBook?.includes(getStockIDStorage())
+            ? ""
+            : getStockIDStorage(),
+        nameStock:
+          window?.GlobalConfig?.StocksNotBook &&
+          window?.GlobalConfig?.StocksNotBook.includes(getStockIDStorage())
+            ? ""
+            : getStockNameStorage(),
         AtHome: false,
         time: "",
       },
@@ -638,7 +646,7 @@ export default class extends React.Component {
                       }
                       components={{ Option: CustomOption }}
                       blurInputOnSelect={true}
-                      noOptionsMessage={() => 'Không có nhân viên.'}
+                      noOptionsMessage={() => "Không có nhân viên."}
                       //menuIsOpen
                       //menuPosition="fixed"
                     />

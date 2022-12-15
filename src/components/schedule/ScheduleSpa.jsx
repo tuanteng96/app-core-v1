@@ -108,17 +108,14 @@ export default class ScheduleSpa extends React.Component {
 
   getStock = () => {
     UserService.getStock().then((response) => {
-      const ListStock = response.data.data.all;
-      const arrStock = [];
-
-      ListStock.map((item) => {
-        if (item.ID !== 778) {
-          arrStock.push(item);
-        }
-      });
+      let ListStock = response.data.data.all;
+      const StocksNotBook = window?.GlobalConfig?.StocksNotBook || "";
+      ListStock = ListStock
+        ? ListStock.filter((o) => o.ID !== 778 && !StocksNotBook.includes(o.ID))
+        : "";
 
       this.setState({
-        arrStock: arrStock,
+        arrStock: ListStock,
         isLoadingStock: false,
       });
     });
@@ -237,12 +234,9 @@ export default class ScheduleSpa extends React.Component {
       ...this.props.DateTimeBook,
       date,
       time: "",
-      toDate: datetime
+      toDate: datetime,
     });
-    this.getListChoose(
-      datetime,
-      this.state.ListDisableChoose
-    );
+    this.getListChoose(datetime, this.state.ListDisableChoose);
     this.setState({
       isOpen: false,
       isActive: 2,
@@ -367,7 +361,7 @@ export default class ScheduleSpa extends React.Component {
                             ...this.props.DateTimeBook,
                             date,
                             time: "",
-                            toDate: item.day
+                            toDate: item.day,
                           });
                           this.setState({ isActive: index, isOpen: false });
                         }}
@@ -400,7 +394,7 @@ export default class ScheduleSpa extends React.Component {
               isOpen={isOpen}
               onSelect={this.handleSelectDate}
               onCancel={this.handleCancelDate}
-              min={moment().subtract(1, 'days').toDate()}
+              min={moment().subtract(1, "days").toDate()}
             />
           </div>
           <Tabs>
