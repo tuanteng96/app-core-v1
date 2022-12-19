@@ -20,7 +20,7 @@ function EmployeeImage({ img }) {
       setPhotos([
         {
           url: SERVER_APP + "/Upload/image/" + img?.Src,
-          caption: img.Iitle,
+          caption: "Dịch vụ " + img?.Title,
         },
       ]);
     }
@@ -33,19 +33,21 @@ function EmployeeImage({ img }) {
         standaloneDark.current.open()
       }}
     >
-      <img src={SERVER_APP + '/Upload/image/' + img?.Src} alt={img?.Iitle} />
-      <div className="time">
+      <div className="bg-img" style={{background: `url(${SERVER_APP + '/Upload/image/' + img?.Src})`}}></div>
+      {/* <img src={SERVER_APP + '/Upload/image/' + img?.Src} alt={img?.Iitle} /> */}
+      {/* <div className="time">
         <TruncateLines lines={2} ellipsis={<span>...</span>}>
           {img?.Title}
         </TruncateLines>
-      </div>
+      </div> */}
       <PhotoBrowser
         photos={photos}
-        theme="dark"
+        theme="light"
         type="popup"
         popupCloseLinkText="Đóng"
         navbarOfText="/"
         ref={standaloneDark}
+        expositionHideCaptions={true}
       />
     </div>
   );

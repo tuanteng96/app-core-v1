@@ -146,7 +146,7 @@ export default class employeeService extends React.Component {
 
   handleDetail = (item) => {
     this.$f7router.navigate(
-      "/employee/service/" + item.ID + "/" + "?memberID=" + item.member.ID
+      "/employee/service/" + item.ID + "/" + "?memberID=" + item?.member?.ID || item?.MemberID
     );
   };
   handleDiary = (item) => {

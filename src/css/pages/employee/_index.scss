@@ -583,9 +583,25 @@
                     text-align: center;
                     padding-top: 8px;
                 }
+                img {
+                    aspect-ratio: 1 / 1;
+                    object-fit: cover;
+                }
+                .bg-img {
+                    padding-top: 100%;
+                    background-size: cover !important;
+                    background-position: center !important;
+                    background-repeat: no-repeat !important;
+                }
             }
         }
     }
+}
+
+.photo-browser-caption-active {
+    padding: 15px 0;
+    font-size: 15px;
+    font-weight: 500;
 }
 
 .date-time-filter {
