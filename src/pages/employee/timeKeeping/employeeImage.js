@@ -19,7 +19,7 @@ function EmployeeImage({ img }) {
     if (img) {
       setPhotos([
         {
-          url: `${SERVER_APP}upload/image/${img.Src}`,
+          url: SERVER_APP + "/Upload/image/" + img?.Src,
           caption: img.Iitle,
         },
       ]);
@@ -33,7 +33,7 @@ function EmployeeImage({ img }) {
         standaloneDark.current.open()
       }}
     >
-      <img src={`${SERVER_APP}upload/image/${img?.Src}`} alt={img?.Iitle} />
+      <img src={SERVER_APP + '/Upload/image/' + img?.Src} alt={img?.Iitle} />
       <div className="time">
         <TruncateLines lines={2} ellipsis={<span>...</span>}>
           {moment(img?.BookDate).format("HH:mm")} - {img?.Title}
