@@ -3,7 +3,7 @@ import http from "../service/http-common";
 
 class UserService {
     login(username, password) {
-        return http.get(`/app/index.aspx?USN=${username}&PWD=${password}&cmd=authen`);
+        return http.get(`/app/index.aspx?cmd=authen&USN=${username}&PWD=${encodeURIComponent(password)}`);
     }
     QRCodeLogin(qrcode) {
         return http.get(`/api/v3/qcode?cmd=login&token=${qrcode}`);
