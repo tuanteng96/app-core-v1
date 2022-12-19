@@ -182,7 +182,7 @@ export default class employeeListImages extends React.Component {
                           <Row className="jc--n">
                             {item.Items &&
                               item.Items.map((img, idx) => (
-                                <Col width="33" key={idx}>
+                                <Col width="50" key={idx}>
                                   <EmployeeImage img={img} />
                                 </Col>
                               ))}
