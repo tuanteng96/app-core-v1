@@ -36,7 +36,7 @@ function EmployeeImage({ img }) {
       <img src={SERVER_APP + '/Upload/image/' + img?.Src} alt={img?.Iitle} />
       <div className="time">
         <TruncateLines lines={2} ellipsis={<span>...</span>}>
-          {moment(img?.BookDate).format("HH:mm")} - {img?.Title}
+          {img?.Title}
         </TruncateLines>
       </div>
       <PhotoBrowser
