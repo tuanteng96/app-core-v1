@@ -46,6 +46,7 @@ import EmployeeServiceDiaryPage from "../pages/employee/timeKeeping/employeeServ
 import EmployeeServiceSchedulePage from "../pages/employee/timeKeeping/employeeServiceSchedule";
 import EmployeeServiceHistoryPage from "../pages/employee/timeKeeping/employeeServiceHistory";
 import EmployeeStatisticalPage from "../pages/employee/statistical/employeeStatistical";
+import employeeListImagesPage from "../pages/employee/timeKeeping/employeeListImages"
 // Thống kê
 import ReportPage from "../pages/report/index";
 
@@ -320,6 +321,13 @@ var routes = [{
     {
         path: '/employee/service/:id/', // Nhân viên dịch vụ chi tiết
         asyncComponent: () => EmployeeServiceDetailPage,
+        options: {
+            transition: 'f7-cover',
+        }
+    },
+    {
+        path: '/employee/images/:id/', // Hình ảnh dịch vụ
+        asyncComponent: () => employeeListImagesPage,
         options: {
             transition: 'f7-cover',
         }

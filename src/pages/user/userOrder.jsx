@@ -54,9 +54,23 @@ export default class extends React.Component {
     UserService.getOrderAll2()
       .then((response) => {
         const data = response.data;
+        const TongNo = data
+          ? data.reduce(
+              (n, { thanhtoan }) =>
+                n +
+                Math.abs(
+                  thanhtoan.tong_gia_tri_dh -
+                    thanhtoan.thanh_toan_tien -
+                    thanhtoan.thanh_toan_vi -
+                    thanhtoan.thanh_toan_ao
+                ),
+              0
+            )
+          : 0;
         this.setState({
           arrOder: data,
           loading: false,
+          TongNo: TongNo,
         });
       })
       .catch((er) => console.log(er));
@@ -87,7 +101,7 @@ export default class extends React.Component {
   }
 
   render() {
-    const { arrOder, loading, loadingText, textPay } = this.state;
+    const { arrOder, loading, loadingText, textPay, TongNo } = this.state;
     return (
       <Page
         onPtrRefresh={this.loadRefresh.bind(this)}
@@ -102,7 +116,10 @@ export default class extends React.Component {
               </Link>
             </div>
             <div className="page-navbar__title">
-              <span className="title">Đơn hàng</span>
+              <span className="title">
+                Đơn hàng
+                {TongNo && <span className="pl-2px font-size-sm"> - Nợ {formatPriceVietnamese(TongNo)}</span>}
+              </span>
             </div>
             <div className="page-navbar__noti">
               <NotificationIcon />

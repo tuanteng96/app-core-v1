@@ -108,26 +108,46 @@ export default class employeeService extends React.Component {
       case "KHACH_KHONG_DEN":
         return (
           <span className="label-inline label-light-success">
-            Khách không đến {item?.Member?.MobilePhone !== "0000000000" && <>{item?.Member.IsAnonymous && "- Khách vãng lai"} {item?.IsNew && "- Khách mới"}</>}
+            Khách không đến{" "}
+            {item?.Member?.MobilePhone !== "0000000000" && (
+              <>
+                {item?.Member.IsAnonymous && "- Khách vãng lai"}{" "}
+                {item?.IsNew && "- Khách mới"}
+              </>
+            )}
           </span>
         );
       case "KHACH_DEN":
         return (
           <span className="label-inline label-light-warning">
-            Khách tới {item?.Member?.MobilePhone === "0000000000" && <>{item?.Member.IsAnonymous && "- Khách vãng lai"} {item?.IsNew && "- Khách mới"}</>}
+            Khách tới{" "}
+            {item?.Member?.MobilePhone === "0000000000" && (
+              <>
+                {item?.Member.IsAnonymous && "- Khách vãng lai"}{" "}
+                {item?.IsNew && "- Khách mới"}
+              </>
+            )}
           </span>
         );
       default:
         return (
           <span className="label-inline label-light-info">
-            Đã xác nhận {item?.Member?.MobilePhone === "0000000000" && <>{item?.Member.IsAnonymous && "- Khách vãng lai"} {item?.IsNew && "- Khách mới"}</>}
+            Đã xác nhận{" "}
+            {item?.Member?.MobilePhone === "0000000000" && (
+              <>
+                {item?.Member.IsAnonymous && "- Khách vãng lai"}{" "}
+                {item?.IsNew && "- Khách mới"}
+              </>
+            )}
           </span>
         );
     }
   };
 
   handleDetail = (item) => {
-    this.$f7router.navigate("/employee/service/" + item.ID + "/");
+    this.$f7router.navigate(
+      "/employee/service/" + item.ID + "/" + "?memberID=" + item.member.ID
+    );
   };
   handleDiary = (item) => {
     this.$f7router.navigate("/employee/diary/" + item.MemberID + "/");

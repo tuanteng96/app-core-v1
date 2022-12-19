@@ -45,6 +45,9 @@ class StaffService {
     getListStaff(stockid) {
         return http.get(`/api/gl/select2?cmd=user&includeRoles=1&includeSource=1&crstockid=${stockid}&roles=DV`)
     }
+    getListImgUse(data) {
+        return http.post(`/api/v3/orderservice@osAttachments`, JSON.stringify(data))
+    }
 }
 
 export default new StaffService();

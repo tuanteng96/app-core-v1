@@ -45,6 +45,7 @@ export default class employeeServiceDetail extends React.Component {
       isLoading: true,
       isShowBtn: true,
       NoteCurrent: "",
+      ListImageUse: [],
     };
   }
 
@@ -53,7 +54,47 @@ export default class employeeServiceDetail extends React.Component {
     this.getStaffService();
     this.getStock();
     this.getImageStaff();
+    this.getListImgUse();
   }
+
+  getListImgUse = () => {
+    const { memberID } = this.$f7route.query;
+    if (!memberID) return;
+    const obj = {
+      mid: memberID,
+      from: "12/12/2000",
+      to: "30/12/2022",
+    };
+    staffService
+      .getListImgUse(obj)
+      .then(({ data }) => {
+        const newList = [];
+        if (data?.list) {
+          for (let item of data?.list) {
+            const index = newList.findIndex(
+              (o) =>
+                moment(o.BookDate).format("DD-MM-YYYY") ===
+                moment(item.BookDate).format("DD-MM-YYYY")
+            );
+            if (index > -1) {
+              newList[index].Items.push(item);
+            } else {
+              const newObj = {
+                BookDate: item.BookDate,
+                Items: [item],
+              };
+              newList.push(newObj);
+            }
+          }
+        }
+        this.setState({
+          ListImageUse: newList.sort(function (left, right) {
+            return moment.utc(right.BookDate).diff(moment.utc(left.BookDate));
+          }),
+        });
+      })
+      .catch((error) => console.log(error));
+  };
 
   getStaffService = () => {
     if (!getUser()) return false;
@@ -379,6 +420,7 @@ export default class employeeServiceDetail extends React.Component {
       loadingSubmit,
       isLoading,
       isShowBtn,
+      ListImageUse,
     } = this.state;
 
     return (
@@ -540,6 +582,20 @@ export default class employeeServiceDetail extends React.Component {
                     </span>
                   </li>
                 )}
+                <li>
+                  <span>Hình ảnh</span>
+                  <span
+                    onClick={() => {
+                      this.$f7router.navigate(
+                        `/employee/images/${this.$f7route.query.memberID}/`
+                      );
+                    }}
+                    className="text-link"
+                  >
+                    Xem hình ảnh
+                  </span>
+                </li>
+
                 {"Desc" in itemDetail && (
                   <li>
                     <span className="w-100">Ghi chú</span>
