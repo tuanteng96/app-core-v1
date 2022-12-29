@@ -463,7 +463,43 @@ export default class employeeStatistical extends React.Component {
               </Sheet>
 
               <div className="employee-statistical__item">
-                <div className="title">Phạt</div>
+                <div className="title">
+                  Cộng tiền (<span>{dataSalary && dataSalary.Bonus.length}</span>)
+                </div>
+                <div className="head">
+                  <div className="tr">
+                    <div className="td w-1">STT</div>
+                    <div className="td w-2">Hạng mục</div>
+                    <div className="td w-3">Giá trị</div>
+                  </div>
+                </div>
+                <div className="tbody">
+                  {dataSalary &&
+                    dataSalary.Bonus.map((item, index) => (
+                      <div className="tr" key={index}>
+                        <div className="td w-1">{index + 1}</div>
+                        <div className="td w-2">
+                        {item.Desc || "Thưởng"} - ( {moment(item.CreateDate).format("llll")} )
+                        </div>
+                        <div className="td w-3">
+                          {formatPriceVietnamese(item.Value)}
+                        </div>
+                      </div>
+                    ))}
+                </div>
+                <div className="tfooter">
+                  <div className="tr">
+                    <div className="td">Tổng</div>
+                    <div className="td">
+                      {dataSalary &&
+                        formatPriceVietnamese(this.numTotal(dataSalary.Bonus))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="employee-statistical__item">
+                <div className="title">Trừ tiền</div>
                 <div className="head">
                   <div className="tr">
                     <div className="td w-1">STT</div>
@@ -476,7 +512,7 @@ export default class employeeStatistical extends React.Component {
                     dataSalary.PHAT.map((item, index) => (
                       <div className="tr" key={index}>
                         <div className="td w-1">{index + 1}</div>
-                        <div className="td w-2">{item.Desc || "Phạt"}</div>
+                        <div className="td w-2">{item.Desc || "Phạt"} - Ngày {moment(item.CreateDate).format("llll")}</div>
                         <div className="td w-3">
                           {formatPriceVietnamese(item.Value)}
                         </div>
@@ -669,41 +705,6 @@ export default class employeeStatistical extends React.Component {
                   </div>
                 </div>
               )}
-              <div className="employee-statistical__item">
-                <div className="title">
-                  Thưởng (<span>{dataSalary && dataSalary.Bonus.length}</span>)
-                </div>
-                <div className="head">
-                  <div className="tr">
-                    <div className="td w-1">STT</div>
-                    <div className="td w-2">Hạng mục</div>
-                    <div className="td w-3">Giá trị</div>
-                  </div>
-                </div>
-                <div className="tbody">
-                  {dataSalary &&
-                    dataSalary.Bonus.map((item, index) => (
-                      <div className="tr" key={index}>
-                        <div className="td w-1">{index + 1}</div>
-                        <div className="td w-2">
-                          Thưởng - ( {moment(item.CreateDate).format("llll")} )
-                        </div>
-                        <div className="td w-3">
-                          {formatPriceVietnamese(item.Value)}
-                        </div>
-                      </div>
-                    ))}
-                </div>
-                <div className="tfooter">
-                  <div className="tr">
-                    <div className="td">Tổng</div>
-                    <div className="td">
-                      {dataSalary &&
-                        formatPriceVietnamese(this.numTotal(dataSalary.Bonus))}
-                    </div>
-                  </div>
-                </div>
-              </div>
               <div className="employee-statistical__item">
                 <div className="title">
                   Tạm ứng (

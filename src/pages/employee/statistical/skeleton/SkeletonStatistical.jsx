@@ -59,7 +59,7 @@ export default class SkeletonStatistical extends React.Component {
               </div>
             </div>
             <div className="employee-statistical__item">
-              <div className="title">Phạt</div>
+              <div className="title">Trừ tiền</div>
               <div className="head">
                 <div className="tr">
                   <div className="td w-1">STT</div>
