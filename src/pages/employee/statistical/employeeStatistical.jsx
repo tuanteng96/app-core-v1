@@ -168,6 +168,7 @@ export default class employeeStatistical extends React.Component {
           sheetOpened: {
             sheet1: true,
             sheet2: false,
+            sheet3: false,
           },
         });
       }
@@ -177,6 +178,17 @@ export default class employeeStatistical extends React.Component {
         sheetOpened: {
           sheet1: false,
           sheet2: true,
+          sheet3: false,
+        },
+      });
+    }
+
+    if (sheet === "sheet3") {
+      this.setState({
+        sheetOpened: {
+          sheet1: false,
+          sheet2: false,
+          sheet3: true,
         },
       });
     }
@@ -189,6 +201,13 @@ export default class employeeStatistical extends React.Component {
         sheet2: false,
       },
     });
+  };
+
+  totalValue = (items, prop) => {
+    if (!items) return 0;
+    return items.reduce(function (a, b) {
+      return a + b[prop];
+    }, 0);
   };
 
   async loadRefresh(done) {
@@ -248,18 +267,54 @@ export default class employeeStatistical extends React.Component {
         {!isLoading && (
           <div className="page-render p-0">
             <div className="employee-statistical">
-              {dataSalary && dataSalary.CHI_LUONG.length > 0 ? (
-                <div className="employee-statistical__item">
-                  <div className="title">Đã trả lương</div>
-                  <div className="tfooter">
-                    <div className="tr">
-                      <div className="td">Đã trả</div>
-                      <div className="td">
+              {!dataSalary?.TY_LE_GIU_LUONG ||
+              (dataSalary?.CHI_GIU_LUONG &&
+                dataSalary?.CHI_GIU_LUONG.length > 0 &&
+                this.totalValue(dataSalary?.THU_GIU_LUONG, "Value") ===
+                  this.totalValue(dataSalary?.CHI_GIU_LUONG, "Value")) ? (
+                <React.Fragment></React.Fragment>
+              ) : (
+                <div
+                  className="employee-statistical__item mb-1px"
+                  style={{
+                    background: "#fbfbfb",
+                  }}
+                >
+                  <div
+                    className="d-flex justify-content-between p-12px"
+                    onClick={() => this.OpenSheet("sheet3")}
+                  >
+                    <div className="text-danger fw-500 font-size-xs">
+                      Đã giữ lương {dataSalary?.THU_GIU_LUONG.length} tháng
+                    </div>
+                    <div className="text-danger fw-600 font-size-xs">
+                      <span>
                         {dataSalary &&
-                          formatPriceVietnamese(dataSalary?.CHI_LUONG[0].Value)}
-                      </div>
+                          formatPriceVietnamese(
+                            this.totalValue(dataSalary?.THU_GIU_LUONG, "Value")
+                          )}
+                      </span>
+                      <i className="fas fa-exclamation-circle text-warning pl-5px"></i>
                     </div>
                   </div>
+                </div>
+              )}
+
+              {dataSalary &&
+              (dataSalary.CHI_LUONG.length ||
+                dataSalary.CHI_LUONG_TAT_CA.length) > 0 ? (
+                <div className="employee-statistical__item">
+                  <div className="title">Đã trả lương</div>
+                  {dataSalary.CHI_LUONG_TAT_CA.map((o, idx) => (
+                    <div className="tfooter" key={idx}>
+                      <div className="tr">
+                        <div className="td">Đã trả lần {idx + 1}</div>
+                        <div className="td">
+                          {dataSalary && formatPriceVietnamese(o.Value)}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               ) : (
                 <div className="employee-statistical__item">
@@ -339,6 +394,53 @@ export default class employeeStatistical extends React.Component {
                   </div>
                 </div>
               </div>
+
+              <Sheet
+                opened={sheetOpened.sheet3}
+                className={`sheet-detail sheet-detail-wallet sheet-detail-order`}
+                style={{
+                  height: "auto !important",
+                  "--f7-sheet-bg-color": "#fff",
+                }}
+                onSheetClosed={() => {
+                  this.HideSheet();
+                }}
+                swipeToClose
+                backdrop
+              >
+                <Button
+                  className="show-close sheet-close"
+                  onClick={() => this.HideSheet()}
+                >
+                  <i className="las la-times"></i>
+                </Button>
+                <PageContent>
+                  <div className="employee-statistical__item mb-0">
+                    <div className="title">Chi tiết giữ lương</div>
+                    <div className="head">
+                      <div className="tr">
+                        <div className="td w-1">STT</div>
+                        <div className="td w-2">Hạng mục</div>
+                        <div className="td w-3">Giá trị</div>
+                      </div>
+                    </div>
+                    <div className="tbody">
+                      {dataSalary.THU_GIU_LUONG &&
+                        dataSalary.THU_GIU_LUONG.map((item, idx) => (
+                          <div className="tr" key={idx}>
+                            <div className="td w-1">{idx + 1}</div>
+                            <div className="td w-2">
+                              {item.Desc} - Tháng {item.Rel}
+                            </div>
+                            <div className="td w-3">
+                              {formatPriceVietnamese(item.Value)}
+                            </div>
+                          </div>
+                        ))}
+                    </div>
+                  </div>
+                </PageContent>
+              </Sheet>
 
               <Sheet
                 opened={sheetOpened.sheet2}
@@ -464,7 +566,8 @@ export default class employeeStatistical extends React.Component {
 
               <div className="employee-statistical__item">
                 <div className="title">
-                  Cộng tiền (<span>{dataSalary && dataSalary.Bonus.length}</span>)
+                  Cộng tiền (
+                  <span>{dataSalary && dataSalary.Bonus.length}</span>)
                 </div>
                 <div className="head">
                   <div className="tr">
@@ -479,7 +582,8 @@ export default class employeeStatistical extends React.Component {
                       <div className="tr" key={index}>
                         <div className="td w-1">{index + 1}</div>
                         <div className="td w-2">
-                        {item.Desc || "Thưởng"} - ( {moment(item.CreateDate).format("llll")} )
+                          {item.Desc || "Thưởng"} - ({" "}
+                          {moment(item.CreateDate).format("llll")} )
                         </div>
                         <div className="td w-3">
                           {formatPriceVietnamese(item.Value)}
@@ -512,7 +616,10 @@ export default class employeeStatistical extends React.Component {
                     dataSalary.PHAT.map((item, index) => (
                       <div className="tr" key={index}>
                         <div className="td w-1">{index + 1}</div>
-                        <div className="td w-2">{item.Desc || "Phạt"} - Ngày {moment(item.CreateDate).format("llll")}</div>
+                        <div className="td w-2">
+                          {item.Desc || "Phạt"} - Ngày{" "}
+                          {moment(item.CreateDate).format("llll")}
+                        </div>
                         <div className="td w-3">
                           {formatPriceVietnamese(item.Value)}
                         </div>
@@ -686,22 +793,24 @@ export default class employeeStatistical extends React.Component {
                         )
                       )}
 
-                    {dataSalary.CHI_LUONG && dataSalary.CHI_LUONG.length === 0 && (
-                      <div className="tr">
-                        <div className="td">Dự kiến thưởng KPI</div>
-                        <div className="td">
-                          {dataSalary?.THUONG_HOA_HONG_DOANH_SO?.Bonus > 0 && (
-                            <span style={{ paddingRight: "8px" }}>
-                              ({dataSalary?.THUONG_HOA_HONG_DOANH_SO?.Bonus}%)
-                            </span>
-                          )}
-                          {dataSalary &&
-                            formatPriceVietnamese(
-                              dataSalary?.THUONG_HOA_HONG_DOANH_SO?.Value || 0
+                    {dataSalary.CHI_LUONG &&
+                      dataSalary.CHI_LUONG.length === 0 && (
+                        <div className="tr">
+                          <div className="td">Dự kiến thưởng KPI</div>
+                          <div className="td">
+                            {dataSalary?.THUONG_HOA_HONG_DOANH_SO?.Bonus >
+                              0 && (
+                              <span style={{ paddingRight: "8px" }}>
+                                ({dataSalary?.THUONG_HOA_HONG_DOANH_SO?.Bonus}%)
+                              </span>
                             )}
+                            {dataSalary &&
+                              formatPriceVietnamese(
+                                dataSalary?.THUONG_HOA_HONG_DOANH_SO?.Value || 0
+                              )}
+                          </div>
                         </div>
-                      </div>
-                    )}
+                      )}
                   </div>
                 </div>
               )}
