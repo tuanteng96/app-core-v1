@@ -235,7 +235,7 @@ export default class extends React.Component {
                   </div>
                   <SlideList BannerName="App.Banner" autoplaySpeed={3000} />
                   <ListService
-                    className={`mt-8px ${getUser() ? "" : "mb-10px"}`}
+                    className={`mt-15px ${getUser() ? "" : "mb-10px"}`}
                     id="42"
                   />
                   {getUser() && <ListService className="my-10px" id="45" />}

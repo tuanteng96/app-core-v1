@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Fragment, useState } from 'react'
 import { SERVER_APP } from './../../constants/config'
 import { formatPriceVietnamese, checkSale } from '../../constants/format'
 import _ from 'lodash'
@@ -12,7 +12,7 @@ import {
   Searchbar,
   Subnavbar,
 } from 'framework7-react'
-import { getStockIDStorage } from '../../constants/user'
+import { getStockIDStorage, getUser } from '../../constants/user'
 import ShopDataService from './../../service/shop.service'
 import ToolBarBottom from '../../components/ToolBarBottom'
 import CategoriesList from './components/CategoriesList/CategoriesList/CategoriesList'
@@ -20,6 +20,72 @@ import Skeleton from 'react-loading-skeleton'
 import PageNoData from '../../components/PageNoData'
 import RenderTagsProd from './components/RenderTagsProd'
 import { TruncateLines } from 'react-truncate-lines'
+import clsx from 'clsx'
+import { toast } from 'react-toastify'
+
+const ButtonCart = ({ item, f7, f7router }) => {
+  const [loading, setLoading] = useState(false)
+
+  const orderSubmit = () => {
+    const infoUser = getUser()
+    const getStock = getStockIDStorage()
+    if (!infoUser) {
+      f7router.navigate('/login/')
+      return false
+    } else {
+      setLoading(true)
+      const data = {
+        order: {
+          ID: 0,
+          SenderID: infoUser.ID,
+          Tinh: 5,
+          Huyen: 37,
+          MethodPayID: 1,
+        },
+        adds: [
+          {
+            ProdID: item.id,
+            Qty: 1,
+          },
+        ],
+        forceStockID: getStock,
+      }
+      ShopDataService.getUpdateOrder(data)
+        .then((response) => {
+          const { errors } = response.data.data
+          setLoading(false)
+          if (response.data.success) {
+            if (errors && errors.length > 0) {
+              toast.error(errors.join(', '), {
+                position: toast.POSITION.TOP_LEFT,
+                autoClose: 1500,
+              })
+            } else {
+              toast.success(`Thêm mặt hàng vào giỏ hàng thành công !`, {
+                position: toast.POSITION.TOP_LEFT,
+                autoClose: 3000,
+              })
+              f7router.navigate("/pay/");
+            }
+          }
+        })
+        .catch((e) => {
+          console.log(e)
+        })
+    }
+  }
+
+  return (
+    <div className="w-55px d--f jc--c ai--c">
+      <div
+        className={clsx('cursor-pointer btn-shopping', loading && 'loading')}
+        onClick={orderSubmit}
+      >
+        <i className="far fa-shopping-basket"></i>
+      </div>
+    </div>
+  )
+}
 
 export default class extends React.Component {
   constructor() {
@@ -247,7 +313,16 @@ export default class extends React.Component {
         <Navbar>
           <div className="page-navbar">
             <div className="page-navbar__back">
-              <Link onClick={() => this.$f7router.back()}>
+              <Link
+                onClick={() =>
+                  this.$f7router.back()
+                  // {
+                  //   url: '/shop/',
+                  //   force: true,
+                  //   ignoreCache: true,
+                  // }
+                }
+              >
                 <i className="las la-angle-left"></i>
               </Link>
             </div>
@@ -285,66 +360,131 @@ export default class extends React.Component {
             </Subnavbar>
           )}
         </Navbar>
-        <div className="page-render page-render-shop no-bg p-0">
-          <div className="page-shop no-bg p-15px">
+        <div
+          className={clsx(
+            'page-render page-render-shop p-0',
+            window?.GlobalConfig?.APP?.UIBase ? 'bg-white' : 'no-bg',
+          )}
+        >
+          <div
+            className={clsx(
+              'page-shop',
+              window?.GlobalConfig?.APP?.UIBase
+                ? 'bg-white px-15px'
+                : 'no-bg p-15px',
+            )}
+          >
             <div className="page-shop__list">
               <Row>
                 {!loading && (
                   <React.Fragment>
                     {arrCateList && arrCateList.length > 0 ? (
                       arrCateList.map((item, index) => (
-                        <Col width="50" key={index}>
-                          <a
-                            href={'/shop/detail/' + item.id}
-                            className="page-shop__list-item"
-                          >
-                            <div className="page-shop__list-img">
-                              <img
-                                src={SERVER_APP + '/Upload/image/' + item.photo}
-                                alt={item.title}
-                              />
-                              <RenderTagsProd status={item?.source?.Status} />
-                            </div>
-                            <div className="page-shop__list-text">
-                              <h3>
-                                <TruncateLines
-                                  lines={2}
-                                  ellipsis={<span>...</span>}
-                                >
-                                  {item.title}
-                                </TruncateLines>
-                              </h3>
-                              <div
-                                className={
-                                  'page-shop__list-price ' +
-                                  (item.source.IsDisplayPrice !== 0 &&
-                                  checkSale(
-                                    item.source.SaleBegin,
-                                    item.source.SaleEnd,
-                                    item.pricesale,
-                                  ) === true
-                                    ? 'sale'
-                                    : '')
-                                }
-                              >
-                                {item.source.IsDisplayPrice === 0 ? (
-                                  <span className="price">Liên hệ</span>
-                                ) : (
-                                  <React.Fragment>
-                                    <span className="price">
-                                      <b>₫</b>
-                                      {formatPriceVietnamese(item.price)}
-                                    </span>
-                                    <span className="price-sale">
-                                      <b>₫</b>
-                                      {formatPriceVietnamese(item.pricesale)}
-                                    </span>
-                                  </React.Fragment>
-                                )}
+                        <Fragment key={index}>
+                          {window?.GlobalConfig?.APP?.UIBase ? (
+                            <Col width="100">
+                              <div className="border-bottom d-flex">
+                                <div className="page-shop__list-text h-auto ai--fs text-left py-15px f--1">
+                                  <h3 className="p-0">{item.title}</h3>
+                                  <div
+                                    className={
+                                      'page-shop__list-price jc--fs ' +
+                                      (item.source.IsDisplayPrice !== 0 &&
+                                      checkSale(
+                                        item.source.SaleBegin,
+                                        item.source.SaleEnd,
+                                        item.pricesale,
+                                      ) === true
+                                        ? 'sale'
+                                        : '')
+                                    }
+                                  >
+                                    {item.source.IsDisplayPrice === 0 ? (
+                                      <span className="price">Liên hệ</span>
+                                    ) : (
+                                      <React.Fragment>
+                                        <span className="price">
+                                          <b>₫</b>
+                                          {formatPriceVietnamese(item.price)}
+                                        </span>
+                                        <span className="price-sale">
+                                          <b>₫</b>
+                                          {formatPriceVietnamese(
+                                            item.pricesale,
+                                          )}
+                                        </span>
+                                      </React.Fragment>
+                                    )}
+                                  </div>
+                                </div>
+                                <ButtonCart
+                                  item={item}
+                                  f7={this.$f7}
+                                  f7router={this.$f7router}
+                                />
                               </div>
-                            </div>
-                          </a>
-                        </Col>
+                            </Col>
+                          ) : (
+                            <Col width="50">
+                              <a
+                                href={'/shop/detail/' + item.id}
+                                className="page-shop__list-item"
+                              >
+                                <div className="page-shop__list-img">
+                                  <img
+                                    src={
+                                      SERVER_APP + '/Upload/image/' + item.photo
+                                    }
+                                    alt={item.title}
+                                  />
+                                  <RenderTagsProd
+                                    status={item?.source?.Status}
+                                  />
+                                </div>
+                                <div className="page-shop__list-text">
+                                  <h3>
+                                    <TruncateLines
+                                      lines={2}
+                                      ellipsis={<span>...</span>}
+                                    >
+                                      {item.title}
+                                    </TruncateLines>
+                                  </h3>
+                                  <div
+                                    className={
+                                      'page-shop__list-price ' +
+                                      (item.source.IsDisplayPrice !== 0 &&
+                                      checkSale(
+                                        item.source.SaleBegin,
+                                        item.source.SaleEnd,
+                                        item.pricesale,
+                                      ) === true
+                                        ? 'sale'
+                                        : '')
+                                    }
+                                  >
+                                    {item.source.IsDisplayPrice === 0 ? (
+                                      <span className="price">Liên hệ</span>
+                                    ) : (
+                                      <React.Fragment>
+                                        <span className="price">
+                                          <b>₫</b>
+                                          {formatPriceVietnamese(item.price)}
+                                        </span>
+                                        <span className="price-sale">
+                                          <b>₫</b>
+                                          {formatPriceVietnamese(
+                                            item.pricesale,
+                                          )}
+                                        </span>
+                                      </React.Fragment>
+                                    )}
+                                  </div>
+                                </div>
+                              </a>
+                            </Col>
+                          )}
+                        </Fragment>
                       ))
                     ) : (
                       <PageNoData text={'Không có dữ liêu'} />

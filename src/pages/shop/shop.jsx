@@ -1,62 +1,63 @@
-import React from "react";
-import { Page, Link, Toolbar, Navbar } from "framework7-react";
-import AdvDataService from "../../service/adv.service";
-import NotificationIcon from "../../components/NotificationIcon";
-import ToolBarBottom from "../../components/ToolBarBottom";
-import SelectStock from "../../components/SelectStock";
-import ProductItemCategory from "./components/Product/ProductItemCategory";
-import SkeletonItemCategory from "./components/Product/SkeletonItemCategory";
+import React from 'react'
+import { Page, Link, Toolbar, Navbar } from 'framework7-react'
+import AdvDataService from '../../service/adv.service'
+import NotificationIcon from '../../components/NotificationIcon'
+import ToolBarBottom from '../../components/ToolBarBottom'
+import SelectStock from '../../components/SelectStock'
+import ProductItemCategory from './components/Product/ProductItemCategory'
+import SkeletonItemCategory from './components/Product/SkeletonItemCategory'
+import CartToolBar from '../../components/CartToolBar'
 
 export default class extends React.Component {
   constructor() {
-    super();
+    super()
     this.state = {
       arrCateAdv: [],
       isLoading: true,
       isOpenStock: false,
       showPreloader: false,
-      isUI: window?.GlobalConfig?.APP?.Prod?.AppMuaHang || 0
-    };
+      isUI: window?.GlobalConfig?.APP?.Prod?.AppMuaHang || 0,
+    }
   }
 
   componentDidMount() {
-    this.getMenuShop();
+    this.getMenuShop()
   }
 
   getMenuShop = () => {
     AdvDataService.getMenuShop()
       .then((response) => {
-        const arrCateAdv = response.data.data;
+        const arrCateAdv = response.data.data
         this.setState({
           arrCateAdv: arrCateAdv,
           isLoading: false,
-        });
+        })
       })
       .catch((e) => {
-        console.log(e);
-      });
-  };
+        console.log(e)
+      })
+  }
 
   openStock = () => {
     this.setState({
       isOpenStock: !this.state.isOpenStock,
-    });
-  };
+    })
+  }
 
   loadRefresh(done) {
     setTimeout(() => {
       this.$f7.views.main.router.navigate(this.$f7.views.main.router.url, {
         reloadCurrent: true,
-      });
+      })
       this.setState({
         showPreloader: true,
-      });
-      done();
-    }, 600);
+      })
+      done()
+    }, 600)
   }
 
   render() {
-    const { arrCateAdv, isLoading, isUI } = this.state;
+    const { arrCateAdv, isLoading, isUI } = this.state
     return (
       <Page
         name="shop"
@@ -75,9 +76,15 @@ export default class extends React.Component {
             <div className="page-navbar__title">
               <span className="title">Mua hàng</span>
             </div>
-            <div className="page-navbar__noti noti">
-              <NotificationIcon />
-            </div>
+            {window?.GlobalConfig?.APP?.UIBase ? (
+              <div className="page-navbar__cart">
+                <CartToolBar />
+              </div>
+            ) : (
+              <div className="page-navbar__noti noti">
+                <NotificationIcon />
+              </div>
+            )}
           </div>
         </Navbar>
         <div className="page-render p-0">
@@ -87,7 +94,11 @@ export default class extends React.Component {
                 <ul>
                   {arrCateAdv &&
                     arrCateAdv.map((item, index) => (
-                      <ProductItemCategory key={index} item={item} isUI={isUI}/>
+                      <ProductItemCategory
+                        key={index}
+                        item={item}
+                        isUI={isUI}
+                      />
                     ))}
                 </ul>
               )}
@@ -100,6 +111,6 @@ export default class extends React.Component {
         </Toolbar>
         <SelectStock isOpenStock={this.state.isOpenStock} />
       </Page>
-    );
+    )
   }
 }

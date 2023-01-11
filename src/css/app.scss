@@ -60,6 +60,11 @@
 @import './../css/pages/quickaction/index';
 @import './../css/pages/forgot',
 './pages/report';
+
+.ios {
+    --f7-toolbar-height: 48px;
+    --f7-navbar-height: 48px;
+}
 //Font family
 body,
 html {
