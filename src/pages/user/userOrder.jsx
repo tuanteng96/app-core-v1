@@ -21,6 +21,7 @@ import Skeleton from "react-loading-skeleton";
 import ReactHtmlParser from "react-html-parser";
 import moment from "moment";
 import "moment/locale/vi";
+import clsx from "clsx";
 moment.locale("vi");
 
 export default class extends React.Component {
@@ -207,10 +208,10 @@ export default class extends React.Component {
                         {item.Items &&
                           item.Items.map((sub, idx) => (
                             <div className="list-sub-item" key={idx}>
-                              <div className="img">
+                              <div className={clsx("img", window?.GlobalConfig?.APP?.UIBase && 'd-none')}>
                                 <img src={checkImageProduct(sub.ProdThumb)} />
                               </div>
-                              <div className="text">
+                              <div className={clsx("text", window?.GlobalConfig?.APP?.UIBase && 'w-100 pl-0')}>
                                 <div className="text-name">{sub.ProdTitle}</div>
                                 <div className="text-count">
                                   SL <b>x{sub.Qty}</b>

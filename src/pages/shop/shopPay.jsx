@@ -15,6 +15,7 @@ import SkeletonPay from "./components/Pay/SkeletonPay";
 import NumberFormat from "react-number-format";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import clsx from "clsx";
 
 toast.configure();
 
@@ -355,7 +356,7 @@ export default class extends React.Component {
         membermoney: WalletPaySuccess,
       },
       forceStockID: getStock,
-      cmd: "THANH_TOAN"
+      cmd: "THANH_TOAN",
     };
     this.setState({
       isBtn: true,
@@ -580,14 +581,32 @@ export default class extends React.Component {
                 {items.length > 0
                   ? items &&
                     items.map((item, index) => (
-                      <div className="page-pay__list-item" key={index}>
-                        <div className="image">
+                      <div
+                        className={clsx(
+                          "page-pay__list-item",
+                          window?.GlobalConfig?.APP?.UIBase &&
+                            items.length - 1 !== index &&
+                            "pb-15px mb-15px border-bottom"
+                        )}
+                        key={index}
+                      >
+                        <div
+                          className={clsx(
+                            "image",
+                            window?.GlobalConfig?.APP?.UIBase && "d-none"
+                          )}
+                        >
                           <img
                             src={checkImageProduct(item.ProdThumb)}
                             alt={item.ProdTitle}
                           />
                         </div>
-                        <div className="info">
+                        <div
+                          className={clsx(
+                            "info",
+                            window?.GlobalConfig?.APP?.UIBase && "pl-0 f--1"
+                          )}
+                        >
                           <h3>{item.ProdTitle}</h3>
                           <div
                             className={

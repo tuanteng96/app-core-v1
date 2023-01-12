@@ -19,13 +19,18 @@ export default class ItemCardService extends React.Component {
     return (
       <div className="cardservice-item__service">
         <div className="cardservice-item__service-img">
-          <img
-            className="w-100"
-            src={SERVER_APP + "/Upload/image/" + item.Product.Thumbnail}
-            onError={(e) => {
-              e.target.src = NoProduct;
-            }}
-          />
+          {window?.GlobalConfig?.APP?.UIBase ? (
+            <div className="h-200px" style={{ background: "#7d7d7d" }}></div>
+          ) : (
+            <img
+              className="w-100"
+              src={SERVER_APP + "/Upload/image/" + item.Product.Thumbnail}
+              onError={(e) => {
+                e.target.src = NoProduct;
+              }}
+            />
+          )}
+
           <div className="cardservice-item__service-text">
             <h4 className="title">
               {item.OrderItem.ProdTitle} <span>({item.Title})</span>

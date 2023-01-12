@@ -67,7 +67,7 @@ const ButtonCart = ({ item, f7, f7router }) => {
         )}
         onClick={orderSubmit}
       >
-        <i className="far fa-shopping-basket"></i>
+        <i className="fal fa-plus"></i>
       </div>
     </div>
   );

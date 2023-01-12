@@ -9,6 +9,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { FaShippingFast } from "react-icons/fa";
 import SkeletonPayInfo from "./components/Pay/SkeletonPayInfo";
+import clsx from "clsx";
 
 toast.configure();
 
@@ -82,7 +83,7 @@ export default class extends React.Component {
         SenderAddress: SenderAddress,
       },
       forceStockID: stockid,
-      cmd: "GUI_DON_HANG"
+      cmd: "GUI_DON_HANG",
     };
     self.$f7.preloader.show();
     ShopDataService.getUpdateOrder(data)
@@ -95,8 +96,7 @@ export default class extends React.Component {
               autoClose: 1500,
             });
             this.$f7router.navigate("/pay/");
-          }
-          else {
+          } else {
             toast.success("Đặt hàng thành công !", {
               position: toast.POSITION.TOP_LEFT,
               autoClose: 3000,
@@ -180,8 +180,21 @@ export default class extends React.Component {
                   {items.length > 0
                     ? items &&
                       items.map((item, index) => (
-                        <div className="page-pay__list-item" key={index}>
-                          <div className="image">
+                        <div
+                          className={clsx(
+                            "page-pay__list-item",
+                            window?.GlobalConfig?.APP?.UIBase &&
+                              items.length - 1 !== index &&
+                              "pb-15px mb-15px border-bottom"
+                          )}
+                          key={index}
+                        >
+                          <div
+                            className={clsx(
+                              "image",
+                              window?.GlobalConfig?.APP?.UIBase && "d-none"
+                            )}
+                          >
                             <img
                               src={
                                 SERVER_APP + "/Upload/image/" + item.ProdThumb
@@ -189,7 +202,12 @@ export default class extends React.Component {
                               alt={item.ProdTitle}
                             />
                           </div>
-                          <div className="info">
+                          <div
+                            className={clsx(
+                              "info",
+                              window?.GlobalConfig?.APP?.UIBase && "pl-0 f--1"
+                            )}
+                          >
                             <h3>{item.ProdTitle}</h3>
                             <div className="info-price">
                               <p className="price-p">
