@@ -13,7 +13,7 @@
 /* Flex direction */
 
 .fd--r {
-    flex-direction: row;
+    flex-direction: row !important;
 }
 
 
@@ -79,7 +79,7 @@
 /* Align items */
 
 .ai--fs {
-    align-items: flex-start;
+    align-items: flex-start !important;
 }
 
 .ai--c {

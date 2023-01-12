@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment } from "react";
 import { SERVER_APP } from "./../../constants/config";
 import { formatPriceVietnamese, checkSale } from "../../constants/format";
 import { getStockIDStorage } from "../../constants/user";
@@ -21,6 +21,7 @@ import SkeletonListService from "./components/Skeleton/SkeletonListService";
 import CategoriesList from "./components/CategoriesList/CategoriesList/CategoriesList";
 import ShopListServiceItem from "./shopListServiceItem";
 import NoProduct from "../../assets/images/no-product.png";
+import clsx from "clsx";
 
 export default class extends React.Component {
   constructor(props) {
@@ -270,100 +271,119 @@ export default class extends React.Component {
                   <div className="page-shop__service-list">
                     {arrService &&
                       arrService.map((item, index) => (
-                        <div
-                          className="page-shop__service-item"
-                          key={item.root.ID}
-                        >
-                          <div className="page-shop__service-item service-about">
-                            <div className="service-about__img">
-                              <img
+                        <Fragment key={index}>
+                          <div className="page-shop__service-item">
+                            <div className="page-shop__service-item service-about">
+                              <div
+                                className={clsx(
+                                  "service-about__img",
+                                  window?.GlobalConfig?.APP?.UIBase && "d-none"
+                                )}
+                              >
+                                <img
+                                  onClick={() =>
+                                    this.setState({ idOpen: item.root.ID })
+                                  }
+                                  src={
+                                    SERVER_APP +
+                                    "/Upload/image/" +
+                                    item.root.Thumbnail
+                                  }
+                                  alt={item.root.Title}
+                                  onError={(e) => {
+                                    e.target.src = NoProduct;
+                                  }}
+                                />
+                                <Link
+                                  href={`/schedule/?SelectedTitle=${item.root.Title}&SelectedId=${item.root.ID}`}
+                                  className="_btn"
+                                >
+                                  Đặt lịch ngay
+                                </Link>
+                              </div>
+                              <div
+                                className={clsx(
+                                  "service-about__title",
+                                  window?.GlobalConfig?.APP?.UIBase && "pb-20px pr-80px"
+                                )}
                                 onClick={() =>
                                   this.setState({ idOpen: item.root.ID })
                                 }
-                                src={
-                                  SERVER_APP +
-                                  "/Upload/image/" +
-                                  item.root.Thumbnail
-                                }
-                                alt={item.root.Title}
-                                onError={(e) => {
-                                  e.target.src = NoProduct;
-                                }}
-                              />
-                              <Link
-                                href={`/schedule/?SelectedTitle=${item.root.Title}&SelectedId=${item.root.ID}`}
-                                className="_btn"
                               >
-                                Đặt lịch ngay
-                              </Link>
-                              {/* <button>Đặt lịch ngay</button> */}
-                            </div>
-                            <div
-                              className="service-about__title"
-                              onClick={() =>
-                                this.setState({ idOpen: item.root.ID })
-                              }
-                            >
-                              {item.root.Title}
-                            </div>
-                            {window.GlobalConfig.APP.Prod.IsDetailOriginal &&
-                            (item.root.Desc !== "" || item.root.Detail) ? (
-                              <div className="service-about__content">
-                                {item.root.Desc && (
-                                  <div className="service-about__content-text">
-                                    {ReactHtmlParser(item.root.Desc)}
-                                  </div>
+                                {item.root.Title}
+                                {window?.GlobalConfig?.APP?.UIBase ? (
+                                  <Link
+                                    href={`/schedule/?SelectedTitle=${item.root.Title}&SelectedId=${item.root.ID}`}
+                                    className="_btn"
+                                  >
+                                    Đặt lịch
+                                  </Link>
+                                ) : (
+                                  ""
                                 )}
-                                <Button
-                                  fill
-                                  sheetOpen={`.demo-sheet-${item.root.ID}`}
-                                  className="show-more"
-                                >
-                                  Chi tiết{" "}
-                                  <i className="las la-angle-right"></i>
-                                </Button>
-                                <Sheet
-                                  opened={Number(idOpen) === item.root.ID}
-                                  className={`demo-sheet-${item.root.ID} sheet-detail`}
-                                  style={{
-                                    height: "auto",
-                                    "--f7-sheet-bg-color": "#fff",
-                                  }}
-                                  //swipeToClose
-                                  onSheetClosed={() => {
-                                    this.setState({ idOpen: "" });
-                                  }}
-                                  backdrop
-                                >
+                              </div>
+                              {window.GlobalConfig.APP.Prod.IsDetailOriginal &&
+                              (item.root.Desc !== "" || item.root.Detail) ? (
+                                <div className="service-about__content">
+                                  {item.root.Desc && (
+                                    <div className="service-about__content-text">
+                                      {ReactHtmlParser(item.root.Desc)}
+                                    </div>
+                                  )}
                                   <Button
-                                    sheetClose={`.demo-sheet-${item.root.ID}`}
+                                    fill
+                                    sheetOpen={`.demo-sheet-${item.root.ID}`}
                                     className="show-more"
                                   >
-                                    <i className="las la-times"></i>
+                                    Chi tiết{" "}
+                                    <i className="las la-angle-right"></i>
                                   </Button>
-                                  <PageContent>
-                                    <div className="page-shop__service-detail">
-                                      <div className="title">
-                                        <h4>{item.root.Title}</h4>
+                                  <Sheet
+                                    opened={Number(idOpen) === item.root.ID}
+                                    className={`demo-sheet-${item.root.ID} sheet-detail`}
+                                    style={{
+                                      height: "auto",
+                                      "--f7-sheet-bg-color": "#fff",
+                                    }}
+                                    //swipeToClose
+                                    onSheetClosed={() => {
+                                      this.setState({ idOpen: "" });
+                                    }}
+                                    backdrop
+                                  >
+                                    <Button
+                                      sheetClose={`.demo-sheet-${item.root.ID}`}
+                                      className="show-more"
+                                    >
+                                      <i className="las la-times"></i>
+                                    </Button>
+                                    <PageContent>
+                                      <div className="page-shop__service-detail">
+                                        <div className="title">
+                                          <h4>{item.root.Title}</h4>
+                                        </div>
+                                        <div className="content">
+                                          {ReactHtmlParser(item.root.Desc)}
+                                          {ReactHtmlParser(
+                                            this.fixedContentDomain(
+                                              item.root.Detail
+                                            )
+                                          )}
+                                        </div>
                                       </div>
-                                      <div className="content">
-                                        {ReactHtmlParser(item.root.Desc)}
-                                        {ReactHtmlParser(
-                                          this.fixedContentDomain(
-                                            item.root.Detail
-                                          )
-                                        )}
-                                      </div>
-                                    </div>
-                                  </PageContent>
-                                </Sheet>
-                              </div>
-                            ) : (
-                              ""
-                            )}
-                            <ShopListServiceItem item={item} />
+                                    </PageContent>
+                                  </Sheet>
+                                </div>
+                              ) : (
+                                ""
+                              )}
+                              <ShopListServiceItem
+                                item={item}
+                                f7router={this.$f7router}
+                              />
+                            </div>
                           </div>
-                        </div>
+                        </Fragment>
                       ))}
                   </div>
                 )}

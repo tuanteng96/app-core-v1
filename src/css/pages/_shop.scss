@@ -555,6 +555,43 @@
                     font-weight: 600;
                     font-size: 15px;
                     color: $color-app;
+                    position: relative;
+                    ._btn {
+                        background: $color-app;
+                        position: absolute;
+                        top: 8px;
+                        right: 0;
+                        padding: 7px 10px;
+                        color: #fff;
+                        font-weight: 500;
+                        border-top-right-radius: 2px;
+                        border-bottom-right-radius: 2px;
+                        font-size: 13px;
+                        text-transform: none;
+                        cursor: pointer;
+                        &:after,
+                        &:before {
+                            position: absolute;
+                            content: '';
+                            display: block;
+                        }
+                        &:after {
+                            width: 0.313em;
+                            height: 0.313em;
+                            background: #dadbdc;
+                            bottom: -0.313em;
+                            right: -3px;
+                            border-radius: 0 0.313em 0.313em 0;
+                        }
+                        &:before {
+                            width: 0.469em;
+                            height: calc(100% + 0.438em);
+                            top: 0;
+                            right: -5px;
+                            background: inherit;
+                            border-radius: 0 0.313em 0.313em 0;
+                        }
+                    }
                 }
                 &__content {
                     border-bottom: 1px dashed #ebedf2;
@@ -608,38 +645,44 @@
                                 @include flexbox;
                                 @include justify-content(space-between);
                                 @include align-items(center);
-                                .title {
-                                    max-width: 60%;
+                            }
+                            .title {
+                                max-width: 60%;
+                                font-weight: 600;
+                                color: $black;
+                                font-size: 15px;
+                            }
+                            .price {
+                                font-weight: 600;
+                                max-width: 40%;
+                                font-family: $font-app;
+                                @include flexbox;
+                                @include flex-direction(column);
+                                @include align-items(flex-end);
+                                b {
                                     font-weight: 600;
-                                    color: $black;
-                                    font-size: 15px;
+                                    font-size: 12px;
+                                    vertical-align: text-top;
+                                    padding-left: 2px;
                                 }
-                                .price {
-                                    font-weight: 600;
-                                    max-width: 40%;
-                                    @include flexbox;
-                                    @include flex-direction(column);
-                                    @include align-items(flex-end);
-                                    b {
-                                        font-weight: 600;
-                                        font-size: 12px;
-                                        vertical-align: text-top;
-                                        padding-left: 2px;
+                                &-sale {
+                                    display: none;
+                                }
+                                &-to {
+                                    color: $color-price-app;
+                                    font-weight: 700;
+                                }
+                                &.sale {
+                                    .price-sale {
+                                        display: block;
+                                        color: $color-price-app;
                                     }
-                                    &-sale {
-                                        display: none;
-                                    }
-                                    &.sale {
-                                        .price-sale {
-                                            display: block;
-                                            color: $color-price-app;
-                                        }
-                                        .price-to {
+                                    .price-to {
+                                        color: #848484;
+                                        text-decoration: line-through;
+                                        font-weight: 500;
+                                        b {
                                             font-weight: 400;
-                                            text-decoration: line-through;
-                                            b {
-                                                font-weight: 400;
-                                            }
                                         }
                                     }
                                 }

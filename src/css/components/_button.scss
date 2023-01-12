@@ -2,6 +2,7 @@
     outline: none;
     border: 0;
 }
+
 .btn-shopping {
     width: 40px;
     height: 40px;
@@ -41,18 +42,23 @@
         animation: animation-spinner 0.5s linear infinite;
         display: none;
     }
+    &.btn-shopping-sm {
+        font-size: 14px;
+        width: 35px;
+        height: 35px;
+    }
 }
 
 @-webkit-keyframes animation-spinner {
     to {
-      -webkit-transform: rotate(360deg);
-      transform: rotate(360deg);
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
     }
-  }
-  
-  @keyframes animation-spinner {
+}
+
+@keyframes animation-spinner {
     to {
-      -webkit-transform: rotate(360deg);
-      transform: rotate(360deg);
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
     }
-  }
+}
