@@ -107,7 +107,7 @@ export default class extends React.Component {
     const self = this;
     // Check query từ Danh sách dịch vụ tới
     if (
-      this.$f7route?.query?.SelectedId &&
+      this.$f7route?.query?.SelectedId ||
       this.$f7route?.query?.SelectedTitle
     ) {
       const { SelectedTitle, SelectedId } = this.$f7route.query;
@@ -115,6 +115,11 @@ export default class extends React.Component {
         ID: Number(SelectedId),
         Title: SelectedTitle,
       });
+    }
+    if(this.$f7route?.query?.note) {
+      this.setState({
+        serviceNote: this.$f7route?.query?.note
+      })
     }
     //
     if (this.$f7route.params.ID && this.state.isParams) {

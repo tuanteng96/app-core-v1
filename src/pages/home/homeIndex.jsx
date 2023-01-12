@@ -41,6 +41,7 @@ import QuickAction from "../../components/quickAction";
 // );
 import ProductList from "../home/components/Product/ProductList";
 import ModalChangePWD from "../../components/ModalChangePWD";
+import ServiceHot2 from "./components/ServiceHot/ServiceHot2";
 
 export default class extends React.Component {
   constructor() {
@@ -241,6 +242,7 @@ export default class extends React.Component {
                   {getUser() && <ListService className="my-10px" id="45" />}
                 </div>
               </div>
+              <ServiceHot2 id={57} f7={this.$f7router}/>
               <ServiceHot f7={this.$f7router} />
               <Suspense fallback={<div>Loading...</div>}>
                 <ListImage />
