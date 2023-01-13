@@ -257,24 +257,23 @@ export default class ServiceHot2 extends React.Component {
                           style={{
                             background: this.getColor(index, arrService),
                           }}
-                        >
-                          <div
-                            className="image"
-                            style={{
-                              backgroundImage: `url("${SERVER_APP}/Upload/image/${item.FileName}")`,
-                            }}
-                          />
-                          <div className="text">
-                            <div>
-                              <h4>{item.Title}</h4>
-                              <div
-                                className="text-desc"
-                                dangerouslySetInnerHTML={{ __html: item.Desc }}
-                              ></div>
-                            </div>
-                            <div className="btns">
-                              <div className="btn-more">Tham gia</div>
-                            </div>
+                        ></div>
+                        <div
+                          className="image"
+                          style={{
+                            backgroundImage: `url("${SERVER_APP}/Upload/image/${item.FileName}")`,
+                          }}
+                        />
+                        <div className="text">
+                          <div>
+                            <h4>{item.Title}</h4>
+                            <div
+                              className="text-desc"
+                              dangerouslySetInnerHTML={{ __html: item.Desc }}
+                            ></div>
+                          </div>
+                          <div className="btns">
+                            <div className="btn-more">Tham gia</div>
                           </div>
                         </div>
                       </Link>

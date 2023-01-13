@@ -8,7 +8,6 @@ import { getStockIDStorage, getUser } from "../../../../constants/user";
 import { Fragment } from "react";
 import ShopListServiceItem from "../../../shop/shopListServiceItem";
 import clsx from "clsx";
-import Truncate from "react-truncate-html";
 
 export default class ServiceHot extends React.Component {
   constructor() {
@@ -186,13 +185,12 @@ export default class ServiceHot extends React.Component {
                                   <div className="service-about__content children-p-0 px-15px">
                                     {item.root?.Desc ? (
                                       <div className="mb-12px">
-                                        <Truncate
-                                          lines={3}
-                                          breakWord={true}
+                                        <div
+                                          className="text-truncate-2"
                                           dangerouslySetInnerHTML={{
                                             __html: item.root.Desc,
                                           }}
-                                        ></Truncate>
+                                        ></div>
                                       </div>
                                     ) : (
                                       ""

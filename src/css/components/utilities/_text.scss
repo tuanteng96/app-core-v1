@@ -46,3 +46,11 @@ $color in $theme-colors {
 .text-truncate {
     @include cut-text();
 }
+
+.text-truncate-2 {
+    @include cut-text-to(3);
+}
+
+.text-truncate-3 {
+    @include cut-text-to(3);
+}
