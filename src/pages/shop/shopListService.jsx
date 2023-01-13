@@ -1,7 +1,7 @@
 import React, { Fragment } from "react";
 import { SERVER_APP } from "./../../constants/config";
 import { formatPriceVietnamese, checkSale } from "../../constants/format";
-import { getStockIDStorage } from "../../constants/user";
+import { getStockIDStorage, getUser } from "../../constants/user";
 import {
   Page,
   Link,
@@ -214,6 +214,8 @@ export default class extends React.Component {
       showPreloader,
     } = this.state;
 
+    const userInfo = getUser();
+
     return (
       <Page
         name="shop-List"
@@ -295,7 +297,11 @@ export default class extends React.Component {
                                   }}
                                 />
                                 <Link
-                                  href={`/schedule/?SelectedTitle=${item.root.Title}&SelectedId=${item.root.ID}`}
+                                  href={
+                                    userInfo
+                                      ? `/schedule/?SelectedTitle=${item.root.Title}&SelectedId=${item.root.ID}`
+                                      : "/login"
+                                  }
                                   className="_btn"
                                 >
                                   Đặt lịch ngay
@@ -304,7 +310,8 @@ export default class extends React.Component {
                               <div
                                 className={clsx(
                                   "service-about__title",
-                                  window?.GlobalConfig?.APP?.UIBase && "pb-20px pr-80px"
+                                  window?.GlobalConfig?.APP?.UIBase &&
+                                    "pb-20px pr-80px"
                                 )}
                                 onClick={() =>
                                   this.setState({ idOpen: item.root.ID })
@@ -313,7 +320,11 @@ export default class extends React.Component {
                                 {item.root.Title}
                                 {window?.GlobalConfig?.APP?.UIBase ? (
                                   <Link
-                                    href={`/schedule/?SelectedTitle=${item.root.Title}&SelectedId=${item.root.ID}`}
+                                    href={
+                                      userInfo
+                                        ? `/schedule/?SelectedTitle=${item.root.Title}&SelectedId=${item.root.ID}`
+                                        : "/login"
+                                    }
                                     className="_btn"
                                   >
                                     Đặt lịch

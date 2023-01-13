@@ -16,6 +16,9 @@ class BookDataService {
     getBookId(ID) {
         return http.get(`/api/v3/mbook?cmd=getbookid&id=${ID}`);
     }
+    bookContact(data) {
+        return http.post('/api/v3/contact23@send', JSON.stringify(data))
+    }
 }
 
 export default new BookDataService();

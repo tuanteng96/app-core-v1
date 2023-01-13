@@ -1,10 +1,14 @@
 import React from "react";
-import { Link } from "framework7-react";
+import { f7, Link } from "framework7-react";
 import Slider from "react-slick";
 import ShopDataService from "../../../../service/shop.service";
 import SkeletonServiceHot from "./SkeletonServiceHot";
 import { SERVER_APP } from "../../../../constants/config";
-import { getStockIDStorage } from "../../../../constants/user";
+import { getStockIDStorage, getUser } from "../../../../constants/user";
+import { Fragment } from "react";
+import ShopListServiceItem from "../../../shop/shopListServiceItem";
+import clsx from "clsx";
+import Truncate from "react-truncate-html";
 
 export default class ServiceHot extends React.Component {
   constructor() {
@@ -20,7 +24,8 @@ export default class ServiceHot extends React.Component {
     this.getServicesAll();
   }
   handStyle = () => {
-    const _width = this.state.width - 120;
+    const off = window?.GlobalConfig?.APP?.UIBase ? 34 : 120;
+    const _width = this.state.width - off;
     return Object.assign({
       width: _width,
     });
@@ -29,52 +34,93 @@ export default class ServiceHot extends React.Component {
   getServicesAll = () => {
     let stockid = getStockIDStorage();
     stockid ? stockid : 0;
-    ShopDataService.getServiceOriginal(stockid)
-      .then(({ data }) => {
-        const result = data.data;
-        if (result) {
-          let newData = [];
-          if (stockid > 0) {
-            newData = result.filter((item) => {
-              const arrayStatus = item?.root?.Status
-                ? item.root.Status.split(",")
-                : [];
-              return (item.root.OnStocks.indexOf("*") > -1 || item.root.OnStocks.indexOf(stockid) > -1) && item.root.IsRootPublic && arrayStatus.indexOf("2") > -1;
-            });
-          } else {
-            newData = result.filter((item) => {
-              const arrayStatus = item?.root?.Status
-                ? item.root.Status.split(",")
-                : [];
-              return item.root.OnStocks && item.root.IsRootPublic && arrayStatus.indexOf("2") > -1;
+    if (window?.GlobalConfig?.APP?.UIBase) {
+      ShopDataService.getServiceParent(795, stockid)
+        .then(({ data }) => {
+          const result = data.lst;
+          if (result) {
+            let newData = [];
+            if (stockid > 0) {
+              newData = result.filter((item) => {
+                const arrayStatus = item?.root?.Status
+                  ? item.root.Status.split(",")
+                  : [];
+                return (
+                  (item.root.OnStocks.indexOf("*") > -1 ||
+                    item.root.OnStocks.indexOf(stockid) > -1) &&
+                  item.root.IsRootPublic &&
+                  arrayStatus.indexOf("2") > -1
+                );
+              });
+            } else {
+              newData = result.filter((item) => {
+                const arrayStatus = item?.root?.Status
+                  ? item.root.Status.split(",")
+                  : [];
+                return (
+                  item.root.OnStocks &&
+                  item.root.IsRootPublic &&
+                  arrayStatus.indexOf("2") > -1
+                );
+              });
+            }
+            this.setState({
+              arrService: newData,
+              isLoading: false,
             });
           }
-          this.setState({
-            arrService: newData,
-            isLoading: false,
-          });
-        }
-      })
-      .catch((err) => console.log(err));
-
-    // ShopDataService.getServiceParent(795, stockid)
-    //   .then((response) => {
-    //     const { data } = response.data;
-    //     const newData = data.filter((item) => {
-    //       return item.root.Tags.includes("hot");
-    //     });
-    //     this.setState({
-    //       arrService: newData,
-    //       isLoading: false,
-    //     });
-    //   })
-    //   .catch((e) => console.log(e));
+        })
+        .catch((e) => console.log(e));
+    } else {
+      ShopDataService.getServiceOriginal(stockid)
+        .then(({ data }) => {
+          const result = data.data;
+          if (result) {
+            let newData = [];
+            if (stockid > 0) {
+              newData = result.filter((item) => {
+                const arrayStatus = item?.root?.Status
+                  ? item.root.Status.split(",")
+                  : [];
+                return (
+                  (item.root.OnStocks.indexOf("*") > -1 ||
+                    item.root.OnStocks.indexOf(stockid) > -1) &&
+                  item.root.IsRootPublic &&
+                  arrayStatus.indexOf("2") > -1
+                );
+              });
+            } else {
+              newData = result.filter((item) => {
+                const arrayStatus = item?.root?.Status
+                  ? item.root.Status.split(",")
+                  : [];
+                return (
+                  item.root.OnStocks &&
+                  item.root.IsRootPublic &&
+                  arrayStatus.indexOf("2") > -1
+                );
+              });
+            }
+            this.setState({
+              arrService: newData,
+              isLoading: false,
+            });
+          }
+        })
+        .catch((err) => console.log(err));
+    }
   };
 
   handleUrl = (item) => {
-    this.props.f7.navigate(
-      `/shop/${item.cate.ID}/?ids=${item.root.ID}&cateid=795`
-    );
+    if (window?.GlobalConfig?.APP?.UIBase) {
+      this.props.f7router.navigate(
+        `/shop/${item.root.Cates[0].ID}/?ids=${item.root.ID}&cateid=795`
+      );
+    } else {
+      this.props.f7router.navigate(
+        `/shop/${item.cate.ID}/?ids=${item.root.ID}&cateid=795`
+      );
+    }
   };
 
   render() {
@@ -90,40 +136,97 @@ export default class ServiceHot extends React.Component {
       autoplay: true,
       autoplaySpeed: 5000,
     };
-
+    const userInfo = getUser();
     return (
       <React.Fragment>
         {!isLoading && (
           <React.Fragment>
             {arrService && arrService.length > 0 && (
-              <div className="home-page__news mb-8">
+              <div
+                className={clsx(
+                  "home-page__news",
+                  !window?.GlobalConfig?.APP?.UIBase
+                    ? "mb-8"
+                    : "bg-transparent pb-0 pt-0"
+                )}
+              >
                 <div className="page-news__list">
-                  <div className="page-news__list-ul">
+                  <div
+                    className={clsx(
+                      "page-news__list-ul",
+                      window?.GlobalConfig?.APP?.UIBase &&
+                        "page-news__list-flex"
+                    )}
+                  >
                     <Slider {...settingsNews}>
                       {arrService &&
-                        arrService.map((item, index) => {
-                          if (index > 6) return null;
-                          return (
-                            <Link
-                              className="page-news__list-item box-shadow-none"
-                              key={item.root.ID}
-                              style={this.handStyle()}
-                              onClick={() => this.handleUrl(item)}
-                            >
-                              <div className="images bd-rd3">
-                                <img
-                                  src={SERVER_APP + item.root.Thumbnail_web}
-                                  alt={item.root.Title}
-                                />
+                        arrService.slice(0, 6).map((item, index) => (
+                          <Fragment key={index}>
+                            {window?.GlobalConfig?.APP?.UIBase ? (
+                              <div
+                                className="page-shop__service-item mb-0"
+                                style={this.handStyle()}
+                              >
+                                <div className="page-shop__service-item service-about mb-0">
+                                  <div className="service-about__title pb-20px pr-80px">
+                                    <span onClick={() => this.handleUrl(item)}>
+                                      {item.root.Title}
+                                    </span>
+                                    <Link
+                                      href={
+                                        userInfo
+                                          ? `/schedule/?SelectedTitle=${item.root.Title}&SelectedId=${item.root.ID}`
+                                          : "/login/"
+                                      }
+                                      className="_btn"
+                                    >
+                                      Đặt lịch
+                                    </Link>
+                                  </div>
+                                  <div className="service-about__content children-p-0 px-15px">
+                                    {item.root?.Desc ? (
+                                      <div className="mb-12px">
+                                        <Truncate
+                                          lines={3}
+                                          breakWord={true}
+                                          dangerouslySetInnerHTML={{
+                                            __html: item.root.Desc,
+                                          }}
+                                        ></Truncate>
+                                      </div>
+                                    ) : (
+                                      ""
+                                    )}
+                                  </div>
+                                  <ShopListServiceItem
+                                    item={item}
+                                    f7router={this.props.f7router}
+                                    lines={true}
+                                  />
+                                </div>
                               </div>
-                              <div className="text">
-                                <h6 className="text-cut-1">
-                                  {item.root.Title}
-                                </h6>
-                              </div>
-                            </Link>
-                          );
-                        })}
+                            ) : (
+                              <Link
+                                className="page-news__list-item box-shadow-none"
+                                key={item.root.ID}
+                                style={this.handStyle()}
+                                onClick={() => this.handleUrl(item)}
+                              >
+                                <div className="images bd-rd3">
+                                  <img
+                                    src={SERVER_APP + item.root.Thumbnail_web}
+                                    alt={item.root.Title}
+                                  />
+                                </div>
+                                <div className="text">
+                                  <h6 className="text-cut-1">
+                                    {item.root.Title}
+                                  </h6>
+                                </div>
+                              </Link>
+                            )}
+                          </Fragment>
+                        ))}
                     </Slider>
                   </div>
                 </div>

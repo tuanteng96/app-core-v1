@@ -5,6 +5,7 @@ import { checkSale, formatPriceVietnamese } from "../../constants/format";
 import { getStockIDStorage, getUser } from "../../constants/user";
 import ShopDataService from '../../service/shop.service'
 import { toast } from "react-toastify";
+import { TruncateLines } from "react-truncate-lines";
 
 const ButtonCart = ({ item, f7, f7router }) => {
   const [loading, setLoading] = useState(false);
@@ -73,7 +74,7 @@ const ButtonCart = ({ item, f7, f7router }) => {
   );
 };
 
-function ShopListServiceItem({ item, CateId, f7router }) {
+function ShopListServiceItem({ item, CateId, f7router, lines }) {
   const [itemShow, setItemShow] = useState(3);
 
   const isPublic = (o) => {
@@ -82,9 +83,8 @@ function ShopListServiceItem({ item, CateId, f7router }) {
     }
     return o.IsOptPublic;
   };
-
   return (
-    <div className="service-about__list">
+    <div className={clsx("service-about__list pt-12px")}>
       <ul>
         {item.items &&
           item.items.length > 0 &&
@@ -97,7 +97,13 @@ function ShopListServiceItem({ item, CateId, f7router }) {
                   <div className="d-flex px-15px pb-15px">
                     <div className="f--1">
                       <div className="title max-w-100 mb-3px">
-                        {subitem.Title}
+                        {lines ? (
+                          <TruncateLines lines={1} ellipsis={<span>...</span>}>
+                            {subitem.Title}
+                          </TruncateLines>
+                        ) : (
+                          subitem.Title
+                        )}
                       </div>
                       <div
                         className={

@@ -320,6 +320,7 @@ export default class ScheduleSpa extends React.Component {
                               DateTimeBook.stock && DateTimeBook.stock
                             ) === item.ID
                           }
+                          readOnly
                         />
                         <label htmlFor={"location-" + item.ID}>
                           {item.Title}

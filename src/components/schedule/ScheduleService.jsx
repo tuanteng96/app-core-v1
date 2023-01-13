@@ -98,7 +98,7 @@ function ScheduleService({
   };
 
   const isActive = (selectedService, item) => {
-    return selectedService.some((service) => service.ID === item.ID);
+    return selectedService.some((service) => service?.ID === item?.ID);
   };
 
   return (

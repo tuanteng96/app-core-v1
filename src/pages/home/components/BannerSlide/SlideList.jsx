@@ -65,7 +65,7 @@ export default class SlideList extends React.Component {
                             href={
                               item.Link && item.Link !== "/"
                                 ? item.Link
-                                : `javascript:;` //`/adv/${item.ID}`
+                                : `#` //`/adv/${item.ID}`
                             }
                             className={`body-slide__item d-block ${
                               !window.GlobalConfig.APP.Home?.SliderFull &&

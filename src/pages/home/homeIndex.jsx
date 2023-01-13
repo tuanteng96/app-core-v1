@@ -242,8 +242,8 @@ export default class extends React.Component {
                   {getUser() && <ListService className="my-10px" id="45" />}
                 </div>
               </div>
-              <ServiceHot2 id={57} f7={this.$f7router}/>
-              <ServiceHot f7={this.$f7router} />
+              <ServiceHot2 id={57} f7router={this.$f7router} f7={this.$f7} />
+              <ServiceHot f7router={this.$f7router} />
               <Suspense fallback={<div>Loading...</div>}>
                 <ListImage />
               </Suspense>
