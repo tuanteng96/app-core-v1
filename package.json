@@ -24,8 +24,6 @@
         "@material-ui/core": "^4.11.0",
         "@material-ui/lab": "^4.0.0-alpha.56",
         "axios": "^0.21.1",
-        "bizcharts": "^4.1.15",
-        "chokidar": "^3.5.1",
         "clsx": "^1.2.1",
         "dom7": "^2.1.5",
         "firebase": "^9.6.1",
