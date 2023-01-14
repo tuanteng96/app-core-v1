@@ -189,7 +189,7 @@ module.exports = {
         new MiniCssExtractPlugin({
             filename: 'css/[name].css',
         }),
-        //new BundleAnalyzerPlugin(),
+        // new BundleAnalyzerPlugin(),
         new CopyWebpackPlugin({
             patterns: [{
                     noErrorOnMissing: true,

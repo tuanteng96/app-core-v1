@@ -294,7 +294,7 @@ export default class employeeStatistical extends React.Component {
                             this.totalValue(dataSalary?.THU_GIU_LUONG, "Value")
                           )}
                       </span>
-                      <i className="fas fa-exclamation-circle text-warning pl-5px"></i>
+                      <i className="las la-exclamation-circle font-size-md text-warning pl-5px"></i>
                     </div>
                   </div>
                 </div>
@@ -333,8 +333,8 @@ export default class employeeStatistical extends React.Component {
 
               <div className="employee-statistical__item">
                 <div className="title" onClick={() => this.OpenSheet("sheet2")}>
-                  Lương theo chấm công{" "}
-                  <i className="fas fa-exclamation-circle text-warning pl-2px"></i>
+                  Lương theo chấm công
+                  <i class="las la-exclamation-circle text-warning pl-5px font-size-md"></i>
                 </div>
                 <div className="head">
                   <div className="tr">
@@ -358,11 +358,11 @@ export default class employeeStatistical extends React.Component {
                       className="td w-2"
                       onClick={() => this.OpenSheet("sheet1")}
                     >
-                      Trừ lương nghỉ{" "}
+                      Trừ lương nghỉ
                       {dataSalary &&
                         dataSalary.NGAY_NGHI &&
                         dataSalary.NGAY_NGHI.length > 0 && (
-                          <i className="fas fa-exclamation-circle text-warning pl-2px"></i>
+                          <i class="las la-exclamation-circle font-size-md text-warning pl-5px"></i>
                         )}
                     </div>
                     <div className="td w-3">

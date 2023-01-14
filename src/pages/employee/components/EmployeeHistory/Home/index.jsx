@@ -58,15 +58,15 @@ const History = forwardRef(({ MemberID }, ref) => {
                     {item.items.map((sub, idx) => (
                       <div className="item-lst_sub" key={idx}>
                         <div className="time">
-                          <i className="fas fa-clock pr-5px"></i>
+                          <i className="las la-clock pr-5px"></i>
                           {moment(sub.BookDate).format("HH:mm A")}
                         </div>
                         <div className="service-name fw-500">
-                          <i className="fas fa-heart pr-5px"></i>
+                          <i className="las la-heart pr-5px"></i>
                           {sub.ProdTitle} ({sub.Title})
                         </div>
                         <div className="staff fw-500">
-                          <i className="fas fa-user-alt pr-5px"></i>
+                          <i className="las la-user-circle pr-5px"></i>
                           Thực hiện :{" "}
                           {sub.Staffs &&
                             sub.Staffs.map((staff) => staff.FullName).join(

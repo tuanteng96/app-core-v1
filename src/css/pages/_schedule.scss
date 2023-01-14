@@ -872,16 +872,17 @@
         font-weight: 700;
         font-size: 11px;
         color: #b91a2f;
-        width: 150px;
+        width: 140px;
     }
     &__icon {
-        width: 50px;
         height: 15px;
         position: relative;
+        display: flex;
+        align-items: center;
         .line {
             position: absolute;
             width: calc(100% - 3px);
-            height: 2px;
+            height: 1px;
             background: #b91a2f;
             top: 50%;
             left: 0;
@@ -889,14 +890,12 @@
             transform: translateX(-50%);
         }
         .arrow {
-            position: absolute;
-            right: 0;
-            top: -4px;
-            border-top-right-radius: 100%;
-            border-bottom-right-radius: 100%;
             z-index: 2;
             font-size: 19px;
             color: #b91a2f;
+            height: 24px;
+            -webkit-animation: bounceRight 2s infinite;
+            animation: bounceRight 2s infinite;
             &::before {
                 // content: "";
                 // display: block;
@@ -1113,5 +1112,24 @@
         -moz-transform: scale(1, 1);
         -o-transform: scale(1, 1);
         transform: scale(1, 1);
+    }
+}
+
+@keyframes bounceRight {
+    0%,
+    20%,
+    50%,
+    80%,
+    100% {
+        -ms-transform: translateX(0);
+        transform: translateX(0);
+    }
+    40% {
+        -ms-transform: translateX(-10px);
+        transform: translateX(-10px);
+    }
+    60% {
+        -ms-transform: translateX(-10px);
+        transform: translateX(-10px);
     }
 }

@@ -84,7 +84,7 @@ const ButtonCart = ({ item, f7, f7router }) => {
         )}
         onClick={orderSubmit}
       >
-        <i className="fal fa-plus"></i>
+        <i className="las la-plus"></i>
       </div>
     </div>
   );

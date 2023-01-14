@@ -44,7 +44,7 @@ export default class CartComponent extends React.Component {
         if (countOrder > 0) {
             return (
               <Link className="icon-cart-component" noLinkClass href="/pay/">
-                <i className="fal fa-shopping-cart"></i>
+                <i className="las la-shopping-cart"></i>
                 <span className="count">
                   {countOrder ? countOrder : <Skeleton circle={true} height={15} width={15} />}
                 </span>

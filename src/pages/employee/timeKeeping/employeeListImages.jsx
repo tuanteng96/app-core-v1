@@ -137,7 +137,7 @@ export default class employeeListImages extends React.Component {
             </div>
           </div>
           <Subnavbar className="sub-nav-bar">
-            <i className="fas fa-calendar-alt icon-date"></i>
+            <i className="las la-calendar icon-date"></i>
             <ListInput
               className="date-time-filter"
               label="Chọn ngày"
