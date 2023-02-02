@@ -4,8 +4,8 @@ import { Page, Sheet } from "framework7-react";
 import UserService from "../service/user.service";
 import { getUser } from "../constants/user";
 import { checkAvt2 } from "../constants/format";
-// import Avatar from '@material-ui/core/Avatar';
-// import AvatarGroup from '@material-ui/lab/AvatarGroup';
+import Avatar from '@material-ui/core/Avatar';
+import AvatarGroup from '@material-ui/lab/AvatarGroup';
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
