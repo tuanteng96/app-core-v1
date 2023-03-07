@@ -7,6 +7,8 @@ import { setNotiID, getNotiID } from "./../constants/user";
 import routes from "../js/routes";
 import { NAME_APP } from "../constants/config";
 import { CLOSE_APP } from "../constants/prom21";
+//import ServiceWorker from "../service-worker.js"
+
 // import Template7 from "template7";
 
 // window.language = localStorage.getItem("language") || "vi";
@@ -80,7 +82,7 @@ export default class extends React.Component {
               resolve();
             }
           },
-        },
+        }
       },
     };
   }
