@@ -6,8 +6,10 @@ import Skeleton from "react-loading-skeleton";
 import PerfectScrollbar from "react-perfect-scrollbar";
 
 const perfectScrollbarOptions = {
-  wheelSpeed: 1,
+  wheelSpeed: 5,
   wheelPropagation: false,
+  suppressScrollY: true,
+  swipeEasing: false,
 };
 
 export default class CategoriesList extends React.Component {
@@ -64,15 +66,6 @@ export default class CategoriesList extends React.Component {
 
   render() {
     const { arrCate, activeId, loading } = this.state;
-    const settingsNews = {
-      className: "slider variable-width",
-      dots: false,
-      arrows: false,
-      infinite: false,
-      slidesToShow: 1,
-      centerPadding: "20px",
-      variableWidth: true,
-    };
 
     if (this.props.id === "hot") return "";
 
