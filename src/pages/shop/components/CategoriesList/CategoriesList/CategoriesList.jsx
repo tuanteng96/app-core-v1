@@ -1,9 +1,14 @@
 import React from "react";
 import { getStockIDStorage } from "../../../../../constants/user";
 import ShopDataService from "../../../../../service/shop.service";
-import Slider from "react-slick";
 import { Link } from "framework7-react";
 import Skeleton from "react-loading-skeleton";
+import PerfectScrollbar from "react-perfect-scrollbar";
+
+const perfectScrollbarOptions = {
+  wheelSpeed: 1,
+  wheelPropagation: false,
+};
 
 export default class CategoriesList extends React.Component {
   constructor() {
@@ -72,39 +77,40 @@ export default class CategoriesList extends React.Component {
     if (this.props.id === "hot") return "";
 
     return (
-      <div className="list-cate">
-        <Slider {...settingsNews}>
-          {loading &&
-            Array(4)
-              .fill()
-              .map((item, index) => (
-                <Link
-                  //href={"/shop/" + item.ID + "/"}
-                  className={`page-news__list-item`}
-                  key={index}
-                >
-                  <Skeleton width={100} />
-                </Link>
-              ))}
+      <PerfectScrollbar
+        options={perfectScrollbarOptions}
+        className="list-cate scroll-hidden scroll"
+      >
+        {loading &&
+          Array(4)
+            .fill()
+            .map((item, index) => (
+              <Link
+                //href={"/shop/" + item.ID + "/"}
+                className={`page-news__list-item`}
+                key={index}
+              >
+                <Skeleton width={100} />
+              </Link>
+            ))}
 
-          {!loading &&
-            arrCate &&
-            arrCate.map((item, index) => {
-              return (
-                <Link
-                  //href={"/shop/" + item.ID + "/"}
-                  className={`${
-                    Number(activeId) === Number(item.ID) && "active"
-                  }`}
-                  onClick={() => this.props.changeCate(item)}
-                  key={index}
-                >
-                  {item.Title}
-                </Link>
-              );
-            })}
-        </Slider>
-      </div>
+        {!loading &&
+          arrCate &&
+          arrCate.map((item, index) => {
+            return (
+              <Link
+                //href={"/shop/" + item.ID + "/"}
+                className={`${
+                  Number(activeId) === Number(item.ID) && "active"
+                }`}
+                onClick={() => this.props.changeCate(item)}
+                key={index}
+              >
+                {item.Title}
+              </Link>
+            );
+          })}
+      </PerfectScrollbar>
     );
   }
 }

@@ -11,6 +11,8 @@ import Framework7React from 'framework7-react';
 // Import Framework7 Styles
 import 'framework7/css/framework7.bundle.css';
 
+import 'react-perfect-scrollbar/dist/css/styles.css';
+
 // Import Icons and App Custom Styles
 import '../css/icons.css';
 

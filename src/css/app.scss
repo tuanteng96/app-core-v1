@@ -5,6 +5,7 @@
 @import './abstracts/variables';
 @import './components/variables';
 @import './../css/abstracts/mixins';
+@import './plugins/mixins/perfect-scrollbar';
 ////////// base
 @import './base/reset',
 "./base/mixins";
@@ -25,7 +26,8 @@
 "./components/button",
 './components/svg',
 './components/sheet',
-"./components/react-select";
+"./components/react-select",
+'./plugins/perfect-scrollbar';
 ////////// layout
 @import './../css/layout/iconanimation';
 @import './../css/layout/button';
@@ -89,6 +91,20 @@ html {
 
 .bs-bb {
     box-sizing: border-box;
+}
+
+.ScrollbarsCustom-Track,
+.ScrollbarsCustom-Thumb {
+    display: none !important;
+}
+
+.ScrollbarsCustom-Wrapper {
+    height: 100%;
+}
+
+.ScrollbarsCustom-Scroller {
+    padding-bottom: 0px !important;
+    margin-bottom: 0px !important;
 }
 
 //Reset Framework7
