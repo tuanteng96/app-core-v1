@@ -82,6 +82,12 @@ export default class ScheduleSpa extends React.Component {
           this.state.ListDisableChoose
         );
       }
+      else {
+        this.getListChoose(
+          new Date(),
+          this.state.ListDisableChoose
+        );
+      }
     }
   }
 

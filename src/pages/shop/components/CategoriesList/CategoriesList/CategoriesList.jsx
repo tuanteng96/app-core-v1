@@ -74,6 +74,7 @@ export default class CategoriesList extends React.Component {
         options={perfectScrollbarOptions}
         className="list-cate scroll-hidden scroll"
       >
+      
         {loading &&
           Array(4)
             .fill()
