@@ -300,41 +300,47 @@ export default class employeeStatistical extends React.Component {
                 </div>
               )}
 
-              {dataSalary &&
-              (dataSalary.CHI_LUONG.length ||
-                dataSalary.CHI_LUONG_TAT_CA.length) > 0 ? (
-                <div className="employee-statistical__item">
-                  <div className="title">Đã trả lương</div>
-                  {dataSalary.CHI_LUONG_TAT_CA.map((o, idx) => (
-                    <div className="tfooter" key={idx}>
-                      <div className="tr">
-                        <div className="td">Đã trả lần {idx + 1}</div>
-                        <div className="td">
-                          {dataSalary && formatPriceVietnamese(o.Value)}
+              {dataSalary && (
+                <React.Fragment>
+                  {(dataSalary.CHI_LUONG && dataSalary.CHI_LUONG.length > 0) ||
+                  (dataSalary.CHI_LUONG_TAT_CA &&
+                    dataSalary.CHI_LUONG_TAT_CA.length > 0) ? (
+                    <div className="employee-statistical__item">
+                      <div className="title">Đã trả lương</div>
+                      {dataSalary.CHI_LUONG_TAT_CA.map((o, idx) => (
+                        <div className="tfooter" key={idx}>
+                          <div className="tr">
+                            <div className="td">Đã trả lần {idx + 1}</div>
+                            <div className="td">
+                              {dataSalary && formatPriceVietnamese(o.Value)}
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="employee-statistical__item">
+                      <div className="title">Chưa trả lương</div>
+                      <div className="tfooter">
+                        <div className="tr">
+                          <div className="td">Dự kiến</div>
+                          <div className="td">
+                            {dataSalary &&
+                              formatPriceVietnamese(
+                                this.basicSalary(dataSalary)
+                              )}
+                          </div>
                         </div>
                       </div>
                     </div>
-                  ))}
-                </div>
-              ) : (
-                <div className="employee-statistical__item">
-                  <div className="title">Chưa trả lương</div>
-                  <div className="tfooter">
-                    <div className="tr">
-                      <div className="td">Dự kiến</div>
-                      <div className="td">
-                        {dataSalary &&
-                          formatPriceVietnamese(this.basicSalary(dataSalary))}
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                  )}
+                </React.Fragment>
               )}
 
               <div className="employee-statistical__item">
                 <div className="title" onClick={() => this.OpenSheet("sheet2")}>
                   Lương theo chấm công
-                  <i class="las la-exclamation-circle text-warning pl-5px font-size-md"></i>
+                  <i className="las la-exclamation-circle text-warning pl-5px font-size-md"></i>
                 </div>
                 <div className="head">
                   <div className="tr">
@@ -362,7 +368,7 @@ export default class employeeStatistical extends React.Component {
                       {dataSalary &&
                         dataSalary.NGAY_NGHI &&
                         dataSalary.NGAY_NGHI.length > 0 && (
-                          <i class="las la-exclamation-circle font-size-md text-warning pl-5px"></i>
+                          <i className="las la-exclamation-circle font-size-md text-warning pl-5px"></i>
                         )}
                     </div>
                     <div className="td w-3">
