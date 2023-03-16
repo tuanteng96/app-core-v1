@@ -99,7 +99,7 @@ export default class extends React.Component {
   }
 
   notiDefault = (evt) => {
-    if (Number(getNotiID()) !== Number(evt.data.id)) {
+    if (evt.data.id && Number(getNotiID()) !== Number(evt.data.id)) {
       setNotiID(evt.data.id);
       this.$f7.views.main.router.navigate(`/notification/${evt.data.id}`);
     }
