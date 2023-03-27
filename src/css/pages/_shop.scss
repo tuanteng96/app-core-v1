@@ -13,6 +13,8 @@
             position: relative;
             margin-right: 25px;
             white-space: nowrap;
+            min-width: auto !important;
+            padding: 0 !important;
             &.active {
                 color: $color-app;
                 &::before {
