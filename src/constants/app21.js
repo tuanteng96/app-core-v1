@@ -1,5 +1,5 @@
 import { f7 } from "framework7-react";
-import { app_request } from "./user";
+import { app_request, getToken } from "./user";
 
 export const app21 = /** @class */ (function() {
     function _21() {}
@@ -141,7 +141,7 @@ export const app21 = /** @class */ (function() {
             maxheight: 1500,
             ext: 'jpg',
             pref: 'IMG',
-            server: '/api/v3/file?cmd=upload&autn=AAAA'
+            server: `/api/v3/file?cmd=upload&autn=AAAA&token=${getToken()}`
         };
         opt = Object.assign(opt, _opt);
         var t = this;

@@ -1,4 +1,5 @@
 import { SERVER_APP } from "./config";
+import { getToken } from "./user";
 
 export const PHOTO_TO_SERVER = (_opt) => {
     var t = window.app21 || {};
@@ -7,7 +8,7 @@ export const PHOTO_TO_SERVER = (_opt) => {
         maxheight: 1500,
         ext: 'jpg',
         pref: 'IMG',
-        server: `${SERVER_APP}/api/v3/file?cmd=upload&autn=AAAA`
+        server: `${SERVER_APP}/api/v3/file?cmd=upload&autn=AAAA&token=${getToken()}`
     };
     opt = Object.assign(opt, _opt);
 
