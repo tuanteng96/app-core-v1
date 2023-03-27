@@ -19,7 +19,7 @@ class StaffService {
         return http.get(`/api/v3/orderservice?cmd=attachment&osid=${osid}`)
     }
     uploadImageStaff(file) {
-        return http.post(`/api/v3/file?cmd=upload`, file);
+        return http.post(`/api/v3/file?cmd=upload&token=${getToken()}`, file);
     }
     updateDescStaff(id, data) {
         return http.post(`/api/v3/orderservice?cmd=desc&osid=${id}`, qs.stringify(data));
