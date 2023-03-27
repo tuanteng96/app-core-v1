@@ -52,7 +52,7 @@ export default class ProductList extends React.Component {
                 <div className="head">
                   <h5>
                     <Link href="/shop/794/">
-                      Sản phẩm mới <i className="las la-angle-right"></i>
+                      Sản phẩm hot <i className="las la-angle-right"></i>
                     </Link>
                   </h5>
                 </div>
@@ -73,7 +73,7 @@ export default class ProductList extends React.Component {
         {isLoading && (
           <div className="home-page__product">
             <div className="head">
-              <h5>Sản phẩm mới</h5>
+              <h5>Sản phẩm hot</h5>
               <div className="all">
                 <Link href="/shop/794/">
                   Xem tất cả <i className="las la-angle-right"></i>

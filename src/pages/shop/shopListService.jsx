@@ -300,7 +300,7 @@ export default class extends React.Component {
                                   href={
                                     userInfo
                                       ? `/schedule/?SelectedTitle=${item.root.Title}&SelectedId=${item.root.ID}`
-                                      : "/login"
+                                      : "/login/"
                                   }
                                   className="_btn"
                                 >
@@ -323,7 +323,7 @@ export default class extends React.Component {
                                     href={
                                       userInfo
                                         ? `/schedule/?SelectedTitle=${item.root.Title}&SelectedId=${item.root.ID}`
-                                        : "/login"
+                                        : "/login/"
                                     }
                                     className="_btn"
                                   >
