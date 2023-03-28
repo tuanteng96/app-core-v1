@@ -315,7 +315,7 @@ export default class employeeServiceDetail extends React.Component {
     const dataSrc = {
       src: src,
     };
-    staffService
+    return staffService
       .updateImageStaff(cateID, dataSrc)
       .then((response) => {})
       .catch((error) => console.log(error));
@@ -611,7 +611,7 @@ export default class employeeServiceDetail extends React.Component {
           opened={sheetOpened}
           onSheetClosed={() => this.closeSheet()}
           //swipeToClose
-          swipeToStep
+          //swipeToStep
           backdrop
         >
           <div className="sheet-modal-swipe-step">
