@@ -24,27 +24,27 @@ export const PHOTO_TO_SERVER = (_opt) => {
     }
     return new Promise((resolve, reject) => {
         t.prom('CAMERA', cameraOpt).then(s => {
-            console.log("CAMERA");
-            console.log(s);
+            // console.log("CAMERA");
+            // console.log(s);
             t.prom('POST_TO_SERVER', JSON.stringify({
                 server: opt.server,
                 path: s.data
                     // token: 'neu_co',
             })).then(s1 => {
                 var rs = JSON.parse(s1.data);
-                console.log("POST_TO_SERVER");
-                console.log(rs);
+                // console.log("POST_TO_SERVER");
+                // console.log(rs);
                 //console.log('app_camera->CAMERA->POST_TO_SERVER->OK', rs.data);
                 // vm.$emit('success', rs.data);
                 resolve(rs);
             }).catch(f1 => {
-                console.log("ERROR POST_TO_SERVER");
-                console.log(f1);
+                // console.log("ERROR POST_TO_SERVER");
+                // console.log(f1);
                 reject({ title: 'POST_TO_SERVER FAIL', error: f1 })
             });
         }).catch(e => {
-            console.log("ERROR CAMERA");
-            console.log(e);
+            // console.log("ERROR CAMERA");
+            // console.log(e);
             reject({ title: 'CAMERA FAIL', error: e })
         })
     })

@@ -344,15 +344,9 @@ export default class employeeServiceDetail extends React.Component {
     f7.dialog.preloader("Đang Upload...");
     try {
       const image = await this.resizeFile(event.target.files[0]);
-      console.log("image");
-      console.log(image);
-      console.log("=============");
       const formData = new FormData();
       formData.append("file", image);
       const upload = await staffService.uploadImageStaff(formData);
-      console.log("upload");
-      console.log(upload);
-      console.log("=============");
       const src = upload.data.data;
       await this.updateImageServer(src);
       await this.getImageStaff();
