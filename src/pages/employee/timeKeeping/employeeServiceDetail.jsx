@@ -344,16 +344,19 @@ export default class employeeServiceDetail extends React.Component {
     f7.dialog.preloader("Đang Upload...");
     try {
       const image = await this.resizeFile(event.target.files[0]);
+      console.log("image");
+      console.log(image);
+      console.log("=============");
       const formData = new FormData();
       formData.append("file", image);
       const upload = await staffService.uploadImageStaff(formData);
+      console.log("upload");
+      console.log(upload);
+      console.log("=============");
       const src = upload.data.data;
       await this.updateImageServer(src);
-      await new Promise((resolve) => setTimeout(resolve, 1000));
       await this.getImageStaff();
-      setTimeout(() => {
-        f7.dialog.close();
-      }, 1000);
+      f7.dialog.close();
     } catch (error) {
       console.log(error);
     }
@@ -613,7 +616,7 @@ export default class employeeServiceDetail extends React.Component {
           style={{ height: "auto", "--f7-sheet-bg-color": "#fff" }}
           opened={sheetOpened}
           onSheetClosed={() => this.closeSheet()}
-          swipeToClose
+          //swipeToClose
           swipeToStep
           backdrop
         >
@@ -621,7 +624,10 @@ export default class employeeServiceDetail extends React.Component {
             <div className="sheet-modal-swipe__close"></div>
             <div className="sheet-swipe-product__content">
               <div className="sheet-pay-body">
-                <div className="sheet-pay-body__form">
+                <div
+                  className="sheet-pay-body__form"
+                  style={{ maxHeight: "65vh" }}
+                >
                   <div className="item">
                     <label>Ghi chú</label>
                     <textarea
