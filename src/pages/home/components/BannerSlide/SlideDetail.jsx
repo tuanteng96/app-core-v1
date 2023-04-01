@@ -6,6 +6,7 @@ import Skeleton from "react-loading-skeleton";
 import AdvDataService from "../../../../service/adv.service";
 import { SERVER_APP } from "../../../../constants/config";
 import ReactHtmlParser from "react-html-parser";
+import { OPEN_LINK } from "../../../../constants/prom21";
 export default class SlideList extends React.Component {
   constructor() {
     super();
@@ -16,7 +17,7 @@ export default class SlideList extends React.Component {
   componentDidMount() {
     const paramsID = this.$f7route.params.id;
     AdvDataService.getDetailAdv(paramsID)
-        .then((response) => {
+      .then((response) => {
         this.setState({
           arrayItem: response.data.data[0],
           isLoading: false,
@@ -64,7 +65,23 @@ export default class SlideList extends React.Component {
                 </div>
                 <div className="page-news__detail-content">
                   <div className="page-news__detail-shadow">
-                    {ReactHtmlParser(this.fixedContentDomain(arrayItem.Desc))}
+                    {ReactHtmlParser(this.fixedContentDomain(arrayItem.Desc), {
+                      transform: (node) => {
+                        if (
+                          node.type === "tag" &&
+                          node.attribs.class === "external"
+                        ) {
+                          return (
+                            <Link
+                              class="external"
+                              onClick={() => OPEN_LINK(node.attribs.href)}
+                            >
+                              {node.children[0].data}
+                            </Link>
+                          );
+                        }
+                      },
+                    })}
                   </div>
                 </div>
               </div>

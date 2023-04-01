@@ -26,6 +26,7 @@ import { CopyToClipboard } from "react-copy-to-clipboard";
 import _ from "lodash";
 import NoProduct from "../../assets/images/no-product.png";
 import { checkSLDisabled } from "../../constants/helpers";
+import { OPEN_LINK } from "../../constants/prom21";
 
 export default class extends React.Component {
   constructor() {
@@ -687,12 +688,50 @@ export default class extends React.Component {
                         <>
                           <div className="content-post">
                             {ReactHtmlParser(
-                              arrProduct.Desc || OriginalCurrent?.Desc
+                              arrProduct.Desc || OriginalCurrent?.Desc,
+                              {
+                                transform: (node) => {
+                                  if (
+                                    node.type === "tag" &&
+                                    node.attribs.class === "external"
+                                  ) {
+                                    return (
+                                      <Link
+                                        class="external"
+                                        onClick={() =>
+                                          OPEN_LINK(node.attribs.href)
+                                        }
+                                      >
+                                        {node.children[0].data}
+                                      </Link>
+                                    );
+                                  }
+                                },
+                              }
                             )}
                             {ReactHtmlParser(
                               this.fixedContentDomain(
                                 arrProduct.Detail || OriginalCurrent?.Detail
-                              )
+                              ),
+                              {
+                                transform: (node) => {
+                                  if (
+                                    node.type === "tag" &&
+                                    node.attribs.class === "external"
+                                  ) {
+                                    return (
+                                      <Link
+                                        class="external"
+                                        onClick={() =>
+                                          OPEN_LINK(node.attribs.href)
+                                        }
+                                      >
+                                        {node.children[0].data}
+                                      </Link>
+                                    );
+                                  }
+                                },
+                              }
                             )}
                           </div>
                         </>
