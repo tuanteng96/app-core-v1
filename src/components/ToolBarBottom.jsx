@@ -26,7 +26,7 @@ export default class ToolBarCustom extends React.Component {
     var href = this.$f7.views.main.router.url;
     var $$ = this.Dom7;
     const TYPE = checkRole();
-    
+
     $$(".js-toolbar-link").removeClass("js-active");
     if (prevState.currentUrl !== href) {
       $$(".js-toolbar-link").each(function () {
@@ -74,25 +74,9 @@ export default class ToolBarCustom extends React.Component {
     if (TYPE === "STAFF") {
       const arrType = [
         CheckPrivateNav(["service"]),
-        CheckPrivateNav([
-          "order",
-          "sale",
-          "service",
-          "manager",
-          "director",
-          "store",
-          "accountant",
-        ]),
+        [1],
         CheckPrivateNav(["director"]),
-        CheckPrivateNav([
-          "order",
-          "sale",
-          "service",
-          "manager",
-          "director",
-          "store",
-          "accountant",
-        ]),
+        [1],
       ];
       return arrType.filter((item) => item).length;
     }
@@ -116,15 +100,7 @@ export default class ToolBarCustom extends React.Component {
               className="page-toolbar-bottom__link js-toolbar-link"
               icon="las la-piggy-bank"
               text="Thống kê"
-              roles={[
-                "order",
-                "sale",
-                "service",
-                "manager",
-                "director",
-                "store",
-                "accountant",
-              ]}
+              roles={"all"}
               href="/employee/statistical/"
             />
             <PrivateNav
@@ -148,15 +124,7 @@ export default class ToolBarCustom extends React.Component {
               className="page-toolbar-bottom__link js-toolbar-link"
               icon="las la-user-circle"
               text="Tài khoản"
-              roles={[
-                "order",
-                "sale",
-                "service",
-                "manager",
-                "director",
-                "store",
-                "accountant",
-              ]}
+              roles="all"
               href="/detail-profile/"
             />
           </React.Fragment>
