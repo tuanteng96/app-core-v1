@@ -81,12 +81,8 @@ export default class ScheduleSpa extends React.Component {
           prevProps.DateTimeBook.toDate,
           this.state.ListDisableChoose
         );
-      }
-      else {
-        this.getListChoose(
-          new Date(),
-          this.state.ListDisableChoose
-        );
+      } else {
+        this.getListChoose(new Date(), this.state.ListDisableChoose);
       }
     }
   }
@@ -157,9 +153,7 @@ export default class ScheduleSpa extends React.Component {
           const indexDayOf =
             DisableTime &&
             DisableTime.findIndex(
-              (x) =>
-                moment(x.Date).format("DD/MM/YYYY") ===
-                moment(datetime).format("DD/MM/YYYY")
+              (x) => x.Date === moment(datetime).format("DD/MM/YYYY")
             );
           if (indexDayOf > -1) {
             if (
@@ -167,16 +161,14 @@ export default class ScheduleSpa extends React.Component {
               DisableTime[indexDayOf].TimeClose.length > 0
             ) {
               isDayOff = DisableTime[indexDayOf].TimeClose.some((time) => {
-                const DateStartDayOf = moment(DisableTime[indexDayOf].Date).set(
-                  {
-                    hour: time.Start.split(":")[0],
-                    minute: time.Start.split(":")[1],
-                  }
+                const DateStartDayOf = moment(
+                  DisableTime[indexDayOf].Date + time.Start,
+                  "DD/MM/YYYY HH:mm"
                 );
-                const DateEndDayOf = moment(DisableTime[indexDayOf].Date).set({
-                  hour: time.End.split(":")[0],
-                  minute: time.End.split(":")[1],
-                });
+                const DateEndDayOf = moment(
+                  DisableTime[indexDayOf].Date + time.End,
+                  "DD/MM/YYYY HH:mm"
+                );
                 let isStart =
                   moment(datetime, "HH:mm").isSameOrAfter(
                     moment(DateStartDayOf, "HH:mm")
