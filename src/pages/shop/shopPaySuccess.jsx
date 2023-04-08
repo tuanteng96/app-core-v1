@@ -87,14 +87,14 @@ export default class extends React.Component {
               textPay &&
               ReactHtmlParser(
                 textPay
-                  .replaceAll('ID_ĐH', `<b class="fw-600 text-danger">#${this.$f7route.params.orderID}</b>`)
+                  .replaceAll('ID_ĐH', `<b class="fw-600 text-danger">${this.$f7route.params.orderID}</b>`)
                   .replaceAll(
                     'MONEY',
                     `<b class="fw-600 text-danger">${formatPriceVietnamese(
                       Math.abs(this.$f7route.query.money),
                     )} ₫</b>`,
                   )
-                  .replaceAll('ID_DH', `<b class="fw-600 text-danger">#${this.$f7route.params.orderID}</b>`),
+                  .replaceAll('ID_DH', `<b class="fw-600 text-danger">${this.$f7route.params.orderID}</b>`),
               )}
           </div>
           <div className="btn">
