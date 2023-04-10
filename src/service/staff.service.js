@@ -48,6 +48,9 @@ class StaffService {
     getListImgUse(data) {
         return http.post(`/api/v3/orderservice@osAttachments`, JSON.stringify(data))
     }
+    getAttachments(data) {
+        return http.post(`/api/v3/OrderService@Attachments`, JSON.stringify(data))
+    }
 }
 
 export default new StaffService();

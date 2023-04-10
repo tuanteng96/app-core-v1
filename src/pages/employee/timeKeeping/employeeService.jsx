@@ -146,7 +146,8 @@ export default class employeeService extends React.Component {
 
   handleDetail = (item) => {
     this.$f7router.navigate(
-      "/employee/service/" + item.ID + "/" + "?memberID=" + item?.member?.ID || item?.MemberID
+      "/employee/service/" + item.ID + "/" + "?memberID=" + item?.member?.ID ||
+        item?.MemberID
     );
   };
   handleDiary = (item) => {
@@ -159,6 +160,10 @@ export default class employeeService extends React.Component {
     this.$f7router.navigate(
       "/employee/history/" + item.OrderItemID + "/" + item.MemberID + "/"
     );
+  };
+
+  handleAttachments = (item) => {
+    this.$f7router.navigate("/employee/attachments/" + item.MemberID + "/");
   };
 
   handleClickSv = (item) => {
@@ -358,6 +363,11 @@ export default class employeeService extends React.Component {
                               >
                                 Lịch trình
                               </ActionsButton>
+                              <ActionsButton
+                                onClick={() => this.handleAttachments(item)}
+                              >
+                                Hình ảnh
+                              </ActionsButton>
                               {!window?.GlobalConfig?.APP?.Staff
                                 ?.hideHistoryMember && (
                                 <ActionsButton
@@ -453,6 +463,11 @@ export default class employeeService extends React.Component {
                                 onClick={() => this.handleDiary(item)}
                               >
                                 Nhật ký
+                              </ActionsButton>
+                              <ActionsButton
+                                onClick={() => this.handleAttachments(item)}
+                              >
+                                Hình ảnh
                               </ActionsButton>
                               {!window?.GlobalConfig?.APP?.Staff
                                 ?.hideHistoryMember && (
