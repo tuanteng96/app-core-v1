@@ -77,7 +77,7 @@ export default class extends React.Component {
                   )
                 }
               >
-                Hệ thống Spa / Thẩm mỹ
+                Hệ thống cơ sở
               </span>
             </div>
             <div className="page-navbar__noti">
