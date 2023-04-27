@@ -90,7 +90,7 @@ export default class extends React.Component {
   }
 
   getBanner = () => {
-    NewsDataService.getBannerName("App.Banner")
+    NewsDataService.getBannerName("APP.BANNER")
       .then((response) => {
         const arrBanner = response.data.data;
         this.setState({

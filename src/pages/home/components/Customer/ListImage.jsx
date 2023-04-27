@@ -20,7 +20,7 @@ export default class ListImage extends React.Component {
   }
 
   getBeforeAfter = () => {
-    NewsDataService.getBannerName("App.AfterBefore")
+    NewsDataService.getBannerName("APP.AFTERBEFORE")
       .then((response) => {
         const arrPhotoCustomer = response.data.data;
         this.setState({

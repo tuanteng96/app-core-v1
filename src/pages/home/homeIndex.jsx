@@ -188,7 +188,7 @@ export default class extends React.Component {
       >
         <Sheet
           opened={opened}
-          style={{ height: 'auto', '--f7-sheet-bg-color': '#fff' }}
+          style={{ height: "auto", "--f7-sheet-bg-color": "#fff" }}
           backdrop
           closeByBackdropClick={false}
         >
@@ -211,7 +211,7 @@ export default class extends React.Component {
                     >
                       <FaMapMarkerAlt />
                       <div className="location-name">
-                        {stockName && stockName ? stockName : 'Bạn đang ở ?'}
+                        {stockName && stockName ? stockName : "Bạn đang ở ?"}
                       </div>
                       <div className="down">
                         <FaChevronDown />
@@ -234,9 +234,9 @@ export default class extends React.Component {
                       onFocus={this.searchPage}
                     ></input>
                   </div>
-                  <SlideList BannerName="App.Banner" autoplaySpeed={3000} />
+                  <SlideList BannerName="APP.BANNER" autoplaySpeed={3000} />
                   <ListService
-                    className={`mt-15px ${getUser() ? '' : 'mb-10px'}`}
+                    className={`mt-15px ${getUser() ? "" : "mb-10px"}`}
                     id="42"
                   />
                   {getUser() && <ListService className="my-10px" id="45" />}
@@ -248,28 +248,28 @@ export default class extends React.Component {
               <SlideList
                 className={`banner-main bg-white ${
                   window.GlobalConfig.APP.Home?.SliderFull
-                    ? 'mb-8px'
-                    : 'px-15px pt-15px'
+                    ? "mb-8px"
+                    : "px-15px pt-15px"
                 } `}
-                BannerName="App.Main"
+                BannerName="APP.MAIN"
                 autoplaySpeed={4000}
               />
               {window.GlobalConfig.APP.Home?.SliderFull ? (
                 <SlideList
                   className="banner-main bg-white"
-                  BannerName="App.MainSale"
+                  BannerName="APP.MAINSALE"
                   autoplaySpeed={4500}
                 />
               ) : (
                 <SlideListCenter
                   className="mb-8px px-15px pb-15px pt-12px"
-                  BannerName="App.MainSale"
+                  BannerName="APP.MAINSALE"
                   autoplaySpeed={4500}
                 />
               )}
               <SlideList
                 containerClass="pl-15px pr-15px slider-hot"
-                BannerName="App.DVHOT"
+                BannerName="APP.SALE"
               />
               <ProductList />
               <NewsList />
@@ -288,6 +288,6 @@ export default class extends React.Component {
         <ModalReviews />
         <QuickAction />
       </Page>
-    )
+    );
   }
 }
