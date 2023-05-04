@@ -33,7 +33,8 @@ export default class extends React.Component {
   }
 
   handStyle = () => {
-    const _width = this.state.width - 150;
+    const { arrMaps } = this.state;
+    const _width = arrMaps && arrMaps.length > 1 ? this.state.width - 150 : '100%';
     return Object.assign({
       width: _width,
     });

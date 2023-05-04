@@ -93,8 +93,12 @@ export default class extends React.Component {
         data: data.data[0],
         isLoading: false,
         initialValues: {
-          ID: dataBook?.MemberBookIDs[0],
-          BookDate: moment(dataBook?.Date, "YYYY-MM-DD").toDate(),
+          ID:
+            dataBook &&
+            dataBook?.MemberBookIDs &&
+            dataBook?.MemberBookIDs.length > 0 &&
+            dataBook?.MemberBookIDs[0],
+          BookDate: moment(dataBook?.Date, "YYYY-MM-DD HH:mm").toDate(),
           Status: "CHUA_XAC_NHAN",
           Desc: "",
         },
@@ -126,7 +130,7 @@ export default class extends React.Component {
     const { data } = this.state;
 
     const dataBook =
-      data && data.length > 0 && data?.NotiData
+      data && data?.NotiData
         ? JSON.parse(data.NotiData)
         : null;
     
@@ -140,7 +144,7 @@ export default class extends React.Component {
           ? moment(values.BookDate).format("HH:mm DD/MM/YYYY")
           : "",
         Desc:
-          moment(dataBook?.Date, "YYYY-MM-DD").format("HH:mm DD/MM/YYYY") ===
+          moment(dataBook?.Date, "YYYY-MM-DD HH:mm").format("HH:mm DD/MM/YYYY") ===
           moment(values.BookDate).format("HH:mm DD/MM/YYYY")
             ? "Khách đồng ý lịch dự kiến"
             : "Khách đổi ngày của lịch dự kiến",
@@ -242,7 +246,6 @@ export default class extends React.Component {
                   {(formikProps) => {
                     const { values, touched, errors, setFieldValue } =
                       formikProps;
-
                     return (
                       <Form className="w-100 h-100 d--f">
                         <div
