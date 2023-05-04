@@ -79,6 +79,9 @@ class UserService {
     getNotiDetail(Id) {
         return http.get(`/api/v3/noticlient?cmd=detail&ids=${Id}`)
     }
+    confirmBook(data) {
+        return http.post(`/api/v3/MemberBookClient@AppConfirm`, JSON.stringify(data));
+    }
     deleteNotification(data) {
         return http.post(`/api/v3/noti2/?cmd=clear2`, data);
     }

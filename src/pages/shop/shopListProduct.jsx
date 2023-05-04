@@ -94,7 +94,7 @@ export default class extends React.Component {
   constructor() {
     super();
     this.state = {
-      itemView: 8, // Số item hiển thị trên 1 Page
+      itemView: window?.GlobalConfig?.APP?.UIBase ? 16 : 8, // Số item hiển thị trên 1 Page
       arrCateList: [],
       Pi: 1,
       Count: 0,

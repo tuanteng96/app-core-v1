@@ -73,7 +73,7 @@
                     overflow: hidden;
                     text-overflow: ellipsis;
                     -webkit-line-clamp: 3;
-                    height: 65px;
+                    max-height: 65px;
                     display: -webkit-box;
                     -webkit-box-orient: vertical;
                 }

@@ -55,7 +55,7 @@ export default class extends React.Component {
     this.setState({
       isLoading: true,
     });
-    ShopDataService.getServiceParent(CateID, stockid, Pi, 2, 1)
+    ShopDataService.getServiceParent(CateID, stockid, Pi, window?.GlobalConfig?.APP?.UIBase ? 6 : 2, 1)
       .then(({ data }) => {
         const { lst, pcount, pi } = data;
         this.setState({

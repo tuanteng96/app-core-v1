@@ -22,6 +22,8 @@ import './../assets/libs/line-awesome-1.3.0/css/line-awesome.min.css';
 
 import './../assets/libs/linearicons/svgembedder.min.js';
 
+import './../css/plugins/animate.min.css';
+
 import '../css/app.scss';
 
 // Import css files
