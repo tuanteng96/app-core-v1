@@ -1,12 +1,5 @@
 import React from "react";
-import {
-  Page,
-  Navbar,
-  Link,
-  Toolbar,
-  Sheet,
-  ListInput,
-} from "framework7-react";
+import { Page, Navbar, Link, Toolbar } from "framework7-react";
 import ToolBarBottom from "../../components/ToolBarBottom";
 import userService from "../../service/user.service";
 import ReactHtmlParser from "react-html-parser";
@@ -15,10 +8,13 @@ import { SET_BADGE } from "../../constants/prom21";
 import { iOS } from "../../constants/helpers";
 import { Form, Formik } from "formik";
 import DatePicker from "react-mobile-datepicker";
+import { toast } from "react-toastify";
+import { PopupConfirm } from "../../components/Popup/PopupConfirm";
+import BookDataService from "../../service/book.service";
 
 import moment from "moment";
 import "moment/locale/vi";
-import { toast } from "react-toastify";
+
 moment.locale("vi");
 
 const dateConfig = {
@@ -69,6 +65,7 @@ export default class extends React.Component {
         Desc: "",
       },
       data: {},
+      show: false,
     };
   }
 
@@ -129,11 +126,8 @@ export default class extends React.Component {
     const Id = this.$f7route.params.id;
     const { data } = this.state;
 
-    const dataBook =
-      data && data?.NotiData
-        ? JSON.parse(data.NotiData)
-        : null;
-    
+    const dataBook = data && data?.NotiData ? JSON.parse(data.NotiData) : null;
+
     this.setState({
       btnLoading: true,
     });
@@ -144,8 +138,9 @@ export default class extends React.Component {
           ? moment(values.BookDate).format("HH:mm DD/MM/YYYY")
           : "",
         Desc:
-          moment(dataBook?.Date, "YYYY-MM-DD HH:mm").format("HH:mm DD/MM/YYYY") ===
-          moment(values.BookDate).format("HH:mm DD/MM/YYYY")
+          moment(dataBook?.Date, "YYYY-MM-DD HH:mm").format(
+            "HH:mm DD/MM/YYYY"
+          ) === moment(values.BookDate).format("HH:mm DD/MM/YYYY")
             ? "Khách đồng ý lịch dự kiến"
             : "Khách đổi ngày của lịch dự kiến",
       },
@@ -165,8 +160,61 @@ export default class extends React.Component {
     });
   };
 
+  getTitleAction = (title) => {
+    if (title && title.includes("/pupup-contact/")) return "Đăng ký ngay";
+    if (title && title.includes("/schedule/?SelectedId"))
+      return "Đặt lịch ngay";
+    return "Xem chi tiết";
+  };
+
+  onActionLink = (link) => {
+    if (link && link.includes("/pupup-contact/")) {
+      this.setState({
+        show: true,
+      });
+    } else {
+      this.$f7router.navigate(link);
+    }
+  };
+
+  onRegSubmit = (values) => {
+    this.setState({
+      btnLoadingReg: true,
+    });
+    var p = {
+      contact: {
+        Fullname: values.Fullname,
+        Phone1: values.Phone,
+        Address: "",
+        Email: "",
+        Content: values.Content,
+      },
+    };
+    BookDataService.bookContact(p)
+      .then(({ data }) => {
+        toast.success("Đăng ký chương trình ưu đãi thành công !", {
+          position: toast.POSITION.TOP_CENTER,
+          autoClose: 1000,
+        });
+        this.setState({
+          btnLoadingReg: false,
+          show: false,
+        });
+        this.$f7router.navigate(`/`);
+      })
+      .catch((error) => console.log(error));
+  };
+
   render() {
-    const { isLoading, data, btnLoading, initialValues, isOpen } = this.state;
+    const {
+      isLoading,
+      data,
+      btnLoading,
+      initialValues,
+      isOpen,
+      show,
+      btnLoadingReg,
+    } = this.state;
     return (
       <Page ptr onPtrRefresh={this.loadRefresh.bind(this)}>
         <Navbar>
@@ -227,13 +275,23 @@ export default class extends React.Component {
           </div>
         </div>
 
+        <PopupConfirm
+          initialValue={{
+            Title: data?.Title,
+          }}
+          show={show}
+          onHide={() => this.setState({ show: false })}
+          onSubmit={(values) => this.onRegSubmit(values)}
+          btnLoading={btnLoadingReg}
+        />
+
         <Toolbar tabbar position="bottom">
           {data?.Link ? (
             <Link
-              href={data?.Link}
+              onClick={() => this.onActionLink(data?.Link)}
               className="btn-submit-order btn-submit-order text-uppercase text-white"
             >
-              <span>Xem chi tiết</span>
+              <span>{this.getTitleAction(data?.Link)}</span>
             </Link>
           ) : (
             <>
