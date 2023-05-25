@@ -759,64 +759,103 @@ export default class employeeStatistical extends React.Component {
                     </div>
                   </div>
                   <div className="tbody">
-                    {dataSalary.DOANH_SO.map((item, index) => (
-                      <div className="tr" key={index}>
-                        <div className="td w-1">{index + 1}</div>
-                        <div className="td w-2">
-                          {item.Desc || "Doanh số"} - ({" "}
-                          {moment(item.CreateDate).format("llll")} )
-                          <div>{item.ProdTitle}</div>
-                        </div>
-                        <div className="td w-3">
-                          {formatPriceVietnamese(item.Value)}
-                        </div>
-                      </div>
-                    ))}
+                    {window.GlobalConfig?.Admin?.kpi2 ? (
+                      <>
+                        {dataSalary?.Kpi2Result?.ItemList &&
+                          dataSalary?.Kpi2Result?.ItemList.map(
+                            (item, index) => (
+                              <div className="tr" key={index}>
+                                <div className="td w-1">{index + 1}</div>
+                                <div className="td w-2">
+                                  <div>{item.CachTinh}</div>
+                                  <div>{item.Dieukien}</div>
+                                </div>
+                                <div className="td w-3">
+                                  {formatPriceVietnamese(item.BonusValue)}
+                                </div>
+                              </div>
+                            )
+                          )}
+                      </>
+                    ) : (
+                      <>
+                        {dataSalary.DOANH_SO.map((item, index) => (
+                          <div className="tr" key={index}>
+                            <div className="td w-1">{index + 1}</div>
+                            <div className="td w-2">
+                              {item.Desc || "Doanh số"} - ({" "}
+                              {moment(item.CreateDate).format("llll")} )
+                              <div>{item.ProdTitle}</div>
+                            </div>
+                            <div className="td w-3">
+                              {formatPriceVietnamese(item.Value)}
+                            </div>
+                          </div>
+                        ))}
+                      </>
+                    )}
                   </div>
                   <div className="tfooter">
-                    <div className="tr">
-                      <div className="td">Tổng</div>
-                      <div className="td">
-                        {formatPriceVietnamese(
-                          this.numTotal(dataSalary.DOANH_SO)
-                        )}
+                    {window.GlobalConfig?.Admin?.kpi2 ? (
+                      <div className="tr">
+                        <div className="td">Tổng</div>
+                        <div className="td">
+                          {formatPriceVietnamese(dataSalary?.Kpi2Result?.Value)}
+                        </div>
                       </div>
-                    </div>
-                    {dataSalary.THUONG_HOA_HONG_DOANH_SO &&
-                      dataSalary.THUONG_HOA_HONG_DOANH_SO.ApplyList &&
-                      dataSalary.THUONG_HOA_HONG_DOANH_SO.ApplyList.map(
-                        (appy, idx) => (
-                          <div className="tr" key={idx}>
-                            <div className="td">
-                              {appy.Type === 0
-                                ? "KPI Chung"
-                                : `KPI nhóm ${appy.Type}`}
-                            </div>
-                            <div className="td">
-                              {formatPriceVietnamese(appy.Value)}
-                            </div>
-                          </div>
-                        )
-                      )}
-
-                    {dataSalary.CHI_LUONG &&
-                      dataSalary.CHI_LUONG.length === 0 && (
+                    ) : (
+                      <>
                         <div className="tr">
-                          <div className="td">Dự kiến thưởng KPI</div>
+                          <div className="td">Tổng</div>
                           <div className="td">
-                            {dataSalary?.THUONG_HOA_HONG_DOANH_SO?.Bonus >
-                              0 && (
-                              <span style={{ paddingRight: "8px" }}>
-                                ({dataSalary?.THUONG_HOA_HONG_DOANH_SO?.Bonus}%)
-                              </span>
+                            {formatPriceVietnamese(
+                              this.numTotal(dataSalary.DOANH_SO)
                             )}
-                            {dataSalary &&
-                              formatPriceVietnamese(
-                                dataSalary?.THUONG_HOA_HONG_DOANH_SO?.Value || 0
-                              )}
                           </div>
                         </div>
-                      )}
+                        {dataSalary.THUONG_HOA_HONG_DOANH_SO &&
+                          dataSalary.THUONG_HOA_HONG_DOANH_SO.ApplyList &&
+                          dataSalary.THUONG_HOA_HONG_DOANH_SO.ApplyList.map(
+                            (appy, idx) => (
+                              <div className="tr" key={idx}>
+                                <div className="td">
+                                  {appy.Type === 0
+                                    ? "KPI Chung"
+                                    : `KPI nhóm ${appy.Type}`}
+                                </div>
+                                <div className="td">
+                                  {formatPriceVietnamese(appy.Value)}
+                                </div>
+                              </div>
+                            )
+                          )}
+
+                        {dataSalary.CHI_LUONG &&
+                          dataSalary.CHI_LUONG.length === 0 && (
+                            <div className="tr">
+                              <div className="td">Dự kiến thưởng KPI</div>
+                              <div className="td">
+                                {dataSalary?.THUONG_HOA_HONG_DOANH_SO?.Bonus >
+                                  0 && (
+                                  <span style={{ paddingRight: "8px" }}>
+                                    (
+                                    {
+                                      dataSalary?.THUONG_HOA_HONG_DOANH_SO
+                                        ?.Bonus
+                                    }
+                                    %)
+                                  </span>
+                                )}
+                                {dataSalary &&
+                                  formatPriceVietnamese(
+                                    dataSalary?.THUONG_HOA_HONG_DOANH_SO
+                                      ?.Value || 0
+                                  )}
+                              </div>
+                            </div>
+                          )}
+                      </>
+                    )}
                   </div>
                 </div>
               )}
