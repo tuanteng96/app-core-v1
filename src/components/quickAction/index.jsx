@@ -24,7 +24,11 @@ export default class quickAction extends React.Component {
         this.setState({
           phone: response.data.data[1].ValueText,
           mess: `https://m.me/${response.data.data[0].ValueText}`,
-          zalo: `https://zalo.me/${response.data.data[2].ValueText}`,
+          zalo: `https://zalo.me/${
+            response.data.data &&
+            response.data.data.length > 1 &&
+            response.data.data[2].ValueText
+          }`,
         });
       })
       .catch((err) => console.log(err));

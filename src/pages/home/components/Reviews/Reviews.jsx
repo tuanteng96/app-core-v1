@@ -51,7 +51,11 @@ export default class Reviews extends React.Component {
     return (
       <div className="reviews mb-10px bg-white">
         <div className="page-news__list-head">
-          <h5>Tâm sự cùng mầm gạo</h5>
+          <h5>
+            {window.location.host === "www.spamamgao.com"
+              ? "Tâm sự cùng mầm gạo"
+              : "Ý kiến khách hàng"}
+          </h5>
         </div>
         <div className="page-news__list-ul">
           {!isLoading && (
