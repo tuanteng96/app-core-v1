@@ -4,6 +4,8 @@ import { FaWhatsapp, FaFacebookMessenger } from "react-icons/fa";
 import { CALL_PHONE, OPEN_LINK } from "../../constants/prom21";
 import userService from "../../service/user.service";
 import { iOS } from "./../../constants/helpers";
+import ZaloIcon from "../../assets/images/zalo-icon.png";
+import { SERVER_APP } from "../../constants/config";
 
 export default class quickAction extends React.Component {
   constructor() {
@@ -17,11 +19,12 @@ export default class quickAction extends React.Component {
   }
   getPhone = () => {
     userService
-      .getConfig("Chung.sdt,chung.link.fanpage")
+      .getConfig("Chung.sdt,chung.link.fanpage,Chung.zalo")
       .then((response) => {
         this.setState({
           phone: response.data.data[1].ValueText,
           mess: `https://m.me/${response.data.data[0].ValueText}`,
+          zalo: response.data.data[2].ValueText,
         });
       })
       .catch((err) => console.log(err));
@@ -31,16 +34,16 @@ export default class quickAction extends React.Component {
     CALL_PHONE(phone);
   };
   handleLink = (link) => {
-    OPEN_LINK(link)
-  }
+    OPEN_LINK(link);
+  };
   onOpen = () => {
     this.setState({
       isOpen: !this.state.isOpen,
     });
   };
-  
+
   render() {
-    const { mess, phone, isOpen } = this.state;
+    const { mess, phone, isOpen, zalo } = this.state;
     if (!mess || !phone) return "";
     return (
       <div className={`page-quick ${isOpen ? "open" : ""}`}>
@@ -65,6 +68,22 @@ export default class quickAction extends React.Component {
                   onClick={() => this.handleLink(mess)}
                 >
                   <FaFacebookMessenger />
+                </div>
+              )}
+            </>
+          )}
+          {zalo && (
+            <>
+              {iOS() ? (
+                <Link external href={mess} noLinkClass className="item">
+                  <img src={ZaloIcon} style={{ borderRadius: "100%" }} />
+                </Link>
+              ) : (
+                <div className="item" onClick={() => this.handleLink(mess)}>
+                  <img
+                    src={SERVER_APP + ZaloIcon}
+                    style={{ borderRadius: "100%" }}
+                  />
                 </div>
               )}
             </>

@@ -395,3 +395,28 @@
         }
     }
 }
+
+.reviews {
+    padding: 15px;
+    &-box {
+        border: 1px solid var(--ezs-color);
+        border-radius: 3px;
+    }
+    &-info {
+        display: flex;
+        align-items: center;
+        &__img {
+            width: 60px;
+        }
+        &__title {
+            font-weight: 600;
+            color: #0e3d60;
+        }
+        &__sub {
+            color: #821e2c;
+        }
+    }
+    &-desc {
+        color: #333333;
+    }
+}
