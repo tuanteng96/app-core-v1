@@ -24,7 +24,7 @@ export default class quickAction extends React.Component {
         this.setState({
           phone: response.data.data[1].ValueText,
           mess: `https://m.me/${response.data.data[0].ValueText}`,
-          zalo: response.data.data[2].ValueText,
+          zalo: `https://zalo.me/${response.data.data[2].ValueText}`,
         });
       })
       .catch((err) => console.log(err));
@@ -44,7 +44,7 @@ export default class quickAction extends React.Component {
 
   render() {
     const { mess, phone, isOpen, zalo } = this.state;
-    if (!mess || !phone) return "";
+    if (!mess && !phone && !zalo) return <></>;
     return (
       <div className={`page-quick ${isOpen ? "open" : ""}`}>
         <div className="page-quick-list">
@@ -75,11 +75,14 @@ export default class quickAction extends React.Component {
           {zalo && (
             <>
               {iOS() ? (
-                <Link external href={mess} noLinkClass className="item">
-                  <img src={ZaloIcon} style={{ borderRadius: "100%" }} />
+                <Link external href={zalo} noLinkClass className="item">
+                  <img
+                    src={SERVER_APP + ZaloIcon}
+                    style={{ borderRadius: "100%" }}
+                  />
                 </Link>
               ) : (
-                <div className="item" onClick={() => this.handleLink(mess)}>
+                <div className="item" onClick={() => this.handleLink(zalo)}>
                   <img
                     src={SERVER_APP + ZaloIcon}
                     style={{ borderRadius: "100%" }}
