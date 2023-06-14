@@ -85,6 +85,9 @@ export default class employeeStatistical extends React.Component {
     value -= this.numTotal(dataSalary.PHAT);
     value += dataSalary.PHU_CAP;
     value += dataSalary?.THUONG_HOA_HONG_DOANH_SO?.Value || 0;
+    value += dataSalary?.KpiTourResult?.Value;
+    value += dataSalary?.Kpi2Result?.Value;
+
     return value;
   };
 
@@ -748,8 +751,8 @@ export default class employeeStatistical extends React.Component {
                   dataSalary.CHI_LUONG.length === 0)) && (
                 <div className="employee-statistical__item">
                   <div className="title">
-                    Doanh số bán hàng (
-                    <span>{dataSalary && dataSalary.DOANH_SO.length}</span>)
+                    KPI (<span>{dataSalary && dataSalary.DOANH_SO.length}</span>
+                    )
                   </div>
                   <div className="head">
                     <div className="tr">
@@ -794,13 +797,35 @@ export default class employeeStatistical extends React.Component {
                         ))}
                       </>
                     )}
+                    <div className="tr">
+                      <div className="td w-1">
+                        {dataSalary?.DOANH_SO?.length +
+                          dataSalary?.Kpi2Result?.ItemList.length +
+                          1}
+                      </div>
+                      <div className="td w-2">
+                        KPI lương Tour <br />{" "}
+                        {dataSalary?.KpiTourResult?.KpiTour?.Condts &&
+                          dataSalary?.KpiTourResult?.KpiTour?.Condts.map(
+                            (x) => `${x.From} - ${x.To} : ${x.CalValue}`
+                          ).join(", ")}
+                      </div>
+                      <div className="td w-3">
+                        {formatPriceVietnamese(
+                          dataSalary?.KpiTourResult?.Value
+                        )}
+                      </div>
+                    </div>
                   </div>
                   <div className="tfooter">
                     {window.GlobalConfig?.Admin?.kpi2 ? (
                       <div className="tr">
                         <div className="td">Tổng</div>
                         <div className="td">
-                          {formatPriceVietnamese(dataSalary?.Kpi2Result?.Value)}
+                          {formatPriceVietnamese(
+                            dataSalary?.Kpi2Result?.Value +
+                              dataSalary?.KpiTourResult?.Value
+                          )}
                         </div>
                       </div>
                     ) : (
@@ -809,7 +834,8 @@ export default class employeeStatistical extends React.Component {
                           <div className="td">Tổng</div>
                           <div className="td">
                             {formatPriceVietnamese(
-                              this.numTotal(dataSalary.DOANH_SO)
+                              this.numTotal(dataSalary.DOANH_SO) +
+                                dataSalary?.KpiTourResult?.Value
                             )}
                           </div>
                         </div>
