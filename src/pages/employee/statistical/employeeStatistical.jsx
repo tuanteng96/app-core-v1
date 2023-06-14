@@ -747,8 +747,7 @@ export default class employeeStatistical extends React.Component {
                 </div>
               </div>
               {((dataSalary && dataSalary.DOANH_SO.length > 0) ||
-                (dataSalary?.CHI_LUONG &&
-                  dataSalary.CHI_LUONG.length === 0)) && (
+                dataSalary?.KpiTourResult?.Value > 0) && (
                 <div className="employee-statistical__item">
                   <div className="title">
                     KPI (<span>{dataSalary && dataSalary.DOANH_SO.length}</span>
