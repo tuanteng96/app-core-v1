@@ -407,6 +407,9 @@
         align-items: center;
         &__img {
             width: 60px;
+            img {
+                border-radius: 100%;
+            }
         }
         &__title {
             font-weight: 600;
@@ -414,6 +417,10 @@
         }
         &__sub {
             color: #821e2c;
+        }
+        &__box {
+            flex: 1;
+            padding-left: 12px;
         }
     }
     &-desc {
