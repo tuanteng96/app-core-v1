@@ -47,7 +47,7 @@ export default class Reviews extends React.Component {
       centerPadding: "20px",
       variableWidth: true,
     };
-    if (!List && List.length === 0) return <></>;
+    if (!List || List.length === 0) return <></>;
     return (
       <div className="reviews mb-10px bg-white">
         <div className="page-news__list-head">
