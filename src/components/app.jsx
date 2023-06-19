@@ -1,12 +1,18 @@
 import React from "react";
 import { App, f7, View } from "framework7-react";
 
-import { getUser, removeUserStorage, setUserStorage } from "../constants/user";
+import {
+  app_request,
+  getUser,
+  removeUserStorage,
+  setUserStorage,
+} from "../constants/user";
 import UserService from "../service/user.service";
 import { setNotiID, getNotiID } from "./../constants/user";
 import routes from "../js/routes";
 import { NAME_APP } from "../constants/config";
-import { CLOSE_APP } from "../constants/prom21";
+import { CLOSE_APP, SEND_TOKEN_FIREBASE } from "../constants/prom21";
+import { iOS } from "../constants/helpers";
 //import ServiceWorker from "../service-worker.js"
 
 // import Template7 from "template7";
@@ -60,6 +66,23 @@ export default class extends React.Component {
             const infoUser = getUser();
             if (infoUser) {
               UserService.getInfo().then(({ data }) => {
+                if (data?.Status === -1) {
+                  SEND_TOKEN_FIREBASE().then(async (response) => {
+                    if (!response.error && response.Token) {
+                      const { ID, acc_type } = data;
+                      await UserService.authRemoveFirebase({
+                        Token: response.Token,
+                        ID: ID,
+                        Type: acc_type,
+                      });
+                    } else {
+                      app_request("unsubscribe", "");
+                    }
+                    iOS() && REMOVE_BADGE();
+                    await localStorage.clear();
+                    location.reload();
+                  });
+                }
                 if (data?.error && data?.error.indexOf("TOKEN") > -1) {
                   removeUserStorage();
                 } else if (data?.token_renew) {
@@ -82,7 +105,7 @@ export default class extends React.Component {
               resolve();
             }
           },
-        }
+        },
       },
     };
   }

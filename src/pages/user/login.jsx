@@ -55,38 +55,49 @@ export default class extends React.Component {
             password: '',
           })
         } else {
-          const userData = response.data
-          const token = userData.token
-          setUserStorage(token, userData)
-          SEND_TOKEN_FIREBASE().then(async (response) => {
-            if (!response.error && response.Token) {
-              await UserService.authSendTokenFirebase({
-                Token: response.Token,
-                ID: userData.ID,
-                Type: userData.acc_type,
-              })
-              setTimeout(() => {
-                self.$f7.preloader.hide()
-                this.$f7router.navigate('/', {
-                  animate: true,
-                  transition: 'f7-flip',
-                })
-              }, 300)
-            } else {
-              setSubscribe(userData, () => {
+          if (response?.data?.Status === -1) {
+            self.$f7.preloader.hide();
+            toast.error("Tài khoản của bạn đã bị vô hiệu hóa !", {
+              position: toast.POSITION.TOP_LEFT,
+              autoClose: 3000,
+            });
+            this.setState({
+              password: "",
+            });
+          } else {
+            const userData = response.data;
+            const token = userData.token;
+            setUserStorage(token, userData);
+            SEND_TOKEN_FIREBASE().then(async (response) => {
+              if (!response.error && response.Token) {
+                await UserService.authSendTokenFirebase({
+                  Token: response.Token,
+                  ID: userData.ID,
+                  Type: userData.acc_type,
+                });
                 setTimeout(() => {
-                  self.$f7.preloader.hide()
-                  this.$f7router.navigate('/', {
+                  self.$f7.preloader.hide();
+                  this.$f7router.navigate("/", {
                     animate: true,
-                    transition: 'f7-flip',
-                  })
-                }, 300)
-              })
-            }
-            userData?.ByStockID && setStockIDStorage(userData.ByStockID)
-            userData?.StockName && setStockNameStorage(userData.StockName)
-            setUserLoginStorage(username, password)
-          })
+                    transition: "f7-flip",
+                  });
+                }, 300);
+              } else {
+                setSubscribe(userData, () => {
+                  setTimeout(() => {
+                    self.$f7.preloader.hide();
+                    this.$f7router.navigate("/", {
+                      animate: true,
+                      transition: "f7-flip",
+                    });
+                  }, 300);
+                });
+              }
+              userData?.ByStockID && setStockIDStorage(userData.ByStockID);
+              userData?.StockName && setStockNameStorage(userData.StockName);
+              setUserLoginStorage(username, password);
+            });
+          }
         }
       })
       .catch((e) => console.log(e))
@@ -124,41 +135,49 @@ export default class extends React.Component {
               })
               self.$f7.dialog.close()
             } else {
-              setUserStorage(data.token, data)
-              SEND_TOKEN_FIREBASE().then(async (response) => {
-                if (!response.error && response.Token) {
-                  await UserService.authSendTokenFirebase({
-                    Token: response.Token,
-                    ID: data.ID,
-                    Type: data.acc_type,
-                  })
-                  set(
-                    ref(database, `/qrcode/${qrcodeStock}/${qrcodeLogin}`),
-                    null,
-                  ).then(() => {
-                    self.$f7.dialog.close()
-                    this.$f7router.navigate('/', {
-                      animate: true,
-                      transition: 'f7-flip',
-                    })
-                  })
-                } else {
-                  setSubscribe(data, () => {
+              if (data?.Status === -1) {
+                toast.error("Tài khoản của bạn đã bị vô hiệu hóa !", {
+                  position: toast.POSITION.TOP_LEFT,
+                  autoClose: 3000,
+                });
+              }
+              else {
+                setUserStorage(data.token, data);
+                SEND_TOKEN_FIREBASE().then(async (response) => {
+                  if (!response.error && response.Token) {
+                    await UserService.authSendTokenFirebase({
+                      Token: response.Token,
+                      ID: data.ID,
+                      Type: data.acc_type,
+                    });
                     set(
                       ref(database, `/qrcode/${qrcodeStock}/${qrcodeLogin}`),
-                      null,
+                      null
                     ).then(() => {
-                      self.$f7.dialog.close()
-                      this.$f7router.navigate('/', {
+                      self.$f7.dialog.close();
+                      this.$f7router.navigate("/", {
                         animate: true,
-                        transition: 'f7-flip',
-                      })
-                    })
-                  })
-                }
-              })
-              data?.ByStockID && setStockIDStorage(data.ByStockID)
-              data?.StockName && setStockNameStorage(data.StockName)
+                        transition: "f7-flip",
+                      });
+                    });
+                  } else {
+                    setSubscribe(data, () => {
+                      set(
+                        ref(database, `/qrcode/${qrcodeStock}/${qrcodeLogin}`),
+                        null
+                      ).then(() => {
+                        self.$f7.dialog.close();
+                        this.$f7router.navigate("/", {
+                          animate: true,
+                          transition: "f7-flip",
+                        });
+                      });
+                    });
+                  }
+                });
+                data?.ByStockID && setStockIDStorage(data.ByStockID);
+                data?.StockName && setStockNameStorage(data.StockName);
+              }
             }
           })
           .catch((err) => self.$f7.dialog.close())

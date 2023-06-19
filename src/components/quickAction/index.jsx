@@ -22,11 +22,18 @@ export default class quickAction extends React.Component {
       .getConfig("Chung.sdt,chung.link.fanpage,Chung.zalo")
       .then((response) => {
         this.setState({
-          phone: response.data.data[1].ValueText,
-          mess: `https://m.me/${response.data.data[0].ValueText}`,
-          zalo: `https://zalo.me/${
+          phone:
             response.data.data &&
             response.data.data.length > 1 &&
+            response.data.data[1].ValueText,
+          mess: `https://m.me/${
+            response.data.data &&
+            response.data.data.length > 0 &&
+            response.data.data[0].ValueText
+          }`,
+          zalo: `https://zalo.me/${
+            response.data.data &&
+            response.data.data.length > 2 &&
             response.data.data[2].ValueText
           }`,
         });
