@@ -11,43 +11,10 @@ import UserService from "../service/user.service";
 import { setNotiID, getNotiID } from "./../constants/user";
 import routes from "../js/routes";
 import { NAME_APP } from "../constants/config";
-import { CLOSE_APP, SEND_TOKEN_FIREBASE } from "../constants/prom21";
+import { CLOSE_APP, REMOVE_BADGE, SEND_TOKEN_FIREBASE } from "../constants/prom21";
 import { iOS } from "../constants/helpers";
-//import ServiceWorker from "../service-worker.js"
-
-// import Template7 from "template7";
-
-// window.language = localStorage.getItem("language") || "vi";
-// window.locales = {
-//   vi: {
-//     loading: "Đang tải....",
-//     THONG_KE: "Thống kê"
-//   },
-//   en: {
-//     loading: "loading...",
-//     THONG_KE: "Report"
-//   },
-// };
-// window.localize = function (key) {
-//   var language = window.language;
-//   language = language.replace(/-/g, "_");
-//   if (!window.locales[language]) language = language.substring(0, 2);
-//   if (!window.locales[language]) language = "en";
-
-//   return window.locales[language][key] ? window.locales[language][key] : key;
-// };
-
-// Template7.registerHelper("localize", function (value, options) {
-//   return window.localize(value);
-// });
-// //Change
-// languageChange = (e) => {
-//   localStorage.setItem("language", e);
-//   window.language = e;
-//   this.$f7.views.main.router.navigate(this.$f7.views.main.router.url, {
-//     reloadCurrent: true,
-//   });
-// };
+import { ref, onValue, set } from "firebase/database";
+import { database } from "../firebase/firebase";
 
 export default class extends React.Component {
   constructor() {
@@ -110,8 +77,6 @@ export default class extends React.Component {
     };
   }
 
-  componentDidMount() {}
-
   render() {
     return (
       <App params={this.state.f7params}>
@@ -166,6 +131,41 @@ export default class extends React.Component {
     );
     document.body.addEventListener("noti_click.voucher_id", this.notiVoucher);
     window.ToBackBrowser = this.ToBackBrowser;
+
+    const starCountRef = ref(database, "logout");
+    onValue(starCountRef, (snapshot) => {
+      const data = snapshot.val();
+      const dataArr = data
+        ? Object.keys(data).map((key) => {
+            return { ...data[key], Key: key };
+          })
+        : [];
+
+      let UserCurrent = getUser();
+      if (UserCurrent && UserCurrent.ID) {
+        if (dataArr.findIndex((item) => item.UserID === UserCurrent.ID) > -1) {
+          set(ref(database, `/logout/${UserCurrent.ID}`), null).then(() => {
+            SEND_TOKEN_FIREBASE().then(async (response) => {
+              if (!response.error && response.Token) {
+                const { ID, acc_type } = UserCurrent;
+                await UserService.authRemoveFirebase({
+                  Token: response.Token,
+                  ID: ID,
+                  Type: acc_type,
+                });
+              } else {
+                app_request("unsubscribe", "");
+              }
+              iOS() && REMOVE_BADGE();
+              await localStorage.clear();
+              this.$f7.views.main.router.navigate("/", {
+                reloadCurrent: true,
+              });
+            });
+          });
+        }
+      }
+    });
   }
 
   componentWillUnmount() {
