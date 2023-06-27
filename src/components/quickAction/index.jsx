@@ -34,8 +34,9 @@ export default class quickAction extends React.Component {
           zalo:
             response.data.data &&
             response.data.data.length > 2 &&
-            response.data.data[2].ValueText &&
-            `https://zalo.me/${response.data.data[2].ValueText}`,
+            response.data.data[2].ValueText
+              ? `https://zalo.me/${response.data.data[2].ValueText}`
+              : `https://zalo.me/${response.data.data[1].ValueText}`,
         });
       })
       .catch((err) => console.log(err));
