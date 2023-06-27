@@ -6,12 +6,14 @@ import ToolBarBottom from "../../components/ToolBarBottom";
 import UserService from "../../service/user.service";
 import Slider from "react-slick";
 import NotificationIcon from "../../components/NotificationIcon";
+import NewsDataService from "../../service/news.service";
 
 export default class extends React.Component {
   constructor() {
     super();
     this.state = {
       arrMaps: [],
+      arrMaps2: [],
       showPreloader: false,
     };
   }
@@ -30,11 +32,27 @@ export default class extends React.Component {
         });
       })
       .catch((e) => console.log(e));
+
+    NewsDataService.getBannerName("APP.COSO")
+      .then(({ data }) => {
+        if (data.data && data.data.length > 0) {
+          this.setState({
+            arrMaps2: data.data.map((x) => ({
+              ...x,
+              Map: x.Link,
+            })),
+          });
+        }
+      })
+      .catch((e) => {
+        console.log(e);
+      });
   }
 
   handStyle = () => {
     const { arrMaps } = this.state;
-    const _width = arrMaps && arrMaps.length > 1 ? this.state.width - 150 : '100%';
+    const _width =
+      arrMaps && arrMaps.length > 1 ? this.state.width - 150 : "100%";
     return Object.assign({
       width: _width,
     });
@@ -47,7 +65,7 @@ export default class extends React.Component {
   };
 
   render() {
-    const { arrMaps, currentMap, currentID } = this.state;
+    const { arrMaps, arrMaps2, currentMap, currentID } = this.state;
     const settingsMaps = {
       className: "slider variable-width",
       dots: false,
@@ -130,11 +148,51 @@ export default class extends React.Component {
                       <ul>
                         <li className="address">
                           <i className="las la-map-marked-alt"></i>
-                          <div className="min-h-40px">{ReactHtmlParser(item.Desc)}</div>
+                          <div className="min-h-40px">
+                            {ReactHtmlParser(item.Desc)}
+                          </div>
                         </li>
                         <li className="phone">
                           <i className="las la-phone-volume"></i>
                           {item.LinkSEO || "Chưa có"}
+                        </li>
+                        <li className="time">
+                          <span>Đang mở cửa</span>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                ))}
+              {arrMaps2 &&
+                arrMaps2.map((item, index) => (
+                  <div
+                    className={`page-maps__list-item ${
+                      currentID === item.ID ? "active" : ""
+                    }`}
+                    key={item.ID}
+                    style={this.handStyle()}
+                    onClick={() => this.handleMaps(item)}
+                  >
+                    <div className="page-maps__list-pd">
+                      <div className="star">
+                        <i className="las la-star"></i>
+                        <i className="las la-star"></i>
+                        <i className="las la-star"></i>
+                        <i className="las la-star"></i>
+                        <i className="las la-star"></i>
+                        <i className="las la-location-arrow"></i>
+                      </div>
+                      <h3>{item.Title}</h3>
+                      <ul>
+                        <li className="address">
+                          <i className="las la-map-marked-alt"></i>
+                          <div className="min-h-40px">
+                            {ReactHtmlParser(item.Desc)}
+                          </div>
+                        </li>
+                        <li className="phone">
+                          <i className="las la-phone-volume"></i>
+                          {item.FileName || "Chưa có"}
                         </li>
                         <li className="time">
                           <span>Đang mở cửa</span>

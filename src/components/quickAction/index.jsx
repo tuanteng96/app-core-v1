@@ -26,16 +26,16 @@ export default class quickAction extends React.Component {
             response.data.data &&
             response.data.data.length > 1 &&
             response.data.data[1].ValueText,
-          mess: `https://m.me/${
+          mess:
             response.data.data &&
             response.data.data.length > 0 &&
-            response.data.data[0].ValueText
-          }`,
-          zalo: `https://zalo.me/${
+            response.data.data[0].ValueText &&
+            `https://m.me/${response.data.data[0].ValueText}`,
+          zalo:
             response.data.data &&
             response.data.data.length > 2 &&
-            response.data.data[2].ValueText
-          }`,
+            response.data.data[2].ValueText &&
+            `https://zalo.me/${response.data.data[2].ValueText}`,
         });
       })
       .catch((err) => console.log(err));
@@ -55,6 +55,7 @@ export default class quickAction extends React.Component {
 
   render() {
     const { mess, phone, isOpen, zalo } = this.state;
+    console.log(zalo);
     if (!mess && !phone && !zalo) return <></>;
     return (
       <div className={`page-quick ${isOpen ? "open" : ""}`}>
