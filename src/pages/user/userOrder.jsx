@@ -27,12 +27,12 @@ import Select from "react-select";
 import { QRCodeSVG } from "qrcode.react";
 import { useState } from "react";
 
-const RenderQR = ({ ValueBank, Total, ID }) => {
+const RenderQR = ({ ValueBank, Total, ID, MaND }) => {
   if (ValueBank.ma_nh === "ZaloPay") {
     return (
       <div className="mt-15px d-flex justify-content-center align-items-center fd--c">
         <QRCodeSVG
-          value={`https://social.zalopay.vn/mt-gateway/v1/private-qr?amount=${Total}&note=${ValueBank.ma_nh}${ID}&receiver_id=${ValueBank.stk}`}
+          value={`https://social.zalopay.vn/mt-gateway/v1/private-qr?amount=${Total}&note=${MaND}${ID}&receiver_id=${ValueBank.stk}`}
           size={220}
           bgColor={"#ffffff"}
           fgColor={"#000000"}
@@ -49,7 +49,7 @@ const RenderQR = ({ ValueBank, Total, ID }) => {
     return (
       <div className="mt-15px d-flex justify-content-center align-items-center fd--c">
         <QRCodeSVG
-          value={`2|99|${ValueBank.stk}|||0|0|${Total}|ĐH${ID}|transfer_myqr`}
+          value={`2|99|${ValueBank.stk}|||0|0|${Total}|${MaND}${ID}|transfer_myqr`}
           size={220}
           bgColor={"#ffffff"}
           fgColor={"#000000"}
@@ -65,14 +65,14 @@ const RenderQR = ({ ValueBank, Total, ID }) => {
   return (
     <div className="mt-12px">
       <img
-        src={`https://img.vietqr.io/image/${ValueBank.ma_nh}-${ValueBank.stk}-compact2.jpg?amount=${Total}&addInfo=ĐH${ID}&accountName=${ValueBank.ten}`}
+        src={`https://img.vietqr.io/image/${ValueBank.ma_nh}-${ValueBank.stk}-compact2.jpg?amount=${Total}&addInfo=${MaND}${ID}&accountName=${ValueBank.ten}`}
         alt="Mã QR Thanh toán"
       />
     </div>
   );
 };
 
-const SheetOrder = ({ item, textPay, loadingText, Banks }) => {
+const SheetOrder = ({ item, textPay, loadingText, Banks, MaND }) => {
   const [ValueBank, setValueBank] = useState(null);
 
   return (
@@ -132,6 +132,7 @@ const SheetOrder = ({ item, textPay, loadingText, Banks }) => {
                   ValueBank={ValueBank}
                   Total={item.RemainPay}
                   ID={item.ID}
+                  MaND={MaND}
                 />
               )}
             </div>
@@ -151,6 +152,7 @@ export default class extends React.Component {
       loadingText: false,
       textPay: "",
       Banks: null,
+      MaND: ''
     };
   }
   componentDidMount() {
@@ -162,6 +164,7 @@ export default class extends React.Component {
     UserService.getConfig("App.thanhtoan,MA_QRCODE_NGAN_HANG")
       .then(({ data }) => {
         let newBanks = [];
+        let newMaND = ''
         if (data.data && data.data.length > 1) {
           let JsonBanks = JSON.parse(data.data[1].Value);
           if (
@@ -174,6 +177,7 @@ export default class extends React.Component {
               value: x.stk,
               label: x.ngan_hang,
             }));
+            newMaND = JsonBanks.ma_nhan_dien
           }
         }
 
@@ -181,6 +185,7 @@ export default class extends React.Component {
           textPay: data.data && data.data[0]?.ValueLines,
           loadingText: false,
           Banks: newBanks,
+          MaND: newMaND,
         });
       })
       .catch((error) => console.log(error));
@@ -238,7 +243,7 @@ export default class extends React.Component {
   }
 
   render() {
-    const { arrOder, loading, loadingText, textPay, TongNo, Banks } =
+    const { arrOder, loading, loadingText, textPay, TongNo, Banks, MaND } =
       this.state;
     return (
       <Page
@@ -544,6 +549,7 @@ export default class extends React.Component {
                         textPay={textPay}
                         loadingText={loadingText}
                         Banks={Banks}
+                        MaND={MaND}
                       />
                     </div>
                   </Link>
