@@ -56,7 +56,6 @@ export default class quickAction extends React.Component {
 
   render() {
     const { mess, phone, isOpen, zalo } = this.state;
-    console.log(zalo);
     if (!mess && !phone && !zalo) return <></>;
     return (
       <div className={`page-quick ${isOpen ? "open" : ""}`}>

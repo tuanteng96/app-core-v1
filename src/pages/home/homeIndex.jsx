@@ -243,7 +243,7 @@ export default class extends React.Component {
                   {getUser() && <ListService className="my-10px" id="45" />}
                 </div>
               </div>
-              <ServiceHot2 id={57} f7router={this.$f7router} f7={this.$f7} />
+              <ServiceHot2 id="APP.SALE" f7router={this.$f7router} f7={this.$f7} />
               <ServiceHot f7router={this.$f7router} />
               <ListImage />
               <SlideList

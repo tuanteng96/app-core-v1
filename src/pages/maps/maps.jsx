@@ -52,7 +52,7 @@ export default class extends React.Component {
   handStyle = () => {
     const { arrMaps } = this.state;
     const _width =
-      arrMaps && arrMaps.length > 1 ? this.state.width - 150 : "100%";
+      arrMaps && arrMaps.length > 1 ? this.state.width - 80 : "100%";
     return Object.assign({
       width: _width,
     });
@@ -75,6 +75,7 @@ export default class extends React.Component {
       //centerPadding: "20px",
       variableWidth: true,
     };
+
     return (
       <Page name="maps">
         <Navbar>
