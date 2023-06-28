@@ -492,14 +492,17 @@ body {
             padding: 5px 12px;
             font-weight: 500;
             text-transform: capitalize;
-            &.select__option--is-focused {
-                background: #F3F6F9;
+            &.select__option--is-focused,
+            &.select__option--is-selected {
+                background: var(--ezs-color);
+                color: #fff;
             }
         }
     }
     .select__single-value {
         color: #000;
         font-weight: 500;
+        text-align: left;
     }
     .select__menu-list {
         max-height: 150px;

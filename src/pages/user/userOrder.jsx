@@ -23,6 +23,124 @@ import moment from "moment";
 import "moment/locale/vi";
 import clsx from "clsx";
 moment.locale("vi");
+import Select from "react-select";
+import { QRCodeSVG } from "qrcode.react";
+import { useState } from "react";
+
+const RenderQR = ({ ValueBank, Total, ID }) => {
+  if (ValueBank.ma_nh === "ZaloPay") {
+    return (
+      <div className="mt-15px d-flex justify-content-center align-items-center fd--c">
+        <QRCodeSVG
+          value={`https://social.zalopay.vn/mt-gateway/v1/private-qr?amount=${Total}&note=${ValueBank.ma_nh}${ID}&receiver_id=${ValueBank.stk}`}
+          size={220}
+          bgColor={"#ffffff"}
+          fgColor={"#000000"}
+          level={"L"}
+          includeMargin={false}
+        />
+        <div className="fw-600 mt-15px">{ValueBank.ten}</div>
+        <div>{ValueBank.stk}</div>
+        <div>{formatPriceVietnamese(Total)}</div>
+      </div>
+    );
+  }
+  if (ValueBank.ma_nh === "MoMoPay") {
+    return (
+      <div className="mt-15px d-flex justify-content-center align-items-center fd--c">
+        <QRCodeSVG
+          value={`2|99|${ValueBank.stk}|||0|0|${Total}|ĐH${ID}|transfer_myqr`}
+          size={220}
+          bgColor={"#ffffff"}
+          fgColor={"#000000"}
+          level={"L"}
+          includeMargin={false}
+        />
+        <div className="fw-600 mt-15px">{ValueBank.ten}</div>
+        <div>{ValueBank.stk}</div>
+        <div>{formatPriceVietnamese(Total)}</div>
+      </div>
+    );
+  }
+  return (
+    <div className="mt-12px">
+      <img
+        src={`https://img.vietqr.io/image/${ValueBank.ma_nh}-${ValueBank.stk}-compact2.jpg?amount=${Total}&addInfo=ĐH${ID}&accountName=${ValueBank.ten}`}
+        alt="Mã QR Thanh toán"
+      />
+    </div>
+  );
+};
+
+const SheetOrder = ({ item, textPay, loadingText, Banks }) => {
+  const [ValueBank, setValueBank] = useState(null);
+
+  return (
+    <Sheet
+      className={`demo-sheet-${item.ID} sheet-detail`}
+      style={{
+        height: "auto !important",
+        "--f7-sheet-bg-color": "#fff",
+      }}
+      backdrop
+    >
+      <Button sheetClose={`.demo-sheet-${item.ID}`} className="show-more">
+        <i className="las la-times"></i>
+      </Button>
+      <PageContent>
+        <div className="page-shop__service-detail">
+          <div className="title">
+            <h4>Thanh toán đơn hàng #{item.ID}</h4>
+          </div>
+          <div className="content">
+            {loadingText && <Skeleton count={6} />}
+            {!loadingText &&
+              textPay &&
+              ReactHtmlParser(
+                textPay
+                  .replaceAll("ID_ĐH", `#${item.ID}`)
+                  .replaceAll(
+                    "MONEY",
+                    `${formatPriceVietnamese(Math.abs(item.RemainPay))} ₫`
+                  )
+                  .replaceAll("ID_DH", `${item.ID}`)
+              )}
+            <div>
+              <div className="mt-10px">
+                <Select
+                  options={Banks}
+                  className="select-control"
+                  classNamePrefix="select"
+                  placeholder="Chọn ngân hàng"
+                  noOptionsMessage={() => "Không có dữ liệu"}
+                  value={ValueBank}
+                  onChange={(val) => setValueBank(val)}
+                  isClearable={true}
+                  // menuPosition="fixed"
+                  // styles={{
+                  //   menuPortal: (base) => ({
+                  //     ...base,
+                  //     zIndex: 9999,
+                  //   }),
+                  // }}
+                  // menuPortalTarget={document.body}
+                  menuPlacement="top"
+                />
+              </div>
+              {ValueBank && (
+                <RenderQR
+                  ValueBank={ValueBank}
+                  Total={item.RemainPay}
+                  ID={item.ID}
+                />
+              )}
+            </div>
+          </div>
+        </div>
+      </PageContent>
+    </Sheet>
+  );
+};
 
 export default class extends React.Component {
   constructor() {
@@ -32,6 +150,7 @@ export default class extends React.Component {
       loading: false,
       loadingText: false,
       textPay: "",
+      Banks: null,
     };
   }
   componentDidMount() {
@@ -40,11 +159,28 @@ export default class extends React.Component {
     this.setState({
       loadingText: true,
     });
-    UserService.getConfig("App.thanhtoan")
+    UserService.getConfig("App.thanhtoan,MA_QRCODE_NGAN_HANG")
       .then(({ data }) => {
+        let newBanks = [];
+        if (data.data && data.data.length > 1) {
+          let JsonBanks = JSON.parse(data.data[1].Value);
+          if (
+            JsonBanks &&
+            JsonBanks.ngan_hang &&
+            Array.isArray(JsonBanks.ngan_hang)
+          ) {
+            newBanks = JsonBanks.ngan_hang.map((x) => ({
+              ...x,
+              value: x.stk,
+              label: x.ngan_hang,
+            }));
+          }
+        }
+
         this.setState({
           textPay: data.data && data.data[0]?.ValueLines,
           loadingText: false,
+          Banks: newBanks,
         });
       })
       .catch((error) => console.log(error));
@@ -102,7 +238,8 @@ export default class extends React.Component {
   }
 
   render() {
-    const { arrOder, loading, loadingText, textPay, TongNo } = this.state;
+    const { arrOder, loading, loadingText, textPay, TongNo, Banks } =
+      this.state;
     return (
       <Page
         onPtrRefresh={this.loadRefresh.bind(this)}
@@ -119,7 +256,12 @@ export default class extends React.Component {
             <div className="page-navbar__title">
               <span className="title">
                 Đơn hàng
-                {TongNo && <span className="pl-2px font-size-sm"> - Nợ {formatPriceVietnamese(TongNo)}</span>}
+                {TongNo && (
+                  <span className="pl-2px font-size-sm">
+                    {" "}
+                    - Nợ {formatPriceVietnamese(TongNo)}
+                  </span>
+                )}
               </span>
             </div>
             <div className="page-navbar__noti">
@@ -208,10 +350,21 @@ export default class extends React.Component {
                         {item.Items &&
                           item.Items.map((sub, idx) => (
                             <div className="list-sub-item" key={idx}>
-                              <div className={clsx("img", window?.GlobalConfig?.APP?.UIBase && 'd-none')}>
+                              <div
+                                className={clsx(
+                                  "img",
+                                  window?.GlobalConfig?.APP?.UIBase && "d-none"
+                                )}
+                              >
                                 <img src={checkImageProduct(sub.ProdThumb)} />
                               </div>
-                              <div className={clsx("text", window?.GlobalConfig?.APP?.UIBase && 'w-100 pl-0')}>
+                              <div
+                                className={clsx(
+                                  "text",
+                                  window?.GlobalConfig?.APP?.UIBase &&
+                                    "w-100 pl-0"
+                                )}
+                              >
                                 <div className="text-name">{sub.ProdTitle}</div>
                                 <div className="text-count">
                                   SL <b>x{sub.Qty}</b>
@@ -386,46 +539,12 @@ export default class extends React.Component {
                           </div>
                         </div>
                       )}
-
-                      <Sheet
-                        className={`demo-sheet-${item.ID} sheet-detail sheet-detail-order`}
-                        style={{
-                          height: "auto !important",
-                          "--f7-sheet-bg-color": "#fff",
-                        }}
-                        swipeToClose
-                        backdrop
-                      >
-                        <Button
-                          sheetClose={`.demo-sheet-${item.ID}`}
-                          className="show-more"
-                        >
-                          <i className="las la-times"></i>
-                        </Button>
-                        <PageContent>
-                          <div className="page-shop__service-detail">
-                            <div className="title">
-                              <h4>Thanh toán đơn hàng #{item.ID}</h4>
-                            </div>
-                            <div className="content">
-                              {loadingText && <Skeleton count={6} />}
-                              {!loadingText &&
-                                textPay &&
-                                ReactHtmlParser(
-                                  textPay
-                                    .replaceAll("ID_ĐH", `#${item.ID}`)
-                                    .replaceAll(
-                                      "MONEY",
-                                      `${formatPriceVietnamese(
-                                        Math.abs(item.RemainPay)
-                                      )} ₫`
-                                    )
-                                    .replaceAll("ID_DH", `${item.ID}`)
-                                )}
-                            </div>
-                          </div>
-                        </PageContent>
-                      </Sheet>
+                      <SheetOrder
+                        item={item}
+                        textPay={textPay}
+                        loadingText={loadingText}
+                        Banks={Banks}
+                      />
                     </div>
                   </Link>
                 ))

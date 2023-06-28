@@ -74,6 +74,7 @@ const checkRouterHome = () => {
 
     const ACC_TYPE = infoUser && infoUser.acc_type;
     if (ACC_TYPE === "M") {
+        //return ShopPaySuccessPage;
         return HomeIndex;
     }
 
@@ -94,349 +95,348 @@ const checkRouterHome = () => {
     return HomeIndex;
 }
 
-var routes = [
-  {
-    path: "/",
-    asyncComponent: () => checkRouterHome(),
-  },
-  {
-    path: "/news/",
-    asyncComponent: () => HomeIndex,
-    options: {
-      transition: "f7-cover",
+var routes = [{
+        path: "/",
+        asyncComponent: () => checkRouterHome(),
     },
-  },
-  {
-    path: "/adv/:id",
-    asyncComponent: () => SlideDetail,
-    options: {
-      transition: "f7-cover",
+    {
+        path: "/news/",
+        asyncComponent: () => HomeIndex,
+        options: {
+            transition: "f7-cover",
+        },
     },
-  },
-  {
-    path: "/news-list/",
-    asyncComponent: () => NewsListPage,
-  },
-  {
-    path: "/news/detail/:postId/",
-    asyncComponent: () => NewsDetailPage,
-  },
-  {
-    path: "/rules-list/",
-    asyncComponent: () => RulesListPage,
-  },
-  {
-    path: "/shop/",
-    asyncComponent: () => ShopPage,
-    options: {
-      transition: "f7-cover",
+    {
+        path: "/adv/:id",
+        asyncComponent: () => SlideDetail,
+        options: {
+            transition: "f7-cover",
+        },
     },
-  },
-  {
-    path: "/pay/",
-    component: ShopPayPage,
-    beforeEnter: checkAuth,
-  },
-  {
-    path: "/pay-info/",
-    asyncComponent: () => ShopPayInfoPage,
-  },
-  {
-    path: "/pay-success/:orderID",
-    component: ShopPaySuccessPage,
-  },
-  {
-    path: "/shop/:cateId",
-    async(routeTo, routeFrom, resolve, reject) {
-      const cateID = routeTo.params.cateId;
-      const cateidparams = routeTo.query.cateid;
-      if (Number(cateID) === 795 || Number(cateidparams) === 795) {
-        resolve({
-          component: ShopListServicePage,
-        });
-      } else {
-        resolve({
-          component: ShopListProductPage,
-        });
-      }
+    {
+        path: "/news-list/",
+        asyncComponent: () => NewsListPage,
     },
-  },
-  {
-    path: "/shop/list/:parentId/:cateId",
-    async(routeTo, routeFrom, resolve, reject) {
-      const cateParentID = routeTo.params.parentId;
-      if (cateParentID === "795") {
-        resolve({
-          component: ShopListServicePage,
-        });
-      } else {
-        resolve({
-          component: ShopListProductPage,
-        });
-      }
+    {
+        path: "/news/detail/:postId/",
+        asyncComponent: () => NewsDetailPage,
     },
-    //component: ShopListPage,
-  },
-  {
-    path: "/shop/detail/:cateId",
-    asyncComponent: () => ShopDetailPage,
-  },
-  {
-    path: "/maps/",
-    asyncComponent: () => MapsPage,
-    options: {
-      transition: "f7-cover",
+    {
+        path: "/rules-list/",
+        asyncComponent: () => RulesListPage,
     },
-  },
-  {
-    path: "/login/",
-    asyncComponent: () => LoginPage,
-    options: {
-      transition: "f7-cover",
+    {
+        path: "/shop/",
+        asyncComponent: () => ShopPage,
+        options: {
+            transition: "f7-cover",
+        },
     },
-  },
-  {
-    path: "/registration/",
-    asyncComponent: () => RegistrationPage,
-    options: {
-      transition: "f7-cover-v",
+    {
+        path: "/pay/",
+        component: ShopPayPage,
+        beforeEnter: checkAuth,
     },
-  },
-  {
-    path: "/forgot/",
-    asyncComponent: () => ForgotPage,
-    options: {
-      transition: "f7-cover",
+    {
+        path: "/pay-info/",
+        asyncComponent: () => ShopPayInfoPage,
     },
-  },
-  {
-    path: "/forgot-change/",
-    asyncComponent: () => ForgotChangePage,
-    options: {
-      transition: "f7-cover-v",
+    {
+        path: "/pay-success/:orderID",
+        component: ShopPaySuccessPage,
     },
-  },
-  {
-    path: "/profile/",
-    asyncComponent: () => ProfilePage,
-    options: {
-      transition: "f7-cover",
+    {
+        path: "/shop/:cateId",
+        async(routeTo, routeFrom, resolve, reject) {
+            const cateID = routeTo.params.cateId;
+            const cateidparams = routeTo.query.cateid;
+            if (Number(cateID) === 795 || Number(cateidparams) === 795) {
+                resolve({
+                    component: ShopListServicePage,
+                });
+            } else {
+                resolve({
+                    component: ShopListProductPage,
+                });
+            }
+        },
     },
-    beforeEnter: checkAuth,
-  },
-  {
-    path: "/detail-profile/",
-    asyncComponent: () => DetailProfilePage,
-    options: {
-      transition: "f7-cover",
+    {
+        path: "/shop/list/:parentId/:cateId",
+        async(routeTo, routeFrom, resolve, reject) {
+            const cateParentID = routeTo.params.parentId;
+            if (cateParentID === "795") {
+                resolve({
+                    component: ShopListServicePage,
+                });
+            } else {
+                resolve({
+                    component: ShopListProductPage,
+                });
+            }
+        },
+        //component: ShopListPage,
     },
-  },
-  {
-    path: "/edit-email/",
-    asyncComponent: () => EditEmailPage,
-  },
-  {
-    path: "/edit-password/",
-    asyncComponent: () => EditPasswordPage,
-  },
-  {
-    path: "/cardservice/", // Thẻ dịch vụ
-    asyncComponent: () => CardServicePage,
-    beforeEnter: checkAuth,
-    options: {
-      transition: "f7-cover",
+    {
+        path: "/shop/detail/:cateId",
+        asyncComponent: () => ShopDetailPage,
     },
-  },
-  {
-    path: "/schedule/", // Thẻ dịch vụ
-    asyncComponent: () => SchedulePage,
-    beforeEnter: checkAuth,
-    options: {
-      transition: "f7-cover",
+    {
+        path: "/maps/",
+        asyncComponent: () => MapsPage,
+        options: {
+            transition: "f7-cover",
+        },
     },
-  },
-  {
-    path: "/schedule/:ID", // Thẻ dịch vụ
-    asyncComponent: () => SchedulePage,
-    beforeEnter: checkAuth,
-    options: {
-      transition: "f7-cover",
+    {
+        path: "/login/",
+        asyncComponent: () => LoginPage,
+        options: {
+            transition: "f7-cover",
+        },
     },
-  },
-  {
-    path: "/manage-schedules/", // Quản lý Thẻ dịch vụ
-    asyncComponent: () => ScheduleManagePage,
-    beforeEnter: checkAuth,
-    options: {
-      transition: "f7-cover",
+    {
+        path: "/registration/",
+        asyncComponent: () => RegistrationPage,
+        options: {
+            transition: "f7-cover-v",
+        },
     },
-  },
-  {
-    path: "/barcode/", // Check In
-    asyncComponent: () => BarCodePage,
-    options: {
-      transition: "f7-cover",
+    {
+        path: "/forgot/",
+        asyncComponent: () => ForgotPage,
+        options: {
+            transition: "f7-cover",
+        },
     },
-  },
-  {
-    path: "/order/", // Check In
-    asyncComponent: () => OrderPage,
-    options: {
-      transition: "f7-cover",
+    {
+        path: "/forgot-change/",
+        asyncComponent: () => ForgotChangePage,
+        options: {
+            transition: "f7-cover-v",
+        },
     },
-  },
-  {
-    path: "/voucher/", // Mã giảm giá
-    asyncComponent: () => VoucherPage,
-  },
-  {
-    path: "/wallet/", // Ví điện tử
-    asyncComponent: () => WalletPage,
-  },
-  {
-    path: "/diary/", // Nhật ký
-    asyncComponent: () => DiaryPage,
-  },
-  {
-    path: "/rating/", // Nhật ký
-    asyncComponent: () => RatingListPage,
-  },
-  {
-    path: "/notification/", // Thông báo Noti
-    asyncComponent: () => NotificationPage,
-    beforeEnter: checkAuth,
-    options: {
-      transition: "f7-cover",
+    {
+        path: "/profile/",
+        asyncComponent: () => ProfilePage,
+        options: {
+            transition: "f7-cover",
+        },
+        beforeEnter: checkAuth,
     },
-  },
-  {
-    path: "/notification/:id", // Thông báo Noti
-    asyncComponent: () => NotificationDetailPage,
-    options: {
-      transition: "f7-cover",
+    {
+        path: "/detail-profile/",
+        asyncComponent: () => DetailProfilePage,
+        options: {
+            transition: "f7-cover",
+        },
     },
-    beforeEnter: checkAuth,
-  },
-  {
-    path: "/employee/service/", // Nhân viên dịch vụ
-    asyncComponent: () => EmployeeServicePage,
-    options: {
-      transition: "f7-cover",
+    {
+        path: "/edit-email/",
+        asyncComponent: () => EditEmailPage,
     },
-  },
-  {
-    path: "/employee/service/:id/", // Nhân viên dịch vụ chi tiết
-    asyncComponent: () => EmployeeServiceDetailPage,
-    options: {
-      transition: "f7-cover",
+    {
+        path: "/edit-password/",
+        asyncComponent: () => EditPasswordPage,
     },
-  },
-  {
-    path: "/employee/images/:id/", // Hình ảnh dịch vụ
-    asyncComponent: () => employeeListImagesPage,
-    options: {
-      transition: "f7-cover",
+    {
+        path: "/cardservice/", // Thẻ dịch vụ
+        asyncComponent: () => CardServicePage,
+        beforeEnter: checkAuth,
+        options: {
+            transition: "f7-cover",
+        },
     },
-  },
-  {
-    path: "/employee/attachments/:id/", // Hình ảnh
-    asyncComponent: () => employeeAttachments,
-    options: {
-      transition: "f7-cover",
+    {
+        path: "/schedule/", // Thẻ dịch vụ
+        asyncComponent: () => SchedulePage,
+        beforeEnter: checkAuth,
+        options: {
+            transition: "f7-cover",
+        },
     },
-  },
-  {
-    path: "/employee/diary/:id/", // Nhân viên nhật ký
-    asyncComponent: () => EmployeeServiceDiaryPage,
-    options: {
-      transition: "f7-cover",
+    {
+        path: "/schedule/:ID", // Thẻ dịch vụ
+        asyncComponent: () => SchedulePage,
+        beforeEnter: checkAuth,
+        options: {
+            transition: "f7-cover",
+        },
     },
-  },
-  {
-    path: "/employee/schedule/:orderItem/", // Nhân viên lịch trình
-    asyncComponent: () => EmployeeServiceSchedulePage,
-    options: {
-      transition: "f7-cover",
+    {
+        path: "/manage-schedules/", // Quản lý Thẻ dịch vụ
+        asyncComponent: () => ScheduleManagePage,
+        beforeEnter: checkAuth,
+        options: {
+            transition: "f7-cover",
+        },
     },
-  },
-  {
-    path: "/employee/history/:orderItem/:memberId", // Nhân viên lịch sử
-    asyncComponent: () => EmployeeServiceHistoryPage,
-    options: {
-      transition: "f7-cover",
+    {
+        path: "/barcode/", // Check In
+        asyncComponent: () => BarCodePage,
+        options: {
+            transition: "f7-cover",
+        },
     },
-  },
-  {
-    path: "/employee/statistical/", // Thống kê
-    asyncComponent: () => EmployeeStatisticalPage,
-    options: {
-      transition: "f7-cover",
+    {
+        path: "/order/", // Check In
+        asyncComponent: () => OrderPage,
+        options: {
+            transition: "f7-cover",
+        },
     },
-  },
-  {
-    path: "/report/", // Báo cáo ngày
-    asyncComponent: () => ReportPage,
-    options: {
-      transition: "f7-cover",
+    {
+        path: "/voucher/", // Mã giảm giá
+        asyncComponent: () => VoucherPage,
     },
-  },
-  {
-    path: "/report/date/", // Báo cáo ngày
-    asyncComponent: () => ReportingDatePage,
-    options: {
-      transition: "f7-cover",
+    {
+        path: "/wallet/", // Ví điện tử
+        asyncComponent: () => WalletPage,
     },
-  },
-  {
-    path: "/report/customer/", // Khách hàng
-    asyncComponent: () => ReportCustomerPage,
-    options: {
-      transition: "f7-cover",
+    {
+        path: "/diary/", // Nhật ký
+        asyncComponent: () => DiaryPage,
     },
-  },
-  {
-    path: "/report/sell/", // Bán hàng
-    asyncComponent: () => ReportSellPage,
-    options: {
-      transition: "f7-cover",
+    {
+        path: "/rating/", // Nhật ký
+        asyncComponent: () => RatingListPage,
     },
-  },
-  {
-    path: "/report/services/", // Dịch vụ
-    asyncComponent: () => ReportServicesPage,
-    options: {
-      transition: "f7-cover",
+    {
+        path: "/notification/", // Thông báo Noti
+        asyncComponent: () => NotificationPage,
+        beforeEnter: checkAuth,
+        options: {
+            transition: "f7-cover",
+        },
     },
-  },
-  {
-    path: "/report/cash-book/", // Sổ quỹ
-    asyncComponent: () => ReportCashBookPage,
-    options: {
-      transition: "f7-cover",
+    {
+        path: "/notification/:id", // Thông báo Noti
+        asyncComponent: () => NotificationDetailPage,
+        options: {
+            transition: "f7-cover",
+        },
+        beforeEnter: checkAuth,
     },
-  },
-  {
-    path: "/report/monthly/", // Thu chi
-    asyncComponent: () => ReportMonthlyPage,
-    options: {
-      transition: "f7-cover",
+    {
+        path: "/employee/service/", // Nhân viên dịch vụ
+        asyncComponent: () => EmployeeServicePage,
+        options: {
+            transition: "f7-cover",
+        },
     },
-  },
-  {
-    path: "/pos/", // Pos bán hàng
-    asyncComponent: () => PosPage,
-    options: {
-      transition: "f7-cover",
+    {
+        path: "/employee/service/:id/", // Nhân viên dịch vụ chi tiết
+        asyncComponent: () => EmployeeServiceDetailPage,
+        options: {
+            transition: "f7-cover",
+        },
     },
-  },
-  {
-    path: "/search/",
-    asyncComponent: () => SearchPage,
-  },
-  {
-    path: "(.*)",
-    component: NotFoundPage,
-  },
+    {
+        path: "/employee/images/:id/", // Hình ảnh dịch vụ
+        asyncComponent: () => employeeListImagesPage,
+        options: {
+            transition: "f7-cover",
+        },
+    },
+    {
+        path: "/employee/attachments/:id/", // Hình ảnh
+        asyncComponent: () => employeeAttachments,
+        options: {
+            transition: "f7-cover",
+        },
+    },
+    {
+        path: "/employee/diary/:id/", // Nhân viên nhật ký
+        asyncComponent: () => EmployeeServiceDiaryPage,
+        options: {
+            transition: "f7-cover",
+        },
+    },
+    {
+        path: "/employee/schedule/:orderItem/", // Nhân viên lịch trình
+        asyncComponent: () => EmployeeServiceSchedulePage,
+        options: {
+            transition: "f7-cover",
+        },
+    },
+    {
+        path: "/employee/history/:orderItem/:memberId", // Nhân viên lịch sử
+        asyncComponent: () => EmployeeServiceHistoryPage,
+        options: {
+            transition: "f7-cover",
+        },
+    },
+    {
+        path: "/employee/statistical/", // Thống kê
+        asyncComponent: () => EmployeeStatisticalPage,
+        options: {
+            transition: "f7-cover",
+        },
+    },
+    {
+        path: "/report/", // Báo cáo ngày
+        asyncComponent: () => ReportPage,
+        options: {
+            transition: "f7-cover",
+        },
+    },
+    {
+        path: "/report/date/", // Báo cáo ngày
+        asyncComponent: () => ReportingDatePage,
+        options: {
+            transition: "f7-cover",
+        },
+    },
+    {
+        path: "/report/customer/", // Khách hàng
+        asyncComponent: () => ReportCustomerPage,
+        options: {
+            transition: "f7-cover",
+        },
+    },
+    {
+        path: "/report/sell/", // Bán hàng
+        asyncComponent: () => ReportSellPage,
+        options: {
+            transition: "f7-cover",
+        },
+    },
+    {
+        path: "/report/services/", // Dịch vụ
+        asyncComponent: () => ReportServicesPage,
+        options: {
+            transition: "f7-cover",
+        },
+    },
+    {
+        path: "/report/cash-book/", // Sổ quỹ
+        asyncComponent: () => ReportCashBookPage,
+        options: {
+            transition: "f7-cover",
+        },
+    },
+    {
+        path: "/report/monthly/", // Thu chi
+        asyncComponent: () => ReportMonthlyPage,
+        options: {
+            transition: "f7-cover",
+        },
+    },
+    {
+        path: "/pos/", // Pos bán hàng
+        asyncComponent: () => PosPage,
+        options: {
+            transition: "f7-cover",
+        },
+    },
+    {
+        path: "/search/",
+        asyncComponent: () => SearchPage,
+    },
+    {
+        path: "(.*)",
+        component: NotFoundPage,
+    },
 ];
 
 export default routes;

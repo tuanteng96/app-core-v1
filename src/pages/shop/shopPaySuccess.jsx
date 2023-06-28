@@ -6,50 +6,107 @@ import {
   Button,
   Sheet,
   PageContent,
-} from 'framework7-react'
-import React from 'react'
-import IconSucces from '../../assets/images/box.svg'
-import NotificationIcon from '../../components/NotificationIcon'
-import ToolBarBottom from '../../components/ToolBarBottom'
-import userService from '../../service/user.service'
-import Skeleton from 'react-loading-skeleton'
-import ReactHtmlParser from 'react-html-parser'
-import { formatPriceVietnamese } from '../../constants/format'
+} from "framework7-react";
+import React from "react";
+import IconSucces from "../../assets/images/box.svg";
+import NotificationIcon from "../../components/NotificationIcon";
+import ToolBarBottom from "../../components/ToolBarBottom";
+import userService from "../../service/user.service";
+import Skeleton from "react-loading-skeleton";
+import ReactHtmlParser from "react-html-parser";
+import { formatPriceVietnamese } from "../../constants/format";
+import Select from "react-select";
+import { QRCodeSVG } from "qrcode.react";
+
+const RenderQR = ({ ValueBank, Total, ID }) => {
+  if (ValueBank.ma_nh === "ZaloPay") {
+    return (
+      <div className="mt-15px">
+        <QRCodeSVG
+          value={`https://social.zalopay.vn/mt-gateway/v1/private-qr?amount=${Total}&note=${ValueBank.ma_nh}${ID}&receiver_id=${ValueBank.stk}`}
+          size={220}
+          bgColor={"#ffffff"}
+          fgColor={"#000000"}
+          level={"L"}
+          includeMargin={false}
+        />
+        <div className="fw-600">{ValueBank.ten}</div>
+        <div>{ValueBank.stk}</div>
+        <div>{formatPriceVietnamese(Total)}</div>
+      </div>
+    );
+  }
+  if (ValueBank.ma_nh === "MoMoPay") {
+    return (
+      <div className="mt-15px">
+        <QRCodeSVG
+          value={`2|99|${ValueBank.stk}|||0|0|${Total}|ĐH${ID}|transfer_myqr`}
+          size={220}
+          bgColor={"#ffffff"}
+          fgColor={"#000000"}
+          level={"L"}
+          includeMargin={false}
+        />
+        <div className="fw-600">{ValueBank.ten}</div>
+        <div>{ValueBank.stk}</div>
+        <div>{formatPriceVietnamese(Total)}</div>
+      </div>
+    );
+  }
+  return (
+    <div className="mt-12px">
+      <img
+        src={`https://img.vietqr.io/image/${ValueBank.ma_nh}-${ValueBank.stk}-compact2.jpg?amount=${Total}&addInfo=ĐH${ID}&accountName=${ValueBank.ten}`}
+        alt="Mã QR Thanh toán"
+      />
+    </div>
+  );
+};
 
 export default class extends React.Component {
   constructor() {
-    super()
+    super();
     this.state = {
       loadingText: false,
-      textPay: '',
-    }
+      textPay: "",
+      Banks: [],
+      ValueBank: null,
+    };
   }
   componentDidMount() {
-    // const userInfo = getUser();
-    // if (!userInfo) return false;
-    // const pwd = getPassword();
-    // UserService.getInfo(userInfo.MobilePhone, pwd)
-    //   .then((response) => {
-    //     const data = response.data.info;
-    //     setUserStorage(data.etoken, data, pwd);
-    //   })
-    //   .catch((er) => console.log(er));
-
     this.setState({
       loadingText: true,
-    })
+    });
     userService
-      .getConfig('App.thanhtoan')
+      .getConfig("App.thanhtoan,MA_QRCODE_NGAN_HANG")
       .then(({ data }) => {
+        let newBanks = [];
+        if (data.data && data.data.length > 1) {
+          let JsonBanks = JSON.parse(data.data[1].Value);
+          if (
+            JsonBanks &&
+            JsonBanks.ngan_hang &&
+            Array.isArray(JsonBanks.ngan_hang)
+          ) {
+            newBanks = JsonBanks.ngan_hang.map((x) => ({
+              ...x,
+              value: x.stk,
+              label: x.ngan_hang,
+            }));
+          }
+        }
         this.setState({
           textPay: data.data && data.data[0]?.ValueLines,
           loadingText: false,
-        })
+          Banks: newBanks,
+        });
       })
-      .catch((error) => console.log(error))
+      .catch((error) => console.log(error));
   }
+
   render() {
-    const { loadingText, textPay } = this.state
+    const { loadingText, textPay, Banks, ValueBank } = this.state;
+    
     return (
       <Page
         onPageBeforeOut={this.onPageBeforeOut}
@@ -73,39 +130,76 @@ export default class extends React.Component {
         </Navbar>
         <div className="page-pay-success bg-white min-h-100 p-20px bz-bb">
           <div className="image mb-20px">
-            <img className="w-125px" src={IconSucces} alt="Đơn hàng được gửi thành công!" />
+            <img
+              className="w-125px"
+              src={IconSucces}
+              alt="Đơn hàng được gửi thành công!"
+            />
           </div>
           {/* <div className="text">
             Đơn hàng <span>#{this.$f7route.params.orderID}</span> của bạn đã
             được gửi thành công.
           </div> */}
           <div className="text-center mb-20px">
-            {
-              loadingText && <Skeleton count={5} />
-            }
+            {loadingText && <Skeleton count={5} />}
             {!loadingText &&
               textPay &&
               ReactHtmlParser(
                 textPay
-                  .replaceAll('ID_ĐH', `<b class="fw-600 text-danger">${this.$f7route.params.orderID}</b>`)
                   .replaceAll(
-                    'MONEY',
-                    `<b class="fw-600 text-danger">${formatPriceVietnamese(
-                      Math.abs(this.$f7route.query.money),
-                    )} ₫</b>`,
+                    "ID_ĐH",
+                    `<b class="fw-600 text-danger">${this.$f7route.params.orderID}</b>`
                   )
-                  .replaceAll('ID_DH', `<b class="fw-600 text-danger">${this.$f7route.params.orderID}</b>`),
+                  .replaceAll(
+                    "MONEY",
+                    `<b class="fw-600 text-danger">${formatPriceVietnamese(
+                      Math.abs(this.$f7route.query.money)
+                    )} ₫</b>`
+                  )
+                  .replaceAll(
+                    "ID_DH",
+                    `<b class="fw-600 text-danger">${this.$f7route.params.orderID}</b>`
+                  )
               )}
+            <div className="mt-10px">
+              <Select
+                options={Banks}
+                className="select-control"
+                classNamePrefix="select"
+                placeholder="Chọn ngân hàng"
+                noOptionsMessage={() => "Không có dữ liệu"}
+                value={ValueBank}
+                onChange={(val) => this.setState({ ValueBank: val })}
+                isClearable={true}
+                menuPosition="fixed"
+                styles={{
+                  menuPortal: (base) => ({
+                    ...base,
+                    zIndex: 9999,
+                  }),
+                }}
+                menuPortalTarget={document.body}
+              />
+            </div>
+            {ValueBank && (
+              <RenderQR
+                ValueBank={ValueBank}
+                Total={Math.abs(this.$f7route.query.money)}
+                ID={this.$f7route.params.orderID}
+              />
+            )}
           </div>
           <div className="btn">
             <Link href="/order/">Đơn hàng của bạn</Link>
-            <Link className="mb-0"href="/shop/">Tiếp tục mua hàng</Link>
+            <Link className="mb-0" href="/shop/">
+              Tiếp tục mua hàng
+            </Link>
           </div>
         </div>
         <Toolbar tabbar position="bottom">
           <ToolBarBottom />
         </Toolbar>
       </Page>
-    )
+    );
   }
 }
