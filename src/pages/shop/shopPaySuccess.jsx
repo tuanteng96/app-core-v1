@@ -55,10 +55,13 @@ const RenderQR = ({ ValueBank, Total, ID, MaND }) => {
   }
   return (
     <div className="mt-12px">
-      <img
-        src={`https://img.vietqr.io/image/${ValueBank.ma_nh}-${ValueBank.stk}-compact2.jpg?amount=${Total}&addInfo=${MaND}${ID}&accountName=${ValueBank.ten}`}
-        alt="Mã QR Thanh toán"
-      />
+      <div className="position-relative m-auto" style={{ maxWidth: "320px" }}>
+        <div className="bg-white position-absolute h-40px w-100 bg-white top-0 left-0"></div>
+        <img
+          src={`https://img.vietqr.io/image/${ValueBank.ma_nh}-${ValueBank.stk}-compact2.jpg?amount=${Total}&addInfo=${MaND}${ID}&accountName=${ValueBank.ten}`}
+          alt="Mã QR Thanh toán"
+        />
+      </div>
     </div>
   );
 };
@@ -74,6 +77,12 @@ export default class extends React.Component {
       MaND: "",
     };
   }
+
+  getName = (item) => {
+    let names = item.ngan_hang.split("-");
+    return names[names.length - 1];
+  };
+
   componentDidMount() {
     this.setState({
       loadingText: true,
@@ -93,7 +102,7 @@ export default class extends React.Component {
             newBanks = JsonBanks.ngan_hang.map((x) => ({
               ...x,
               value: x.stk,
-              label: x.ngan_hang,
+              label: this.getName(x),
             }));
             newMaND = JsonBanks.ma_nhan_dien;
           }
@@ -102,7 +111,8 @@ export default class extends React.Component {
           textPay: data.data && data.data[0]?.ValueLines,
           loadingText: false,
           Banks: newBanks,
-          MaND: newMaND
+          MaND: newMaND,
+          ValueBank: newBanks && newBanks.length > 0 && newBanks[0],
         });
       })
       .catch((error) => console.log(error));

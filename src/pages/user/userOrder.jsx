@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Page,
   Link,
@@ -64,16 +64,25 @@ const RenderQR = ({ ValueBank, Total, ID, MaND }) => {
   }
   return (
     <div className="mt-12px">
-      <img
-        src={`https://img.vietqr.io/image/${ValueBank.ma_nh}-${ValueBank.stk}-compact2.jpg?amount=${Total}&addInfo=${MaND}${ID}&accountName=${ValueBank.ten}`}
-        alt="Mã QR Thanh toán"
-      />
+      <div className="position-relative m-auto" style={{ maxWidth: "320px" }}>
+        <div className="bg-white position-absolute h-40px w-100 bg-white top-0 left-0"></div>
+        <img
+          src={`https://img.vietqr.io/image/${ValueBank.ma_nh}-${ValueBank.stk}-compact2.jpg?amount=${Total}&addInfo=${MaND}${ID}&accountName=${ValueBank.ten}`}
+          alt="Mã QR Thanh toán"
+        />
+      </div>
     </div>
   );
 };
 
 const SheetOrder = ({ item, textPay, loadingText, Banks, MaND }) => {
   const [ValueBank, setValueBank] = useState(null);
+
+  useEffect(() => {
+    if (Banks && Banks.length > 0) {
+      setValueBank(Banks[0]);
+    }
+  }, [Banks]);
 
   return (
     <Sheet
@@ -101,7 +110,7 @@ const SheetOrder = ({ item, textPay, loadingText, Banks, MaND }) => {
                   .replaceAll("ID_ĐH", `#${item.ID}`)
                   .replaceAll(
                     "MONEY",
-                    `${formatPriceVietnamese(Math.abs(item.RemainPay))} ₫`
+                    `${formatPriceVietnamese(Math.abs(item.ToPay))} ₫`
                   )
                   .replaceAll("ID_DH", `${item.ID}`)
               )}
@@ -130,7 +139,7 @@ const SheetOrder = ({ item, textPay, loadingText, Banks, MaND }) => {
               {ValueBank && (
                 <RenderQR
                   ValueBank={ValueBank}
-                  Total={item.RemainPay}
+                  Total={item.ToPay}
                   ID={item.ID}
                   MaND={MaND}
                 />
@@ -155,12 +164,19 @@ export default class extends React.Component {
       MaND: ''
     };
   }
+
+  getName = (item) => {
+    let names = item.ngan_hang.split("-");
+    return names[names.length - 1];
+  };
+
   componentDidMount() {
     this.getOrderAll();
 
     this.setState({
       loadingText: true,
     });
+
     UserService.getConfig("App.thanhtoan,MA_QRCODE_NGAN_HANG")
       .then(({ data }) => {
         let newBanks = [];
@@ -175,7 +191,7 @@ export default class extends React.Component {
             newBanks = JsonBanks.ngan_hang.map((x) => ({
               ...x,
               value: x.stk,
-              label: x.ngan_hang,
+              label: this.getName(x),
             }));
             newMaND = JsonBanks.ma_nhan_dien
           }
