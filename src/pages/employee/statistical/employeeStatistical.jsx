@@ -79,14 +79,18 @@ export default class employeeStatistical extends React.Component {
       : dataSalary.LUONG_CO_BAN || 0;
 
     value += this.SalaryServices(dataSalary.SalaryServices);
+   
     value += this.numTotal(dataSalary.BonusSales);
     value += this.numTotal(dataSalary.Bonus);
     value -= this.numTotal(dataSalary.NGAY_NGHI);
     value -= this.numTotal(dataSalary.PHAT);
+     
     value += dataSalary.PHU_CAP;
     value += dataSalary?.THUONG_HOA_HONG_DOANH_SO?.Value || 0;
-    value += dataSalary?.KpiTourResult?.Value;
-    value += dataSalary?.Kpi2Result?.Value;
+
+    
+    value += dataSalary?.KpiTourResult?.Value || 0;
+    value += dataSalary?.Kpi2Result?.Value || 0;
 
     return value;
   };

@@ -21,33 +21,58 @@ export default class extends React.Component {
   componentDidMount() {
     this.setState({ width: window.innerWidth });
 
-    UserService.getStock()
-      .then((response) => {
-        const { all } = response.data.data;
-        const newAll = all.filter((item) => item.ID !== 778);
-        this.setState({
-          arrMaps: newAll,
-          currentMap: newAll[0].Map,
-          currentID: newAll[0].ID,
-        });
-      })
-      .catch((e) => console.log(e));
+    // UserService.getStock()
+    //   .then((response) => {
+    //     const { all } = response.data.data;
+    //     const newAll = all.filter((item) => item.ID !== 778);
+    //     this.setState({
+    //       arrMaps: newAll,
+    //       currentMap: newAll[0].Map,
+    //       currentID: newAll[0].ID,
+    //     });
+    //   })
+    //   .catch((e) => console.log(e));
 
-    NewsDataService.getBannerName("APP.COSO")
-      .then(({ data }) => {
-        if (data.data && data.data.length > 0) {
-          this.setState({
-            arrMaps2: data.data.map((x) => ({
-              ...x,
-              Map: x.Link,
-            })),
-          });
-        }
-      })
-      .catch((e) => {
-        console.log(e);
-      });
+    // NewsDataService.getBannerName("APP.COSO")
+    //   .then(({ data }) => {
+    //     if (data.data && data.data.length > 0) {
+    //       this.setState({
+    //         arrMaps2: data.data.map((x) => ({
+    //           ...x,
+    //           Map: x.Link,
+    //         })),
+    //       });
+    //     }
+    //   })
+    //   .catch((e) => {
+    //     console.log(e);
+    //   });
+    this.getMapsList();
   }
+
+  getMapsList = async () => {
+    let { data: arr1 } = await UserService.getStock();
+    let { data: arr2 } = await NewsDataService.getBannerName("APP.COSO");
+    let newArr1 = arr1?.data?.all
+      ? arr1?.data?.all.filter((item) => item.ID !== 778)
+      : [];
+    let newArr2 = arr2?.data || [];
+    let newMaps = [...newArr1]
+
+    for (let x of newArr2) {
+      newMaps.push({
+        ...x,
+        Map: x.Link,
+        LinkSEO: x.FileName,
+      });
+    }
+
+    this.setState({
+      arrMaps: newMaps,
+      currentMap: newMaps[0].Map,
+      currentID: newMaps[0].ID,
+    });
+  };
 
   handStyle = () => {
     const { arrMaps } = this.state;
