@@ -175,7 +175,7 @@ export default class employeeServiceDetail extends React.Component {
         Note: itemDetail.Desc,
         NoteCurrent: itemDetail.Desc,
         surcharget: resulSurchargetNew.join(", "),
-        isShowBtn: !mBook,
+        isShowBtn: this.$f7route.query.type === "os",
       });
       this.setState({ isLoading: false });
       callback && callback();
@@ -738,29 +738,43 @@ export default class employeeServiceDetail extends React.Component {
         />
 
         <Toolbar tabbar position="bottom">
-          {isShowBtn ? (
-            <div className="page-toolbar">
-              <div className="page-toolbar__order">
+          {!isLoading && (
+            <>
+              {isShowBtn ? (
+                <div className="page-toolbar">
+                  <div className="page-toolbar__order">
+                    <button
+                      className={`page-btn-order btn-submit-order ${
+                        itemDetail && itemDetail.Status === "done"
+                          ? "success"
+                          : ""
+                      }`}
+                      onClick={() => this.openSheet()}
+                    >
+                      <span>
+                        {itemDetail && itemDetail.Status === "done"
+                          ? "Xem hình ảnh"
+                          : "Báo cáo xong"}
+                      </span>
+                    </button>
+                  </div>
+                </div>
+              ) : (
                 <button
-                  className={`page-btn-order btn-submit-order ${
-                    itemDetail && itemDetail.Status === "done" ? "success" : ""
-                  }`}
-                  onClick={() => this.openSheet()}
+                  className={`page-btn-order btn-submit-order`}
+                  onClick={() => this.$f7router.back()}
                 >
-                  <span>
-                    {itemDetail && itemDetail.Status === "done"
-                      ? "Xem hình ảnh"
-                      : "Báo cáo xong"}
-                  </span>
+                  <span>Đóng</span>
                 </button>
-              </div>
-            </div>
-          ) : (
+              )}
+            </>
+          )}
+          {isLoading && (
             <button
               className={`page-btn-order btn-submit-order`}
-              onClick={() => this.$f7router.back()}
+              disabled
             >
-              <span>Đóng</span>
+              <span>Đang tải ...</span>
             </button>
           )}
         </Toolbar>
