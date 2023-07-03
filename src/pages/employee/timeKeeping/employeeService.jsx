@@ -144,10 +144,11 @@ export default class employeeService extends React.Component {
     }
   };
 
-  handleDetail = (item) => {
+  handleDetail = (item, type) => {
     this.$f7router.navigate(
-      "/employee/service/" + item.ID + "/" + "?memberID=" + item?.member?.ID ||
-        item?.MemberID
+      `/employee/service/${item.ID}/?memberID=${
+        item?.member?.ID || item?.MemberID
+      }&type=${type}`
     );
   };
   handleDiary = (item) => {
@@ -349,7 +350,7 @@ export default class employeeService extends React.Component {
                             <ActionsGroup>
                               <ActionsLabel>{item.Title}</ActionsLabel>
                               <ActionsButton
-                                onClick={() => this.handleDetail(item)}
+                                onClick={() => this.handleDetail(item, "os")}
                               >
                                 Xem chi tiết
                               </ActionsButton>
@@ -455,7 +456,7 @@ export default class employeeService extends React.Component {
                             <ActionsGroup>
                               <ActionsLabel>{item.RootTitles}</ActionsLabel>
                               <ActionsButton
-                                onClick={() => this.handleDetail(item)}
+                                onClick={() => this.handleDetail(item, "book")}
                               >
                                 Xem chi tiết
                               </ActionsButton>

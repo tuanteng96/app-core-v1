@@ -125,6 +125,7 @@ export default class employeeServiceDetail extends React.Component {
 
   getService = async (callback) => {
     if (!getUser()) return false;
+    const cateID = this.$f7route.params.id;
     const infoMember = getUser();
     const user = {
       USN: infoMember.UserName,
@@ -137,22 +138,25 @@ export default class employeeServiceDetail extends React.Component {
       IsService: 1,
       MemberIDs: "",
       srv_status: "book,wait_book,wait,doing,done,cancel",
-      srv_from: "1/1/2015",
-      srv_to: "1/1/2030",
+      srv_from: "",
+      srv_to: "",
       key: "",
       ps: 1000,
+      osid: this.$f7route.query.type === "os" ? cateID : "",
+      mbid: this.$f7route.query.type !== "os" ? cateID : "",
     };
 
     try {
-      const cateID = this.$f7route.params.id;
       const response = await staffService.getServiceStaff(user, data);
+      
       const { result, mBook } = {
-        result: response.data.data,
-        mBook: response.data.mBook,
+        result:
+          response?.data?.data && response.data.data.length > 0
+            ? response.data.data[0]
+            : null,
+        mBook: response?.data?.mBook && response.data.mBook.length > 0 ? response.data.mBook[0] : null,
       };
-      const itemDetail =
-        result.find((item) => item.ID === parseInt(cateID)) ||
-        mBook.find((item) => item.ID === parseInt(cateID));
+      const itemDetail = result || mBook;
       const dataPP = {
         cmd: "service_fee",
         OrderServiceID: itemDetail.ID,
@@ -171,8 +175,7 @@ export default class employeeServiceDetail extends React.Component {
         Note: itemDetail.Desc,
         NoteCurrent: itemDetail.Desc,
         surcharget: resulSurchargetNew.join(", "),
-        isShowBtn:
-          mBook.findIndex((item) => item.ID === parseInt(cateID)) === -1,
+        isShowBtn: !mBook,
       });
       this.setState({ isLoading: false });
       callback && callback();
