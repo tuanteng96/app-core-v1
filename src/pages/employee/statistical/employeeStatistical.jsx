@@ -21,7 +21,7 @@ import SkeletonStatistical from "./skeleton/SkeletonStatistical";
 moment.locale("vi");
 
 const sumTotalArr = (arr, key) => {
-  if (!arr) return 0;
+  if (!arr || arr.length === 0) return 0;
   return arr.map((item) => item[key]).reduce((prev, next) => prev + next);
 };
 
