@@ -21,9 +21,9 @@ import SkeletonStatistical from "./skeleton/SkeletonStatistical";
 moment.locale("vi");
 
 const sumTotalArr = (arr, key) => {
-  if(!arr) return 0;
-  return arr.map(item => item[key]).reduce((prev, next) => prev + next);
-}
+  if (!arr) return 0;
+  return arr.map((item) => item[key]).reduce((prev, next) => prev + next);
+};
 
 export default class employeeStatistical extends React.Component {
   constructor() {
@@ -758,13 +758,7 @@ export default class employeeStatistical extends React.Component {
                 dataSalary?.KpiTourResult?.Value > 0) && (
                 <div className="employee-statistical__item">
                   <div className="title">
-                    KPI (
-                    <span>
-                      {window.GlobalConfig?.Admin?.kpi2
-                        ? dataSalary?.Kpi2Result?.ItemList &&
-                          dataSalary?.Kpi2Result?.ItemList.length
-                        : dataSalary && dataSalary.DOANH_SO.length}
-                    </span>
+                    KPI (<span>{dataSalary && dataSalary.DOANH_SO.length}</span>
                     )
                   </div>
                   <div className="head">
@@ -775,13 +769,37 @@ export default class employeeStatistical extends React.Component {
                     </div>
                   </div>
                   <div className="tbody">
-                    
+                    <>
+                      {dataSalary.DOANH_SO.map((item, index) => (
+                        <div className="tr" key={index}>
+                          <div className="td w-1">{index + 1}</div>
+                          <div className="td w-2">
+                            {item.Desc || "Doanh số"} - ({" "}
+                            {moment(item.CreateDate).format("llll")} )
+                            <div>{item.ProdTitle}</div>
+                          </div>
+                          <div className="td w-3">
+                            {formatPriceVietnamese(item.Value)}
+                          </div>
+                        </div>
+                      ))}
+                      <div className="tr">
+                        <div className="td w-1"></div>
+                        <div className="td w-2 fw-600 text-uppercase">
+                          Tổng doanh số
+                        </div>
+                        <div className="td w-3 fw-600">
+                          {formatPriceVietnamese(
+                            this.numTotal(dataSalary.DOANH_SO)
+                          )}
+                        </div>
+                      </div>
                       <>
                         {dataSalary?.Kpi2Result?.ItemList &&
                           dataSalary?.Kpi2Result?.ItemList.map(
                             (item, index) => (
                               <div className="tr" key={index}>
-                                <div className="td w-1">{index + 1}</div>
+                                <div className="td w-1"></div>
                                 <div className="td w-2">
                                   <div>{item.CachTinh}</div>
                                   <div>{item.Dieukien}</div>
@@ -793,72 +811,50 @@ export default class employeeStatistical extends React.Component {
                             )
                           )}
                       </>
-                    
-                      <>
-                        {dataSalary.DOANH_SO.map((item, index) => (
-                          <div className="tr" key={index}>
-                            <div className="td w-1">{index + 1}</div>
+                      {dataSalary.THUONG_HOA_HONG_DOANH_SO &&
+                        dataSalary.THUONG_HOA_HONG_DOANH_SO.ApplyList &&
+                        dataSalary.THUONG_HOA_HONG_DOANH_SO.ApplyList.map(
+                          (appy, idx) => (
+                            <div className="tr" key={idx}>
+                              <div className="td w-1"></div>
+                              <div className="td fw-600 text-uppercase w-2">
+                                {appy.Type === 0
+                                  ? "KPI Chung"
+                                  : `KPI nhóm ${appy.Type}`}
+                              </div>
+                              <div className="td w-3 fw-600">
+                                {formatPriceVietnamese(appy.Value)}
+                              </div>
+                            </div>
+                          )
+                        )}
+                    </>
+                    {dataSalary?.KpiTourResult?.KpiTour?.Condts &&
+                      dataSalary?.KpiTourResult?.KpiTour?.Condts.length > 0 && (
+                        <>
+                          <div className="tr">
+                            <div className="td w-1"></div>
                             <div className="td w-2">
-                              {item.Desc || "Doanh số"} - ({" "}
-                              {moment(item.CreateDate).format("llll")} )
-                              <div>{item.ProdTitle}</div>
+                              KPI lương Tour <br />{" "}
+                              {dataSalary?.KpiTourResult?.KpiTour?.Condts &&
+                                dataSalary?.KpiTourResult?.KpiTour?.Condts
+                                  .length > 0 && (
+                                  <>
+                                    {dataSalary?.KpiTourResult?.KpiTour?.Condts.map(
+                                      (x) =>
+                                        `${x.From} - ${x.To} : ${x.CalValue}`
+                                    ).join(", ")}
+                                  </>
+                                )}
                             </div>
                             <div className="td w-3">
-                              {formatPriceVietnamese(item.Value)}
+                              {formatPriceVietnamese(
+                                dataSalary?.KpiTourResult?.Value
+                              )}
                             </div>
                           </div>
-                        ))}
-                        <div className="tr">
-                          <div className="td w-1"></div>
-                          <div className="td w-2 fw-600 text-uppercase">
-                            Tổng doanh số
-                          </div>
-                          <div className="td w-3 fw-600">
-                            {formatPriceVietnamese(
-                              this.numTotal(dataSalary.DOANH_SO)
-                            )}
-                          </div>
-                        </div>
-                        {dataSalary.THUONG_HOA_HONG_DOANH_SO &&
-                      dataSalary.THUONG_HOA_HONG_DOANH_SO.ApplyList &&
-                      dataSalary.THUONG_HOA_HONG_DOANH_SO.ApplyList.map(
-                        (appy, idx) => (
-                          <div className="tr" key={idx}>
-                            <div className="td w-1"></div>
-                            <div className="td fw-600 text-uppercase w-2">
-                              {appy.Type === 0
-                                ? "KPI Chung"
-                                : `KPI nhóm ${appy.Type}`}
-                            </div>
-                            <div className="td w-3 fw-600">
-                              {formatPriceVietnamese(appy.Value)}
-                            </div>
-                          </div>
-                        )
+                        </>
                       )}
-                      </>
-                    
-                    <div className="tr">
-                      <div className="td w-1">
-                        {window.GlobalConfig?.Admin?.kpi2
-                          ? dataSalary?.Kpi2Result?.ItemList.length + 1
-                          : dataSalary?.DOANH_SO?.length + 1}
-                      </div>
-                      <div className="td w-2">
-                        KPI lương Tour <br />{" "}
-                        {dataSalary?.KpiTourResult?.KpiTour?.Condts &&
-                          dataSalary?.KpiTourResult?.KpiTour?.Condts.length >
-                            0 &&
-                          dataSalary?.KpiTourResult?.KpiTour?.Condts.map(
-                            (x) => `${x.From} - ${x.To} : ${x.CalValue}`
-                          ).join(", ")}
-                      </div>
-                      <div className="td w-3">
-                        {formatPriceVietnamese(
-                          dataSalary?.KpiTourResult?.Value
-                        )}
-                      </div>
-                    </div>
                   </div>
                   <div className="tfooter">
                     {window.GlobalConfig?.Admin?.kpi2 ? (
@@ -877,12 +873,13 @@ export default class employeeStatistical extends React.Component {
                           <div className="td">Tổng</div>
                           <div className="td">
                             {formatPriceVietnamese(
-                              sumTotalArr(dataSalary.THUONG_HOA_HONG_DOANH_SO.ApplyList,'Value') +
-                              dataSalary?.KpiTourResult?.Value
+                              sumTotalArr(
+                                dataSalary.THUONG_HOA_HONG_DOANH_SO.ApplyList,
+                                "Value"
+                              ) + dataSalary?.KpiTourResult?.Value
                             )}
                           </div>
                         </div>
-
                         {/* {dataSalary.CHI_LUONG &&
                           dataSalary.CHI_LUONG.length === 0 && (
                             <div className="tr">
