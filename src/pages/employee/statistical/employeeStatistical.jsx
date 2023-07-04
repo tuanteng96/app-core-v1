@@ -796,6 +796,7 @@ export default class employeeStatistical extends React.Component {
                       </div>
                       <>
                         {dataSalary?.Kpi2Result?.ItemList &&
+                          dataSalary?.Kpi2Result?.ItemList.length > 0 &&
                           dataSalary?.Kpi2Result?.ItemList.map(
                             (item, index) => (
                               <div className="tr" key={index}>
@@ -811,9 +812,9 @@ export default class employeeStatistical extends React.Component {
                             )
                           )}
                       </>
-                      {dataSalary.THUONG_HOA_HONG_DOANH_SO &&
-                        dataSalary.THUONG_HOA_HONG_DOANH_SO.ApplyList &&
-                        dataSalary.THUONG_HOA_HONG_DOANH_SO.ApplyList.map(
+                      {dataSalary?.THUONG_HOA_HONG_DOANH_SO &&
+                        dataSalary?.THUONG_HOA_HONG_DOANH_SO?.ApplyList &&
+                        dataSalary?.THUONG_HOA_HONG_DOANH_SO?.ApplyList.map(
                           (appy, idx) => (
                             <div className="tr" key={idx}>
                               <div className="td w-1"></div>
@@ -874,9 +875,9 @@ export default class employeeStatistical extends React.Component {
                           <div className="td">
                             {formatPriceVietnamese(
                               sumTotalArr(
-                                dataSalary.THUONG_HOA_HONG_DOANH_SO.ApplyList,
+                                dataSalary?.THUONG_HOA_HONG_DOANH_SO?.ApplyList,
                                 "Value"
-                              ) + dataSalary?.KpiTourResult?.Value
+                              ) + (dataSalary?.KpiTourResult?.Value || 0)
                             )}
                           </div>
                         </div>
