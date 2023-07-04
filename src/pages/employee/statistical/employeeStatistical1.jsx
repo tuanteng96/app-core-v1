@@ -20,11 +20,6 @@ import "moment/locale/vi";
 import SkeletonStatistical from "./skeleton/SkeletonStatistical";
 moment.locale("vi");
 
-const sumTotalArr = (arr, key) => {
-  if(!arr) return 0;
-  return arr.map(item => item[key]).reduce((prev, next) => prev + next);
-}
-
 export default class employeeStatistical extends React.Component {
   constructor() {
     super();
@@ -84,15 +79,16 @@ export default class employeeStatistical extends React.Component {
       : dataSalary.LUONG_CO_BAN || 0;
 
     value += this.SalaryServices(dataSalary.SalaryServices);
-
+   
     value += this.numTotal(dataSalary.BonusSales);
     value += this.numTotal(dataSalary.Bonus);
     value -= this.numTotal(dataSalary.NGAY_NGHI);
     value -= this.numTotal(dataSalary.PHAT);
-
+     
     value += dataSalary.PHU_CAP;
     value += dataSalary?.THUONG_HOA_HONG_DOANH_SO?.Value || 0;
 
+    
     value += dataSalary?.KpiTourResult?.Value || 0;
     value += dataSalary?.Kpi2Result?.Value || 0;
 
@@ -758,13 +754,7 @@ export default class employeeStatistical extends React.Component {
                 dataSalary?.KpiTourResult?.Value > 0) && (
                 <div className="employee-statistical__item">
                   <div className="title">
-                    KPI (
-                    <span>
-                      {window.GlobalConfig?.Admin?.kpi2
-                        ? dataSalary?.Kpi2Result?.ItemList &&
-                          dataSalary?.Kpi2Result?.ItemList.length
-                        : dataSalary && dataSalary.DOANH_SO.length}
-                    </span>
+                    KPI (<span>{dataSalary && dataSalary.DOANH_SO.length}</span>
                     )
                   </div>
                   <div className="head">
@@ -775,7 +765,7 @@ export default class employeeStatistical extends React.Component {
                     </div>
                   </div>
                   <div className="tbody">
-                    
+                    {window.GlobalConfig?.Admin?.kpi2 ? (
                       <>
                         {dataSalary?.Kpi2Result?.ItemList &&
                           dataSalary?.Kpi2Result?.ItemList.map(
@@ -793,7 +783,7 @@ export default class employeeStatistical extends React.Component {
                             )
                           )}
                       </>
-                    
+                    ) : (
                       <>
                         {dataSalary.DOANH_SO.map((item, index) => (
                           <div className="tr" key={index}>
@@ -808,47 +798,17 @@ export default class employeeStatistical extends React.Component {
                             </div>
                           </div>
                         ))}
-                        <div className="tr">
-                          <div className="td w-1"></div>
-                          <div className="td w-2 fw-600 text-uppercase">
-                            Tổng doanh số
-                          </div>
-                          <div className="td w-3 fw-600">
-                            {formatPriceVietnamese(
-                              this.numTotal(dataSalary.DOANH_SO)
-                            )}
-                          </div>
-                        </div>
-                        {dataSalary.THUONG_HOA_HONG_DOANH_SO &&
-                      dataSalary.THUONG_HOA_HONG_DOANH_SO.ApplyList &&
-                      dataSalary.THUONG_HOA_HONG_DOANH_SO.ApplyList.map(
-                        (appy, idx) => (
-                          <div className="tr" key={idx}>
-                            <div className="td w-1"></div>
-                            <div className="td fw-600 text-uppercase w-2">
-                              {appy.Type === 0
-                                ? "KPI Chung"
-                                : `KPI nhóm ${appy.Type}`}
-                            </div>
-                            <div className="td w-3 fw-600">
-                              {formatPriceVietnamese(appy.Value)}
-                            </div>
-                          </div>
-                        )
-                      )}
                       </>
-                    
+                    )}
                     <div className="tr">
                       <div className="td w-1">
-                        {window.GlobalConfig?.Admin?.kpi2
-                          ? dataSalary?.Kpi2Result?.ItemList.length + 1
-                          : dataSalary?.DOANH_SO?.length + 1}
+                        {dataSalary?.DOANH_SO?.length +
+                          dataSalary?.Kpi2Result?.ItemList.length +
+                          1}
                       </div>
                       <div className="td w-2">
                         KPI lương Tour <br />{" "}
                         {dataSalary?.KpiTourResult?.KpiTour?.Condts &&
-                          dataSalary?.KpiTourResult?.KpiTour?.Condts.length >
-                            0 &&
                           dataSalary?.KpiTourResult?.KpiTour?.Condts.map(
                             (x) => `${x.From} - ${x.To} : ${x.CalValue}`
                           ).join(", ")}
@@ -866,8 +826,8 @@ export default class employeeStatistical extends React.Component {
                         <div className="td">Tổng</div>
                         <div className="td">
                           {formatPriceVietnamese(
-                            (dataSalary?.Kpi2Result?.Value || 0) +
-                              (dataSalary?.KpiTourResult?.Value || 0)
+                            dataSalary?.Kpi2Result?.Value +
+                              dataSalary?.KpiTourResult?.Value
                           )}
                         </div>
                       </div>
@@ -877,13 +837,29 @@ export default class employeeStatistical extends React.Component {
                           <div className="td">Tổng</div>
                           <div className="td">
                             {formatPriceVietnamese(
-                              sumTotalArr(dataSalary.THUONG_HOA_HONG_DOANH_SO.ApplyList,'Value') +
-                              dataSalary?.KpiTourResult?.Value
+                              this.numTotal(dataSalary.DOANH_SO) +
+                                dataSalary?.KpiTourResult?.Value
                             )}
                           </div>
                         </div>
+                        {dataSalary.THUONG_HOA_HONG_DOANH_SO &&
+                          dataSalary.THUONG_HOA_HONG_DOANH_SO.ApplyList &&
+                          dataSalary.THUONG_HOA_HONG_DOANH_SO.ApplyList.map(
+                            (appy, idx) => (
+                              <div className="tr" key={idx}>
+                                <div className="td">
+                                  {appy.Type === 0
+                                    ? "KPI Chung"
+                                    : `KPI nhóm ${appy.Type}`}
+                                </div>
+                                <div className="td">
+                                  {formatPriceVietnamese(appy.Value)}
+                                </div>
+                              </div>
+                            )
+                          )}
 
-                        {/* {dataSalary.CHI_LUONG &&
+                        {dataSalary.CHI_LUONG &&
                           dataSalary.CHI_LUONG.length === 0 && (
                             <div className="tr">
                               <div className="td">Dự kiến thưởng KPI</div>
@@ -906,7 +882,7 @@ export default class employeeStatistical extends React.Component {
                                   )}
                               </div>
                             </div>
-                          )} */}
+                          )}
                       </>
                     )}
                   </div>
