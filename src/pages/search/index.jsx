@@ -183,9 +183,8 @@ export default class extends React.Component {
           {isLoading && <div className="line-loading"></div>}
 
           <div
-            className="text-align-center"
+            className="text-align-center preloader-custom"
             style={{ padding: "20px 0 10px 0" }}
-            className="preloader-custom"
           >
             <Preloader size={28} />
           </div>

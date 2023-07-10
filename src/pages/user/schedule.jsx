@@ -116,10 +116,10 @@ export default class extends React.Component {
         Title: SelectedTitle,
       });
     }
-    if(this.$f7route?.query?.note) {
+    if (this.$f7route?.query?.note) {
       this.setState({
-        serviceNote: this.$f7route?.query?.note
-      })
+        serviceNote: this.$f7route?.query?.note,
+      });
     }
     //
     if (this.$f7route.params.ID && this.state.isParams) {
@@ -128,19 +128,21 @@ export default class extends React.Component {
       BookDataService.getBookId(ID)
         .then(({ data }) => {
           const currentBook = data.data;
+          if (currentBook) {
+            this.setState({
+              DateTimeBook: {
+                date: moment(currentBook.BookDate).format("DD/MM/YYYY"),
+                time: moment(currentBook.BookDate).format("HH:mm"),
+                stock: currentBook.Stock.ID,
+                nameStock: currentBook.StockID,
+                AtHome: currentBook.AtHome,
+                isOther: this.isOther(currentBook.BookDate),
+              },
+              serviceNote: currentBook.Desc,
+              selectedService: currentBook.Roots,
+            });
+          }
 
-          this.setState({
-            DateTimeBook: {
-              date: moment(currentBook.BookDate).format("DD/MM/YYYY"),
-              time: moment(currentBook.BookDate).format("HH:mm"),
-              stock: currentBook.Stock.ID,
-              nameStock: currentBook.StockID,
-              AtHome: currentBook.AtHome,
-              isOther: this.isOther(currentBook.BookDate),
-            },
-            serviceNote: currentBook.Desc,
-            selectedService: currentBook.Roots,
-          });
           self.$f7.dialog.close();
         })
         .catch((error) => console.log(error));
