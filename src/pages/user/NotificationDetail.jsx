@@ -135,7 +135,7 @@ export default class extends React.Component {
       MemberBook: {
         ...values,
         BookDate: values.BookDate
-          ? moment(values.BookDate).format("HH:mm DD/MM/YYYY")
+          ? moment(values.BookDate).format("YYYY-MM-DD HH:mm")
           : "",
         Desc:
           moment(dataBook?.Date, "YYYY-MM-DD HH:mm").format(
