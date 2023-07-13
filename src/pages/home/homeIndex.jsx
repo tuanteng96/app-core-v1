@@ -235,7 +235,7 @@ export default class extends React.Component {
                       onFocus={this.searchPage}
                     ></input>
                   </div>
-                  <SlideList BannerName="APP.BANNER" autoplaySpeed={3000} />
+                  <SlideList f7router={this.$f7router} f7={this.$f7} BannerName="APP.BANNER" autoplaySpeed={3000} />
                   <ListService
                     className={`mt-15px ${getUser() ? "" : "mb-10px"}`}
                     id="42"

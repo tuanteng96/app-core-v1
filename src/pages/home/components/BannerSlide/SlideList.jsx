@@ -78,14 +78,14 @@ export default class SlideList extends React.Component {
     const userCurent = getUser();
     if (item.Link && item.Link.includes("/schedule/")) {
       const url = `${item.Link}&note=${encodeURIComponent(item.Title)}`;
-      this.props.f7router.navigate(userCurent ? url : "/login/");
+      this.$f7.views.main.router.navigate(userCurent ? url : "/login/");
     } else if (item.Link && item.Link.includes("/pupup-contact/")) {
       this.setState({
         show: true,
         initialValues: item,
       });
     } else {
-      this.props.f7router.navigate(item.Link);
+      this.$f7.views.main.router.navigate(item.Link);
     }
   };
 
