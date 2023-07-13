@@ -5,11 +5,19 @@ import Slider from "react-slick";
 import { SERVER_APP } from "../../../../constants/config";
 import Skeleton from "react-loading-skeleton";
 import { validURL } from "../../../../constants/helpers";
+import { PopupConfirm } from "../PopupConfirm";
+import BookDataService from "../../../../service/book.service";
+import { toast } from "react-toastify";
+import { getUser } from "../../../../constants/user";
+
 export default class SlideList extends React.Component {
   constructor() {
     super();
     this.state = {
       isLoading: true,
+      show: false,
+      initialValues: null,
+      btnLoading: false,
     };
   }
 
@@ -30,11 +38,59 @@ export default class SlideList extends React.Component {
         console.log(e);
       });
   };
-  isLink = link => {
 
-  }
+  onHide = () => {
+    this.setState({
+      show: false,
+      initialValues: null,
+    });
+  };
+
+  onSubmit = (values) => {
+    this.setState({
+      btnLoading: true,
+    });
+    var p = {
+      contact: {
+        Fullname: values.Fullname,
+        Phone1: values.Phone,
+        Address: "",
+        Email: "",
+        Content: values.Content,
+      },
+    };
+    BookDataService.bookContact(p)
+      .then(({ data }) => {
+        toast.success("Đăng ký chương trình ưu đãi thành công !", {
+          position: toast.POSITION.TOP_CENTER,
+          autoClose: 1000,
+        });
+        this.setState({
+          btnLoading: false,
+          show: false,
+          initialValues: null,
+        });
+      })
+      .catch((error) => console.log(error));
+  };
+
+  handleUrl = (item) => {
+    const userCurent = getUser();
+    if (item.Link && item.Link.includes("/schedule/")) {
+      const url = `${item.Link}&note=${encodeURIComponent(item.Title)}`;
+      this.props.f7router.navigate(userCurent ? url : "/login/");
+    } else if (item.Link && item.Link.includes("/pupup-contact/")) {
+      this.setState({
+        show: true,
+        initialValues: item,
+      });
+    } else {
+      this.props.f7router.navigate(item.Link);
+    }
+  };
+
   render() {
-    const { arrBanner, isLoading } = this.state;
+    const { arrBanner, isLoading, initialValues, btnLoading, show } = this.state;
     var settingsBanner = {
       dots: true,
       arrows: false,
@@ -62,11 +118,7 @@ export default class SlideList extends React.Component {
                         return (
                           <Link
                             noLinkClass
-                            href={
-                              item.Link && item.Link !== "/"
-                                ? item.Link
-                                : `#` //`/adv/${item.ID}`
-                            }
+                            onClick={() => this.handleUrl(item)}
                             className={`body-slide__item d-block ${
                               !window.GlobalConfig.APP.Home?.SliderFull &&
                               "rounded"
@@ -97,6 +149,13 @@ export default class SlideList extends React.Component {
             </div>
           </div>
         )}
+        <PopupConfirm
+          initialValue={initialValues}
+          show={show}
+          onHide={() => this.onHide()}
+          onSubmit={(values) => this.onSubmit(values)}
+          btnLoading={btnLoading}
+        />
       </React.Fragment>
     );
   }
