@@ -139,7 +139,7 @@ export default class extends React.Component {
                         <div className="voucher-text">
                           <div className="code">
                             <span>Mã</span>
-                            <span>{item.aff ? item.ma_chia_se : item.ma}</span>
+                            <span>{item.ma}</span>
                           </div>
                           <div className="voucher-value">
                             Giảm tối đa{" "}
@@ -235,35 +235,21 @@ export default class extends React.Component {
                                       </div>
                                     </div>
                                   </div>
-                                  {item.so_luong_mua_tung_don ? (
-                                    <div className="item-sub">
-                                      <div className="item-sub__box">
-                                        <h5>
-                                          Giới hạn số lượng SP / DV trên cả đơn
-                                          hàng
-                                        </h5>
-                                        <div className="price">
-                                          {item.so_luong_mua_tung_don}
-                                        </div>
+                                  <div className="item-sub">
+                                    <div className="item-sub__box">
+                                      <h5>
+                                        Giới hạn SL trên mỗi SP-DV / Giới hạn SL
+                                        SP-DV trên cả đơn hàng
+                                      </h5>
+                                      <div className="price">
+                                        {item?.so_luong_mua_tung_san_pham ||
+                                          "Không giới hạn"}
+                                        <span style={{padding: "0 3px"}}>/</span>
+                                        {item?.so_luong_mua_tung_don ||
+                                          "Không giới hạn"}
                                       </div>
                                     </div>
-                                  ) : (
-                                    ""
-                                  )}
-                                  {item.so_luong_mua_tung_san_pham ? (
-                                    <div className="item-sub">
-                                      <div className="item-sub__box">
-                                        <h5>
-                                          Giới hạn số lượng trên từng SP / DV
-                                        </h5>
-                                        <div className="price">
-                                          {item.so_luong_mua_tung_san_pham}
-                                        </div>
-                                      </div>
-                                    </div>
-                                  ) : (
-                                    ""
-                                  )}
+                                  </div>
                                   {item.aff && (
                                     <div className="item-sub">
                                       <div className="item-sub__box">

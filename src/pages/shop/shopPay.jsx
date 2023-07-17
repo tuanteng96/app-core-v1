@@ -759,9 +759,7 @@ export default class extends React.Component {
                               : `- ${formatPriceVietnamese(VDiscount)}đ`}
                             ) {VCode}
                           </span>
-                          <AiOutlineClose
-                            onClick={() => this.handleVcode({ Code: "" })}
-                          />
+                          <i className="las la-times" onClick={() => this.handleVcode({ Code: "" })}></i>
                         </div>
                       )}
                     </div>
