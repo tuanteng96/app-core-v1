@@ -48,7 +48,8 @@
             padding: 14px;
             &.active {
                 .star {
-                    i.la-location-arrow {
+                    > i.la-location-arrow,
+                    >a i.la-location-arrow {
                         color: $color-price-app;
                     }
                 }
@@ -60,13 +61,17 @@
                     margin-right: 2px;
                     font-size: 13px;
                 }
-                i.la-location-arrow {
+                > i.la-location-arrow,
+                > a {
                     color: #9a94a9;
                     position: absolute;
                     font-size: 25px;
                     right: 0;
                     top: 0;
                     margin-right: 0;
+                    i {
+                        font-size: 25px;
+                    }
                 }
             }
             h3 {

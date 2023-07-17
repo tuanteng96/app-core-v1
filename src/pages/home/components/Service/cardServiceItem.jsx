@@ -3,7 +3,7 @@ import { Link } from "framework7-react";
 import { SERVER_APP } from "../../../../constants/config";
 import { PopupConfirm } from "../PopupConfirm";
 import BookDataService from "../../../../service/book.service";
-import { getUser } from "../../../../constants/user";
+import { getStockIDStorage, getUser } from "../../../../constants/user";
 import { toast } from "react-toastify";
 
 export default class CardServiceItem extends React.Component {
@@ -23,31 +23,36 @@ export default class CardServiceItem extends React.Component {
     });
   };
   onSubmit = (values) => {
-    this.setState({
-      btnLoading: true,
-    });
-    var p = {
-      contact: {
-        Fullname: values.Fullname,
-        Phone1: values.Phone,
-        Address: "",
-        Email: "",
-        Content: values.Content,
-      },
-    };
-    BookDataService.bookContact(p)
-      .then(({ data }) => {
-        toast.success("Đăng ký chương trình ưu đãi thành công !", {
-          position: toast.POSITION.TOP_CENTER,
-          autoClose: 1000,
-        });
-        this.setState({
-          btnLoading: false,
-          show: false,
-          initialValues: null,
-        });
-      })
-      .catch((error) => console.log(error));
+    let StockID = getStockIDStorage();
+    if (!StockID) {
+      this.props.OpenStock();
+    } else {
+      this.setState({
+        btnLoading: true,
+      });
+      var p = {
+        contact: {
+          Fullname: values.Fullname,
+          Phone1: values.Phone,
+          Address: "",
+          Email: "",
+          Content: values.Content,
+        },
+      };
+      BookDataService.bookContact(p)
+        .then(({ data }) => {
+          toast.success("Đăng ký chương trình ưu đãi thành công !", {
+            position: toast.POSITION.TOP_CENTER,
+            autoClose: 1000,
+          });
+          this.setState({
+            btnLoading: false,
+            show: false,
+            initialValues: null,
+          });
+        })
+        .catch((error) => console.log(error));
+    }
   };
 
   handleUrl = (item) => {

@@ -29,6 +29,7 @@ export default class ListService extends React.Component {
         console.log(e);
       });
   };
+
   render() {
     const { arrService, isLoading } = this.state;
     const {className} = this.props;
@@ -41,7 +42,7 @@ export default class ListService extends React.Component {
               if (index > 4) return false;
               return (
                 <Col width="25" key={index}>
-                  <CardServiceItem item={item} />
+                  <CardServiceItem OpenStock={this.props.OpenStock} item={item} />
                 </Col>
               );
             })}

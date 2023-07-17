@@ -84,6 +84,13 @@ const SheetOrder = ({ item, textPay, loadingText, Banks, MaND }) => {
     }
   }, [Banks]);
 
+  let TotalDebt = Math.abs(
+    item.thanhtoan.tong_gia_tri_dh -
+      item.thanhtoan.thanh_toan_tien -
+      item.thanhtoan.thanh_toan_vi -
+      item.thanhtoan.thanh_toan_ao
+  )
+
   return (
     <Sheet
       className={`demo-sheet-${item.ID} sheet-detail`}
@@ -110,7 +117,7 @@ const SheetOrder = ({ item, textPay, loadingText, Banks, MaND }) => {
                   .replaceAll("ID_ĐH", `#${item.ID}`)
                   .replaceAll(
                     "MONEY",
-                    `${formatPriceVietnamese(Math.abs(item.ToPay))} ₫`
+                    `${formatPriceVietnamese(Math.abs(TotalDebt))} ₫`
                   )
                   .replaceAll("ID_DH", `${item.ID}`)
               )}
@@ -139,7 +146,7 @@ const SheetOrder = ({ item, textPay, loadingText, Banks, MaND }) => {
               {ValueBank && (
                 <RenderQR
                   ValueBank={ValueBank}
-                  Total={item.ToPay}
+                  Total={TotalDebt}
                   ID={item.ID}
                   MaND={MaND}
                 />

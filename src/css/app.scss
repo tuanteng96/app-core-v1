@@ -81,6 +81,18 @@ html {
     background: transparent !important;
 }
 
+.bg-white_ > div {
+    background: #fff !important;
+}
+
+.content_ p:first-child {
+    margin-top: 0 !important
+}
+
+.content_ p:last-child {
+    margin-bottom: 0 !important;
+}
+
 .h-100 {
     height: 100%;
 }

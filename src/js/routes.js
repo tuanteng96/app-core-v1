@@ -57,6 +57,7 @@ import PosPage from "../pages/pos/Pos"
 import SearchPage from "../pages/search/index";
 import NotFoundPage from '../pages/404.jsx';
 import { getUser } from "../constants/user";
+import ServiceOriginal from "../pages/shop/ServiceOriginal";
 
 function checkAuth(to, from, resolve, reject) {
     var router = this;
@@ -176,6 +177,10 @@ var routes = [{
             }
         },
         //component: ShopListPage,
+    },
+    {
+        path: "/shop/selected/:id",
+        asyncComponent: () => ServiceOriginal,
     },
     {
         path: "/shop/detail/:cateId",

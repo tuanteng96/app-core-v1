@@ -98,6 +98,7 @@ export default class extends React.Component {
                         key={index}
                         item={item}
                         isUI={isUI}
+                        OpenStock={this.openStock}
                       />
                     ))}
                 </ul>

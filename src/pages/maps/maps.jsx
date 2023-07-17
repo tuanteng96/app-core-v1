@@ -7,6 +7,8 @@ import UserService from "../../service/user.service";
 import Slider from "react-slick";
 import NotificationIcon from "../../components/NotificationIcon";
 import NewsDataService from "../../service/news.service";
+import { iOS } from "../../constants/helpers";
+import { OPEN_LINK } from "../../constants/prom21";
 
 export default class extends React.Component {
   constructor() {
@@ -57,7 +59,7 @@ export default class extends React.Component {
       ? arr1?.data?.all.filter((item) => item.ID !== 778)
       : [];
     let newArr2 = arr2?.data || [];
-    let newMaps = [...newArr1]
+    let newMaps = [...newArr1];
 
     for (let x of newArr2) {
       newMaps.push({
@@ -87,6 +89,10 @@ export default class extends React.Component {
       currentMap: item.Map,
       currentID: item.ID,
     });
+  };
+
+  openMaps = (item) => {
+    OPEN_LINK(`https://www.google.com/maps/dir/?api=1&destination=${item?.Desc.split(" ").join("+")}`);
   };
 
   render() {
@@ -168,7 +174,20 @@ export default class extends React.Component {
                         <i className="las la-star"></i>
                         <i className="las la-star"></i>
                         <i className="las la-star"></i>
-                        <i className="las la-location-arrow"></i>
+                        {iOS() ? (
+                          <Link
+                            external
+                            href={`https://www.google.com/maps/dir/?api=1&destination=${item?.Desc.split(" ").join("+")}`}
+                            noLinkClass
+                          >
+                            <i className="las la-location-arrow"></i>
+                          </Link>
+                        ) : (
+                          <i
+                            className="las la-location-arrow"
+                            onClick={() => this.openMaps(item)}
+                          ></i>
+                        )}
                       </div>
                       <h3>{item.Title}</h3>
                       <ul>

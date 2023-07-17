@@ -1,18 +1,18 @@
-import React, { Suspense } from 'react'
-import bgHeaderTop from '../../assets/images/bg-header-home.png'
-import { Page, Link, Toolbar, f7, Sheet, Button } from 'framework7-react'
-import UserService from '../../service/user.service'
-import IconSearch from '../../assets/images/icon-search.png'
-import { toast } from 'react-toastify'
-import 'react-toastify/dist/ReactToastify.css'
-import { FaRegUser, FaMapMarkerAlt, FaChevronDown } from 'react-icons/fa'
+import React, { Suspense } from "react";
+import bgHeaderTop from "../../assets/images/bg-header-home.png";
+import { Page, Link, Toolbar, f7, Sheet, Button } from "framework7-react";
+import UserService from "../../service/user.service";
+import IconSearch from "../../assets/images/icon-search.png";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { FaRegUser, FaMapMarkerAlt, FaChevronDown } from "react-icons/fa";
 // const ModalReviews = React.lazy(() => import("../../components/ModalReviews"));
 // const SelectStock = React.lazy(() => import("../../components/SelectStock"));
-import ModalReviews from '../../components/ModalReviews'
-import SelectStock from '../../components/SelectStock'
-import CartToolBar from '../../components/CartToolBar'
-import ToolBarBottom from '../../components/ToolBarBottom'
-import NotificationIcon from '../../components/NotificationIcon'
+import ModalReviews from "../../components/ModalReviews";
+import SelectStock from "../../components/SelectStock";
+import CartToolBar from "../../components/CartToolBar";
+import ToolBarBottom from "../../components/ToolBarBottom";
+import NotificationIcon from "../../components/NotificationIcon";
 import {
   getUser,
   setStockIDStorage,
@@ -23,30 +23,30 @@ import {
   setUserLoginStorage,
   setUserStorage,
   getUserLoginStorage,
-} from '../../constants/user'
-import ListService from './components/Service/ListService'
-import SlideList from '../home/components/BannerSlide/SlideList'
-import SlideListCenter from './components/BannerSlide/SlideListCenter'
-import ListImage from '../home/components/Customer/ListImage'
+} from "../../constants/user";
+import ListService from "./components/Service/ListService";
+import SlideList from "../home/components/BannerSlide/SlideList";
+import SlideListCenter from "./components/BannerSlide/SlideListCenter";
+import ListImage from "../home/components/Customer/ListImage";
 // const ListImage = React.lazy(() =>
 //   import("../home/components/Customer/ListImage")
 // );
-import NewsList from '../home/components/news/NewsList'
+import NewsList from "../home/components/news/NewsList";
 // const NewsList = React.lazy(() => import("../home/components/news/NewsList"));
 // const QuickAction = React.lazy(() => import("../../components/quickAction"));
-import QuickAction from '../../components/quickAction'
+import QuickAction from "../../components/quickAction";
 // const ProductList = React.lazy(() =>
 //   import("../home/components/Product/ProductList")
 // );
-import ProductList from '../home/components/Product/ProductList'
-import ModalChangePWD from '../../components/ModalChangePWD'
+import ProductList from "../home/components/Product/ProductList";
+import ModalChangePWD from "../../components/ModalChangePWD";
 import ServiceHot2 from "./components/ServiceHot/ServiceHot2";
 import ServiceHot from "./components/ServiceHot/ServiceHot";
-import Reviews from './components/Reviews/Reviews'
+import Reviews from "./components/Reviews/Reviews";
 
 export default class extends React.Component {
   constructor() {
-    super()
+    super();
     this.state = {
       arrNews: [],
       isOpenStock: false,
@@ -54,129 +54,129 @@ export default class extends React.Component {
       showPreloader: false,
       isReload: 0,
       opened: false,
-    }
+    };
   }
 
   componentDidMount() {
-    const stockName = getStockNameStorage()
-    const userCurent = getUser()
-    if (userCurent && userCurent.RequirePwd && userCurent.acc_type === 'M') {
+    const stockName = getStockNameStorage();
+    const userCurent = getUser();
+    if (userCurent && userCurent.RequirePwd && userCurent.acc_type === "M") {
       this.setState({
         opened: true,
-      })
+      });
     }
     this.setState({
       stockName: stockName,
-    })
+    });
   }
   onPageBeforeIn = () => {
-    const getStock = getStockIDStorage()
+    const getStock = getStockIDStorage();
 
     UserService.getStock()
       .then((response) => {
-        let indexStock = 0
-        const arrStock = response.data.data.all
+        let indexStock = 0;
+        const arrStock = response.data.data.all;
 
-        const countStock = arrStock.length
-        const CurrentStockID = response.data.data.CurrentStockID
+        const countStock = arrStock.length;
+        const CurrentStockID = response.data.data.CurrentStockID;
         if (getStock) {
           indexStock = arrStock.findIndex(
-            (item) => item.ID === parseInt(getStock),
-          )
+            (item) => item.ID === parseInt(getStock)
+          );
         }
         const indexCurrentStock = arrStock.findIndex(
-          (item) => item.ID === parseInt(CurrentStockID),
-        )
+          (item) => item.ID === parseInt(CurrentStockID)
+        );
 
         if (countStock === 2) {
-          const StockID = arrStock.slice(-1)[0].ID
-          const TitleStockID = arrStock.slice(-1)[0].Title
-          setStockIDStorage(StockID)
-          setStockNameStorage(TitleStockID)
+          const StockID = arrStock.slice(-1)[0].ID;
+          const TitleStockID = arrStock.slice(-1)[0].Title;
+          setStockIDStorage(StockID);
+          setStockNameStorage(TitleStockID);
           this.setState({
             isReload: this.state.isReload + 1,
             stockName: TitleStockID,
-          })
+          });
         }
         setTimeout(() => {
           if (indexCurrentStock <= 0 && indexStock <= 0 && countStock > 2) {
-            removeStockNameStorage()
+            removeStockNameStorage();
             this.setState({
               isOpenStock: true,
               stockName: null,
-            })
+            });
           }
-        }, 500)
+        }, 500);
       })
-      .catch((e) => console.log(e))
-  }
+      .catch((e) => console.log(e));
+  };
 
   handleStock = () => {
     this.setState({
       isOpenStock: !this.state.isOpenStock,
-    })
-  }
+    });
+  };
 
   nameStock = (name) => {
     this.setState({
       stockName: name,
-    })
-  }
+    });
+  };
 
   searchPage = () => {
-    this.$f7router.navigate('/search/')
-  }
+    this.$f7router.navigate("/search/");
+  };
 
   onChangePWD = (values) => {
-    const self = this
-    const userCurent = getUser()
-    self.$f7.preloader.show()
+    const self = this;
+    const userCurent = getUser();
+    self.$f7.preloader.show();
     //const crpwd = getUserLoginStorage().password || "1234";
-    var bodyData = new FormData()
-    bodyData.append('pwd', values.password) // New Password
-    bodyData.append('repwd', values.re_password) // Nhập lại mật khẩu mới
+    var bodyData = new FormData();
+    bodyData.append("pwd", values.password); // New Password
+    bodyData.append("repwd", values.re_password); // Nhập lại mật khẩu mới
     //bodyData.append("crpwd", crpwd); // Mật khẩu hiện tai
-    bodyData.append('remove_repwd', true)
+    bodyData.append("remove_repwd", true);
 
     UserService.updatePassword(bodyData)
       .then((response) => {
         setTimeout(() => {
-          self.$f7.preloader.hide()
+          self.$f7.preloader.hide();
           if (response.error || response.data.error) {
             toast.error(response.error || response.data.error, {
               position: toast.POSITION.TOP_LEFT,
               autoClose: 2000,
-            })
+            });
           } else {
-            toast.success('Cập nhập mật khẩu mới công !', {
+            toast.success("Cập nhập mật khẩu mới công !", {
               position: toast.POSITION.TOP_CENTER,
               autoClose: 1000,
-            })
-            setUserLoginStorage(null, values.password)
+            });
+            setUserLoginStorage(null, values.password);
             this.setState({
               opened: false,
-            })
-            setUserStorage(null, { ...userCurent, RequirePwd: false })
+            });
+            setUserStorage(null, { ...userCurent, RequirePwd: false });
           }
-        }, 1000)
+        }, 1000);
       })
-      .catch((err) => console.log(err))
-  }
+      .catch((err) => console.log(err));
+  };
 
   loadRefresh(done) {
     setTimeout(() => {
       this.$f7.views.main.router.navigate(this.$f7.views.main.router.url, {
         reloadCurrent: true,
-      })
+      });
       this.setState({
         showPreloader: true,
-      })
-      done()
-    }, 1000)
+      });
+      done();
+    }, 1000);
   }
 
   render() {
-    const { isOpenStock, stockName, isReload, opened } = this.state
+    const { isOpenStock, stockName, isReload, opened } = this.state;
     return (
       <Page
         noNavbar
@@ -235,15 +235,35 @@ export default class extends React.Component {
                       onFocus={this.searchPage}
                     ></input>
                   </div>
-                  <SlideList f7router={this.$f7router} f7={this.$f7} BannerName="APP.BANNER" autoplaySpeed={3000} />
+                  <SlideList
+                    OpenStock={this.handleStock}
+                    f7router={this.$f7router}
+                    f7={this.$f7}
+                    BannerName="APP.BANNER"
+                    autoplaySpeed={3000}
+                  />
                   <ListService
                     className={`mt-15px ${getUser() ? "" : "mb-10px"}`}
                     id="42"
+                    OpenStock={this.handleStock}
                   />
-                  {getUser() && <ListService className="my-10px" id="45" />}
+                  {getUser() && (
+                    <ListService
+                      OpenStock={this.handleStock}
+                      f7router={this.$f7router}
+                      f7={this.$f7}
+                      className="my-10px"
+                      id="45"
+                    />
+                  )}
                 </div>
               </div>
-              <ServiceHot2 id="APP.SALE" f7router={this.$f7router} f7={this.$f7} />
+              <ServiceHot2
+                id="APP.SALE"
+                f7router={this.$f7router}
+                f7={this.$f7}
+                OpenStock={this.handleStock}
+              />
               <ServiceHot f7router={this.$f7router} />
               <ListImage />
               <SlideList
@@ -254,23 +274,35 @@ export default class extends React.Component {
                 } `}
                 BannerName="APP.MAIN"
                 autoplaySpeed={4000}
+                OpenStock={this.handleStock}
+                f7router={this.$f7router}
+                f7={this.$f7}
               />
               {window.GlobalConfig.APP.Home?.SliderFull ? (
                 <SlideList
                   className="banner-main bg-white"
                   BannerName="APP.MAINSALE"
                   autoplaySpeed={4500}
+                  OpenStock={this.handleStock}
+                  f7router={this.$f7router}
+                  f7={this.$f7}
                 />
               ) : (
                 <SlideListCenter
                   className="mb-8px px-15px pb-15px pt-12px"
                   BannerName="APP.MAINSALE"
                   autoplaySpeed={4500}
+                  OpenStock={this.handleStock}
+                  f7router={this.$f7router}
+                  f7={this.$f7}
                 />
               )}
               <SlideList
                 containerClass="pl-15px pr-15px slider-hot"
                 BannerName="APP.SALE"
+                OpenStock={this.handleStock}
+                f7router={this.$f7router}
+                f7={this.$f7}
               />
               <ProductList />
               <Reviews />

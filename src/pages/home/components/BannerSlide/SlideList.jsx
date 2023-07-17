@@ -8,7 +8,7 @@ import { validURL } from "../../../../constants/helpers";
 import { PopupConfirm } from "../PopupConfirm";
 import BookDataService from "../../../../service/book.service";
 import { toast } from "react-toastify";
-import { getUser } from "../../../../constants/user";
+import { getStockIDStorage, getUser } from "../../../../constants/user";
 
 export default class SlideList extends React.Component {
   constructor() {
@@ -47,31 +47,37 @@ export default class SlideList extends React.Component {
   };
 
   onSubmit = (values) => {
-    this.setState({
-      btnLoading: true,
-    });
-    var p = {
-      contact: {
-        Fullname: values.Fullname,
-        Phone1: values.Phone,
-        Address: "",
-        Email: "",
-        Content: values.Content,
-      },
-    };
-    BookDataService.bookContact(p)
-      .then(({ data }) => {
-        toast.success("Đăng ký chương trình ưu đãi thành công !", {
-          position: toast.POSITION.TOP_CENTER,
-          autoClose: 1000,
-        });
-        this.setState({
-          btnLoading: false,
-          show: false,
-          initialValues: null,
-        });
-      })
-      .catch((error) => console.log(error));
+    let StockID = getStockIDStorage()
+    if(!StockID) {
+      this.props.OpenStock()
+    }
+    else {
+      this.setState({
+        btnLoading: true,
+      });
+      var p = {
+        contact: {
+          Fullname: values.Fullname,
+          Phone1: values.Phone,
+          Address: "",
+          Email: "",
+          Content: values.Content,
+        },
+      };
+      BookDataService.bookContact(p)
+        .then(({ data }) => {
+          toast.success("Đăng ký chương trình ưu đãi thành công !", {
+            position: toast.POSITION.TOP_CENTER,
+            autoClose: 1000,
+          });
+          this.setState({
+            btnLoading: false,
+            show: false,
+            initialValues: null,
+          });
+        })
+        .catch((error) => console.log(error));
+    }
   };
 
   handleUrl = (item) => {

@@ -274,6 +274,37 @@ export default class extends React.Component {
       .catch((z) => console.log("aaa Error:", z));
   };
 
+  onSumbitGender = (val, memberInfo) => {
+    this.$f7.dialog.preloader("Đang thực hiện ...");
+    const obj = {};
+    if (memberInfo.acc_type === "M") {
+      obj.member = {
+        Gender: val,
+      };
+    } else {
+      obj.user = {
+        Gender: val,
+      };
+    }
+    UserService.updateInfo(obj)
+      .then(() => {
+        toast.success("Cập nhập giới tính thành công !", {
+          position: toast.POSITION.TOP_CENTER,
+          autoClose: 1500,
+        });
+        this.onLoadRefresh();
+        this.$f7.dialog.close();
+      })
+      .catch((error) => console.log(error));
+  };
+
+  checkEmail = (email) => {
+    if(email && !email.includes('@nomail.com')) {
+      return email
+    }
+    return "Chưa cập nhập"
+  }
+
   onLoadRefresh() {
     this.getInfoMember();
     this.getStockCurrent();
@@ -335,14 +366,12 @@ export default class extends React.Component {
               <div className="name">Avatar</div>
               <div
                 className="content"
-                onClick={() => onChangeAvatar(memberInfo)}
               >
                 <div className="content-avatar">
                   <img
                     src={checkAvt(memberInfo?.Photo || memberInfo?.Avatar)}
                   />
                 </div>
-                <i className="las la-angle-right"></i>
               </div>
             </div>
             <div className="page-detail-profile__item">
@@ -353,12 +382,44 @@ export default class extends React.Component {
                 </div>
               </div>
             </div>
-            <div className="page-detail-profile__item">
+            <div
+              className="page-detail-profile__item"
+              onClick={() => {
+                Number(memberInfo?.Gender) === -1 &&
+                  f7.dialog
+                    .create({
+                      title: "Chọn giới tính",
+                      buttons: [
+                        {
+                          text: "Nam",
+                          onClick: () => {
+                            this.onSumbitGender(1, memberInfo);
+                          },
+                        },
+                        {
+                          text: "Nữ",
+                          onClick: () => {
+                            this.onSumbitGender(0, memberInfo);
+                          },
+                        },
+                      ],
+                      verticalButtons: true,
+                    })
+                    .open();
+              }}
+            >
               <div className="name">Giới tính</div>
               <div className="content">
                 <div className="content-text">
-                  {memberInfo && memberInfo.Gender === 1 ? "Nam" : "Nữ"}
+                  {memberInfo && memberInfo.Gender === -1 ? (
+                    "Chọn giới tính"
+                  ) : (
+                    <>{memberInfo && memberInfo.Gender === 1 ? "Nam" : "Nữ"}</>
+                  )}
                 </div>
+                {Number(memberInfo?.Gender) === -1 && (
+                  <i className="las la-angle-right"></i>
+                )}
               </div>
             </div>
             <div
@@ -388,7 +449,9 @@ export default class extends React.Component {
                     onCancel={this.handleCancelBirthday}
                   />
                 </div>
-                <i className="las la-angle-right"></i>
+                {
+                  !memberInfo?.BirthDate && <i className="las la-angle-right"></i>
+                }
               </div>
             </div>
             <div className="page-detail-profile__item">
@@ -408,9 +471,7 @@ export default class extends React.Component {
               <div className="name">Email</div>
               <div className="content">
                 <div className="content-text">
-                  {memberInfo && memberInfo.Email
-                    ? memberInfo.Email
-                    : "Chưa cập nhập"}
+                  {this.checkEmail(memberInfo && memberInfo.Email)}
                 </div>
                 <i className="las la-angle-right"></i>
               </div>

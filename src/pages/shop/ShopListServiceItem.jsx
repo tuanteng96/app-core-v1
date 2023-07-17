@@ -86,7 +86,7 @@ function ShopListServiceItem({ item, CateId, f7router, lines }) {
   return (
     <div className={clsx("service-about__list pt-12px")}>
       <ul>
-        {item.items &&
+        {item?.items &&
           item.items.length > 0 &&
           item.items
             .filter((item) => isPublic(item))
@@ -181,7 +181,7 @@ function ShopListServiceItem({ item, CateId, f7router, lines }) {
               </li>
             ))}
       </ul>
-      {item.items.length > 3 && itemShow < item.items.length && (
+      {item?.items.length > 3 && itemShow < item.items.length && (
         <button
           className="btn-more-service"
           onClick={() => setItemShow(itemShow + 5)}
