@@ -111,15 +111,7 @@ export default class ServiceHot extends React.Component {
   };
 
   handleUrl = (item) => {
-    if (window?.GlobalConfig?.APP?.UIBase) {
-      this.props.f7router.navigate(
-        `/shop/${item.root.Cates[0].ID}/?ids=${item.root.ID}&cateid=795`
-      );
-    } else {
-      this.props.f7router.navigate(
-        `/shop/${item.cate.ID}/?ids=${item.root.ID}&cateid=795`
-      );
-    }
+    this.props.f7router.navigate(`/shop/selected/${item.root.ID}`);
   };
 
   render() {
