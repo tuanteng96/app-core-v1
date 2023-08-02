@@ -124,6 +124,7 @@ export default class employeeServiceDetail extends React.Component {
   };
 
   getService = async (callback) => {
+    let isOs = this.$f7route.query.type === "os";
     if (!getUser()) return false;
     const cateID = this.$f7route.params.id;
     const infoMember = getUser();
@@ -156,7 +157,7 @@ export default class employeeServiceDetail extends React.Component {
             : null,
         mBook: response?.data?.mBook && response.data.mBook.length > 0 ? response.data.mBook[0] : null,
       };
-      const itemDetail = result || mBook;
+      const itemDetail = isOs ? result : mBook;
       const dataPP = {
         cmd: "service_fee",
         OrderServiceID: itemDetail.ID,
