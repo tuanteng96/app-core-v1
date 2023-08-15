@@ -624,53 +624,57 @@ export default class extends React.Component {
                   {arrRelProds && arrRelProds.length > 0
                     ? this.probablyHTML()
                     : ""}
-                  {aff && aff.aff_link && aff.aff_value && (
-                    <li className="content">
-                      <div className="content-title">Hoa hồng giới thiệu</div>
-                      <div className="content-post">
-                        <div className="content-bonus">
-                          <span>
-                            Nguyên giá :{" "}
-                            <b>
-                              {aff.aff_value.NG > 100
-                                ? `${formatPriceVietnamese(aff.aff_value.NG)}`
-                                : `${aff.aff_value.NG}%`}
-                            </b>
-                          </span>
-                          <span>
-                            Khuyến mãi :{" "}
-                            <b>
-                              {" "}
-                              {aff.aff_value.KM > 100
-                                ? `${formatPriceVietnamese(aff.aff_value.KM)}`
-                                : `${aff.aff_value.KM}%`}
-                            </b>
-                          </span>
-                        </div>
-                        <CopyToClipboard
-                          text={aff.aff_link}
-                          onCopy={() => {
-                            this.setState({ copied: true });
-                            setTimeout(() => {
-                              toast.success("Copy đường dẫn thành công !", {
-                                position: toast.POSITION.TOP_LEFT,
-                                autoClose: 1000,
-                              });
-                              this.setState({ copied: false });
-                            }, 1000);
-                          }}
-                        >
-                          <button
-                            className={`btn-share ${copied && "btn-no-click"}`}
-                            disabled={copied}
+                  {window.GlobalConfig?.APP?.AFF && aff &&
+                    aff.aff_link &&
+                    aff.aff_value && (
+                      <li className="content">
+                        <div className="content-title">Hoa hồng giới thiệu</div>
+                        <div className="content-post">
+                          <div className="content-bonus">
+                            <span>
+                              Nguyên giá :{" "}
+                              <b>
+                                {aff.aff_value.NG > 100
+                                  ? `${formatPriceVietnamese(aff.aff_value.NG)}`
+                                  : `${aff.aff_value.NG}%`}
+                              </b>
+                            </span>
+                            <span>
+                              Khuyến mãi :{" "}
+                              <b>
+                                {" "}
+                                {aff.aff_value.KM > 100
+                                  ? `${formatPriceVietnamese(aff.aff_value.KM)}`
+                                  : `${aff.aff_value.KM}%`}
+                              </b>
+                            </span>
+                          </div>
+                          <CopyToClipboard
+                            text={aff.aff_link}
+                            onCopy={() => {
+                              this.setState({ copied: true });
+                              setTimeout(() => {
+                                toast.success("Copy đường dẫn thành công !", {
+                                  position: toast.POSITION.TOP_LEFT,
+                                  autoClose: 1000,
+                                });
+                                this.setState({ copied: false });
+                              }, 1000);
+                            }}
                           >
-                            <i className="las la-share-alt"></i>{" "}
-                            {copied ? "Đang Copy ..." : "Copy đường dẫn"}
-                          </button>
-                        </CopyToClipboard>
-                      </div>
-                    </li>
-                  )}
+                            <button
+                              className={`btn-share ${
+                                copied && "btn-no-click"
+                              }`}
+                              disabled={copied}
+                            >
+                              <i className="las la-share-alt"></i>{" "}
+                              {copied ? "Đang Copy ..." : "Copy đường dẫn"}
+                            </button>
+                          </CopyToClipboard>
+                        </div>
+                      </li>
+                    )}
 
                   {arrProduct.Desc ||
                   arrProduct.Detail ||
