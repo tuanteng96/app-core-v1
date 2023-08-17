@@ -364,9 +364,7 @@ export default class extends React.Component {
           <div className="page-detail-profile__box">
             <div className="page-detail-profile__item">
               <div className="name">Avatar</div>
-              <div
-                className="content"
-              >
+              <div className="content">
                 <div className="content-avatar">
                   <img
                     src={checkAvt(memberInfo?.Photo || memberInfo?.Avatar)}
@@ -382,114 +380,124 @@ export default class extends React.Component {
                 </div>
               </div>
             </div>
-            <div
-              className="page-detail-profile__item"
-              onClick={() => {
-                Number(memberInfo?.Gender) === -1 &&
-                  f7.dialog
-                    .create({
-                      title: "Chọn giới tính",
-                      buttons: [
-                        {
-                          text: "Nam",
-                          onClick: () => {
-                            this.onSumbitGender(1, memberInfo);
-                          },
-                        },
-                        {
-                          text: "Nữ",
-                          onClick: () => {
-                            this.onSumbitGender(0, memberInfo);
-                          },
-                        },
-                      ],
-                      verticalButtons: true,
-                    })
-                    .open();
-              }}
-            >
-              <div className="name">Giới tính</div>
-              <div className="content">
-                <div className="content-text">
-                  {memberInfo && memberInfo.Gender === -1 ? (
-                    "Chọn giới tính"
-                  ) : (
-                    <>{memberInfo && memberInfo.Gender === 1 ? "Nam" : "Nữ"}</>
-                  )}
+
+            {memberInfo?.acc_type === "M" && (
+              <>
+                <div
+                  className="page-detail-profile__item"
+                  onClick={() => {
+                    Number(memberInfo?.Gender) === -1 &&
+                      f7.dialog
+                        .create({
+                          title: "Chọn giới tính",
+                          buttons: [
+                            {
+                              text: "Nam",
+                              onClick: () => {
+                                this.onSumbitGender(1, memberInfo);
+                              },
+                            },
+                            {
+                              text: "Nữ",
+                              onClick: () => {
+                                this.onSumbitGender(0, memberInfo);
+                              },
+                            },
+                          ],
+                          verticalButtons: true,
+                        })
+                        .open();
+                  }}
+                >
+                  <div className="name">Giới tính</div>
+                  <div className="content">
+                    <div className="content-text">
+                      {memberInfo && memberInfo.Gender === -1 ? (
+                        "Chọn giới tính"
+                      ) : (
+                        <>
+                          {memberInfo && memberInfo.Gender === 1 ? "Nam" : "Nữ"}
+                        </>
+                      )}
+                    </div>
+                    {Number(memberInfo?.Gender) === -1 && (
+                      <i className="las la-angle-right"></i>
+                    )}
+                  </div>
                 </div>
-                {Number(memberInfo?.Gender) === -1 && (
-                  <i className="las la-angle-right"></i>
-                )}
-              </div>
-            </div>
-            <div
-              className="page-detail-profile__item"
-              onClick={() => this.handleClickBirthday(memberInfo?.BirthDate)}
-            >
-              <div className="name">Ngày sinh</div>
-              <div className="content">
-                <div className="content-text">
-                  {memberInfo && memberInfo.BirthDate
-                    ? formatDateBirday(memberInfo.BirthDate)
-                    : "Chưa cập nhập"}
-                  <DatePicker
-                    theme="ios"
-                    cancelText="Đóng"
-                    confirmText="Cập nhập"
-                    headerFormat="DD/MM/YYYY"
-                    showCaption={true}
-                    dateConfig={dateConfig}
-                    value={
-                      memberInfo && memberInfo.BirthDate
-                        ? new Date(memberInfo.BirthDate)
-                        : new Date()
-                    }
-                    isOpen={this.state.isOpen}
-                    onSelect={this.handleSelectBirthday}
-                    onCancel={this.handleCancelBirthday}
-                  />
+                <div
+                  className="page-detail-profile__item"
+                  onClick={() =>
+                    this.handleClickBirthday(memberInfo?.BirthDate)
+                  }
+                >
+                  <div className="name">Ngày sinh</div>
+                  <div className="content">
+                    <div className="content-text">
+                      {memberInfo && memberInfo.BirthDate
+                        ? formatDateBirday(memberInfo.BirthDate)
+                        : "Chưa cập nhập"}
+                      <DatePicker
+                        theme="ios"
+                        cancelText="Đóng"
+                        confirmText="Cập nhập"
+                        headerFormat="DD/MM/YYYY"
+                        showCaption={true}
+                        dateConfig={dateConfig}
+                        value={
+                          memberInfo && memberInfo.BirthDate
+                            ? new Date(memberInfo.BirthDate)
+                            : new Date()
+                        }
+                        isOpen={this.state.isOpen}
+                        onSelect={this.handleSelectBirthday}
+                        onCancel={this.handleCancelBirthday}
+                      />
+                    </div>
+                    {!memberInfo?.BirthDate && (
+                      <i className="las la-angle-right"></i>
+                    )}
+                  </div>
                 </div>
-                {
-                  !memberInfo?.BirthDate && <i className="las la-angle-right"></i>
-                }
-              </div>
-            </div>
-            <div className="page-detail-profile__item">
-              <div className="name">Số điện thoại</div>
-              <div className="content">
-                <div className="content-text">
-                  {memberInfo && memberInfo.MobilePhone
-                    ? memberInfo.MobilePhone || "Chưa cập nhập"
-                    : memberInfo.Phone || "Chưa cập nhập"}
+                <div className="page-detail-profile__item">
+                  <div className="name">Số điện thoại</div>
+                  <div className="content">
+                    <div className="content-text">
+                      {memberInfo && memberInfo.MobilePhone
+                        ? memberInfo.MobilePhone || "Chưa cập nhập"
+                        : memberInfo.Phone || "Chưa cập nhập"}
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
-            <div
-              className="page-detail-profile__item"
-              onClick={() => this.handleUpdateEmail()}
-            >
-              <div className="name">Email</div>
-              <div className="content">
-                <div className="content-text">
-                  {this.checkEmail(memberInfo && memberInfo.Email)}
+                <div
+                  className="page-detail-profile__item"
+                  onClick={() => this.handleUpdateEmail()}
+                >
+                  <div className="name">Email</div>
+                  <div className="content">
+                    <div className="content-text">
+                      {this.checkEmail(memberInfo && memberInfo.Email)}
+                    </div>
+                    <i className="las la-angle-right"></i>
+                  </div>
                 </div>
-                <i className="las la-angle-right"></i>
-              </div>
-            </div>
-            <div
-              className="page-detail-profile__item"
-              onClick={() => this.onChangeAddress(memberInfo)}
-            >
-              <div className="name">Địa chỉ</div>
-              <div className="content">
-                <div className="content-text">
-                  {memberInfo && memberInfo.HomeAddress
-                    ? memberInfo.HomeAddress
-                    : "Chưa cập nhập"}
+                <div
+                  className="page-detail-profile__item"
+                  onClick={() => this.onChangeAddress(memberInfo)}
+                >
+                  <div className="name">Địa chỉ</div>
+                  <div className="content">
+                    <div className="content-text">
+                      {memberInfo && memberInfo.HomeAddress
+                        ? memberInfo.HomeAddress
+                        : "Chưa cập nhập"}
+                    </div>
+                    <i className="las la-angle-right"></i>
+                  </div>
                 </div>
-                <i className="las la-angle-right"></i>
-              </div>
-            </div>
+              </>
+            )}
+
             <div
               className="page-detail-profile__item"
               onClick={() => this.changeStock()}
