@@ -299,11 +299,11 @@ export default class extends React.Component {
   };
 
   checkEmail = (email) => {
-    if(email && !email.includes('@nomail.com')) {
-      return email
+    if (email && !email.includes("@nomail.com")) {
+      return email;
     }
-    return "Chưa cập nhập"
-  }
+    return "Chưa cập nhập";
+  };
 
   onLoadRefresh() {
     this.getInfoMember();
@@ -495,21 +495,21 @@ export default class extends React.Component {
                     <i className="las la-angle-right"></i>
                   </div>
                 </div>
+                <div
+                  className="page-detail-profile__item"
+                  onClick={() => this.changeStock()}
+                >
+                  <div className="name">Cơ sở</div>
+                  <div className="content">
+                    <div className="content-text">
+                      {!IDStockName ? "Chưa chọn điểm" : IDStockName}
+                    </div>
+                    <i className="las la-angle-right"></i>
+                  </div>
+                </div>
               </>
             )}
 
-            <div
-              className="page-detail-profile__item"
-              onClick={() => this.changeStock()}
-            >
-              <div className="name">Cơ sở</div>
-              <div className="content">
-                <div className="content-text">
-                  {!IDStockName ? "Chưa chọn điểm" : IDStockName}
-                </div>
-                <i className="las la-angle-right"></i>
-              </div>
-            </div>
             <div className="page-detail-profile__item">
               <div className="name">Nhóm</div>
               <div className="content">
