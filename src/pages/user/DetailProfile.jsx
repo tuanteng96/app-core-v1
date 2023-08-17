@@ -362,7 +362,7 @@ export default class extends React.Component {
         </Navbar>
         <div className="page-render page-detail-profile p-0">
           <div className="page-detail-profile__box">
-            <div className="page-detail-profile__item">
+            {/* <div className="page-detail-profile__item">
               <div className="name">Avatar</div>
               <div className="content">
                 <div className="content-avatar">
@@ -371,7 +371,7 @@ export default class extends React.Component {
                   />
                 </div>
               </div>
-            </div>
+            </div> */}
             <div className="page-detail-profile__item">
               <div className="name">Họ và tên</div>
               <div className="content">

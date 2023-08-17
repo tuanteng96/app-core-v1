@@ -124,16 +124,21 @@ export default class extends React.Component {
           <img src={bgImage} />
         </div>
         <div className="profile-info">
-          <div className="profile-info__avatar">
+          <div
+            className="profile-info__avatar"
+            onClick={() =>
+              this.$f7.views.main.router.navigate("/detail-profile/")
+            }
+          >
             {isLoading ? (
               <Skeleton circle={true} height={90} width={90} />
             ) : (
               <img src={checkAvt(memberInfo && memberInfo.Photo)} />
             )}
 
-            <Link noLinkClass href="/detail-profile/">
+            {/* <Link noLinkClass href="/detail-profile/">
               <i className="las la-pen"></i>
-            </Link>
+            </Link> */}
           </div>
           {isLoading ? (
             <div className="profile-info__basic">
