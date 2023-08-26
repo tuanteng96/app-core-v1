@@ -8,3 +8,10 @@ export default typeof ClientZ !== "undefined"
         "Content-type": "application/x-www-form-urlencoded",
       },
     });
+
+// export default axios.create({
+//   baseURL: SERVER_APP,
+//   headers: {
+//     "Content-type": "application/x-www-form-urlencoded",
+//   },
+// });

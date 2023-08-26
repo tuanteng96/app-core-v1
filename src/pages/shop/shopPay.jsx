@@ -47,6 +47,15 @@ export default class extends React.Component {
     };
   }
 
+  componentDidUpdate(prevProps, prevState) { 
+    if (
+      prevState.popupOpened !== this.state.popupOpened &&
+      this.state.popupOpened
+    ) {
+      this.getVoucherOrder();
+    }
+  }
+
   setPopupOpen = () => {
     this.setState({
       popupOpened: true,
@@ -328,6 +337,40 @@ export default class extends React.Component {
             WalletMe: data.mm,
             voucherList: data.vouchers,
             TotalOrder: data.order?.ToPay,
+          });
+          if (data.errors && data.errors.length > 0) {
+            toast.error(data.errors.join(", "), {
+              position: toast.POSITION.TOP_LEFT,
+              autoClose: 1500,
+            });
+          }
+        }
+      })
+      .catch((er) => console.log(er));
+  };
+
+  getVoucherOrder = () => {
+    const infoUser = getUser();
+    if (!infoUser) {
+      this.$f7router.navigate("/login/");
+      return false;
+    }
+
+    const data = {
+      order: {
+        ID: 0,
+        SenderID: infoUser.ID,
+        VCode: null,
+      },
+      addProps: "ProdTitle",
+      voucherForOrder: true
+    };
+    ShopDataService.getUpdateOrder(data)
+      .then((response) => {
+        const data = response.data.data;
+        if (response.data.success) {
+          this.setState({
+            voucherList: data.vouchers,
           });
           if (data.errors && data.errors.length > 0) {
             toast.error(data.errors.join(", "), {
@@ -759,7 +802,10 @@ export default class extends React.Component {
                               : `- ${formatPriceVietnamese(VDiscount)}đ`}
                             ) {VCode}
                           </span>
-                          <i className="las la-times" onClick={() => this.handleVcode({ Code: "" })}></i>
+                          <i
+                            className="las la-times"
+                            onClick={() => this.handleVcode({ Code: "" })}
+                          ></i>
                         </div>
                       )}
                     </div>
