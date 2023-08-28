@@ -93,7 +93,7 @@ export default class extends React.Component {
           if (data.errors && data.errors.length > 0) {
             toast.error(data.errors.join(", "), {
               position: toast.POSITION.TOP_LEFT,
-              autoClose: 1500,
+              autoClose: false,
             });
             this.$f7router.navigate("/pay/");
           } else {
