@@ -139,11 +139,11 @@ export default class extends React.Component {
     bodyData.append("remove_repwd", true);
 
     UserService.updatePassword(bodyData)
-      .then((response) => {
+      .then(({data}) => {
         setTimeout(() => {
           self.$f7.preloader.hide();
-          if (response.error || response.data.error) {
-            toast.error(response.error || response.data.error, {
+          if (data.error) {
+            toast.error(data.error, {
               position: toast.POSITION.TOP_LEFT,
               autoClose: 2000,
             });
@@ -156,12 +156,13 @@ export default class extends React.Component {
             this.setState({
               opened: false,
             });
-            setUserStorage(userCurent?.MobilePhone, {
+            setUserStorage(data?.data?.token, {
               ...userCurent,
+              token: data?.data?.token,
               RequirePwd: false,
             });
           }
-        }, 1000);
+        }, 300);
       })
       .catch((err) => console.log(err));
   };

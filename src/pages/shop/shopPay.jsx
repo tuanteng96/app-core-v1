@@ -280,7 +280,7 @@ export default class extends React.Component {
                 order: data.order,
                 popupOpened: false,
                 VDiscount: data.order?.Voucher?.Discount,
-                VCode: vcode,
+                VCode: data.order?.VCode,
                 deleteds: [],
                 edits: [],
                 TotalOrder: data.order?.ToPay,
