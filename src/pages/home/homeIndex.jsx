@@ -156,7 +156,10 @@ export default class extends React.Component {
             this.setState({
               opened: false,
             });
-            setUserStorage(null, { ...userCurent, RequirePwd: false });
+            setUserStorage(userCurent?.MobilePhone, {
+              ...userCurent,
+              RequirePwd: false,
+            });
           }
         }, 1000);
       })

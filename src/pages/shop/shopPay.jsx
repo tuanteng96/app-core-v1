@@ -499,38 +499,31 @@ export default class extends React.Component {
   onSearchVoucher = (e) => {
     const { order, voucherSearch } = this.state;
     e.preventDefault();
-    if (order.ID) {
-      this.setState({
-        loadingBtn: true,
-      });
-      const dataSubmit = {
-        orderId: order.ID,
-        vcode: voucherSearch,
-      };
-      ShopDataService.searchVoucher(dataSubmit)
-        .then(({ data }) => {
-          if (data.error) {
-            toast.error(data.error, {
-              position: toast.POSITION.TOP_LEFT,
-              autoClose: 2000,
-            });
-            this.setState({
-              loadingBtn: false,
-            });
-            return false;
-          }
-          this.handleVcode({ Code: voucherSearch });
+    this.setState({
+      loadingBtn: true,
+    });
+    const dataSubmit = {
+      orderId: order.ID,
+      vcode: voucherSearch,
+    };
+    ShopDataService.searchVoucher(dataSubmit)
+      .then(({ data }) => {
+        if (data.error) {
+          toast.error(data.error, {
+            position: toast.POSITION.TOP_LEFT,
+            autoClose: 2000,
+          });
           this.setState({
             loadingBtn: false,
           });
-        })
-        .catch((error) => console.log(error));
-    } else {
-      toast.error("Đơn hàng không tồn tại hoặc chưa có mặt hàng.", {
-        position: toast.POSITION.TOP_LEFT,
-        autoClose: 2000,
-      });
-    }
+          return false;
+        }
+        this.handleVcode({ Code: voucherSearch });
+        this.setState({
+          loadingBtn: false,
+        });
+      })
+      .catch((error) => console.log(error));
   };
 
   loadRefresh(done) {
