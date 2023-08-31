@@ -563,7 +563,10 @@ export default class extends React.Component {
     return (
       <Page
         noToolbar
-        onPageBeforeOut={() => this.setPopupWalletClose()}
+        onPageBeforeOut={() => {
+          this.setPopupClose();
+          this.setPopupWalletClose();
+        }}
         name="shop-pay"
         ptr
         infiniteDistance={50}
