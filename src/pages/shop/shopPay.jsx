@@ -47,7 +47,7 @@ export default class extends React.Component {
     };
   }
 
-  componentDidUpdate(prevProps, prevState) { 
+  componentDidUpdate(prevProps, prevState) {
     if (
       prevState.popupOpened !== this.state.popupOpened &&
       this.state.popupOpened
@@ -363,7 +363,7 @@ export default class extends React.Component {
         VCode: null,
       },
       addProps: "ProdTitle",
-      voucherForOrder: true
+      voucherForOrder: true,
     };
     ShopDataService.getUpdateOrder(data)
       .then((response) => {
@@ -563,8 +563,7 @@ export default class extends React.Component {
     return (
       <Page
         noToolbar
-        onPageBeforeOut={this.onPageBeforeOut}
-        onPageBeforeRemove={this.onPageBeforeRemove}
+        onPageBeforeOut={() => this.setPopupWalletClose()}
         name="shop-pay"
         ptr
         infiniteDistance={50}
