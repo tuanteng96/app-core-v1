@@ -11,10 +11,17 @@ import UserService from "../service/user.service";
 import { setNotiID, getNotiID } from "./../constants/user";
 import routes from "../js/routes";
 import { NAME_APP } from "../constants/config";
-import { CLOSE_APP, REMOVE_BADGE, SEND_TOKEN_FIREBASE } from "../constants/prom21";
+import {
+  CLOSE_APP,
+  REMOVE_BADGE,
+  SEND_TOKEN_FIREBASE,
+} from "../constants/prom21";
 import { iOS } from "../constants/helpers";
 import { ref, onValue, set } from "firebase/database";
 import { database } from "../firebase/firebase";
+import { QueryClient, QueryClientProvider } from "react-query";
+
+const queryClient = new QueryClient();
 
 export default class extends React.Component {
   constructor() {
@@ -28,6 +35,9 @@ export default class extends React.Component {
         id: "vn.cser",
         // App routes
         routes: routes,
+        dialog: {
+          buttonCancel: "Đóng",
+        },
         on: {
           init: function () {
             const infoUser = getUser();
@@ -49,8 +59,7 @@ export default class extends React.Component {
                     await localStorage.clear();
                     location.reload();
                   });
-                }
-                if (data?.error && data?.error.indexOf("TOKEN") > -1) {
+                } else if (data?.error && data?.error.indexOf("TOKEN") > -1) {
                   removeUserStorage();
                 } else if (data?.token_renew) {
                   setUserStorage(data.token_renew, data);
@@ -79,10 +88,12 @@ export default class extends React.Component {
 
   render() {
     return (
-      <App params={this.state.f7params}>
-        {/* Your main view, should have "view-main" class */}
-        <View id="main-view" main className="safe-areas" url="/" />
-      </App>
+      <QueryClientProvider client={queryClient}>
+        <App params={this.state.f7params}>
+          {/* Your main view, should have "view-main" class */}
+          <View id="main-view" main className="safe-areas" url="/" />
+        </App>
+      </QueryClientProvider>
     );
   }
 

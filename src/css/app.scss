@@ -81,7 +81,11 @@ html {
     background: transparent !important;
 }
 
-.bg-white_ > div {
+.bg-white_>div {
+    background: #fff !important;
+}
+
+.bg-white>.page-content {
     background: #fff !important;
 }
 

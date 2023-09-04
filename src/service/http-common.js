@@ -1,5 +1,5 @@
 import axios from "axios";
-import { SERVER_APP } from './../constants/config';
+import { SERVER_APP } from "./../constants/config";
 export default typeof ClientZ !== "undefined"
   ? ClientZ
   : axios.create({
