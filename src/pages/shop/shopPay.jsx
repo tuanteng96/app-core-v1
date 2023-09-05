@@ -266,7 +266,8 @@ export default class extends React.Component {
               ),
             });
             vcode &&
-              toast.error(data.errors.join(", "), {
+              !data?.order?.VCode &&
+              toast.error("Mã giảm giá không hợp lệ.", {
                 position: toast.POSITION.TOP_LEFT,
                 autoClose: 1500,
               });
@@ -286,6 +287,12 @@ export default class extends React.Component {
                 TotalOrder: data.order?.ToPay,
               });
               self.$f7.preloader.hide();
+              vcode &&
+                !data?.order?.VCode &&
+                toast.error("Mã giảm giá không hợp lệ.", {
+                  position: toast.POSITION.TOP_LEFT,
+                  autoClose: 1500,
+                });
             }, 300);
           }
         }
@@ -814,86 +821,6 @@ export default class extends React.Component {
                     </div>
                   </div>
                 </li>
-                {/* <li className="wallet">
-                  <div className="title">
-                    <svg
-                      width={18}
-                      height={18}
-                      viewBox="0 0 18 18"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="_2-S23g"
-                    >
-                      <path
-                        d="M17.35 9C17.35 13.6116 13.6116 17.35 9 17.35C4.38842 17.35 0.65 13.6116 0.65 9C0.65 4.38842 4.38842 0.65 9 0.65C13.6116 0.65 17.35 4.38842 17.35 9Z"
-                        stroke="#FFA600"
-                        strokeWidth="1.3"
-                      />
-                      <path
-                        fillRule="evenodd"
-                        clipRule="evenodd"
-                        d="M6.86071 4.72259C6.17747 5.29925 5.86228 6.34975 6.11015 7.18667C6.32493 7.91199 6.96053 8.4448 7.63192 8.79523C8.00147 8.9881 8.40198 9.15031 8.80859 9.25808C8.90865 9.28464 9.00893 9.309 9.10812 9.33858C9.20708 9.3681 9.30524 9.39993 9.40253 9.43384C9.46387 9.45524 9.5244 9.4784 9.58533 9.50057C9.60195 9.50666 9.69246 9.54243 9.62439 9.51522C9.55449 9.48729 9.6962 9.54567 9.71173 9.55237C9.99803 9.67605 10.2729 9.82119 10.5313 9.99195C10.6458 10.0676 10.5774 10.0165 10.6832 10.1034C10.7405 10.1504 10.7967 10.1984 10.8507 10.2489C10.9045 10.2993 10.956 10.3518 11.0057 10.4059C11.0917 10.4995 11.0512 10.4483 11.1192 10.5524C11.2986 10.8273 11.364 11.0304 11.3537 11.3518C11.3432 11.6797 11.2139 12.011 11.0294 12.2188C10.5583 12.7491 9.79735 12.9482 9.09489 12.9149C8.59692 12.8912 8.05251 12.7874 7.60822 12.6078C7.15828 12.4261 6.75616 12.1464 6.36567 11.8709C6.11567 11.6946 5.72339 11.8315 5.57846 12.0678C5.40729 12.3469 5.53427 12.6418 5.7849 12.8185C6.53781 13.3496 7.32405 13.7643 8.25889 13.916C9.14449 14.0597 9.99009 14.0398 10.8225 13.6919C11.6025 13.3658 12.2381 12.7255 12.4288 11.9204C12.6275 11.0819 12.4057 10.2759 11.8194 9.62985C11.1364 8.87715 10.0972 8.46072 9.11336 8.19958C8.9946 8.16802 8.87763 8.13016 8.7621 8.08923C8.69772 8.06645 8.63385 8.04247 8.57045 8.01745C8.69173 8.06536 8.52551 7.99709 8.4918 7.98206C8.34755 7.91786 8.20619 7.84746 8.06954 7.76959C7.47629 7.43163 7.11548 7.04773 7.19816 6.40127C7.30253 5.58492 7.95476 5.17968 8.75267 5.12075C9.56082 5.06099 10.4006 5.2559 11.0497 5.67546C11.6643 6.0728 12.2408 5.12234 11.6305 4.72786C10.3007 3.86821 8.12633 3.65448 6.86071 4.72259Z"
-                        fill="#FFA600"
-                        stroke="#FFA600"
-                        strokeWidth="0.2"
-                      />
-                    </svg>
-                    <span>
-                      Ví (
-                      <span>
-                        {formatPriceVietnamese(WalletMe)}
-                        <b>₫</b>
-                      </span>
-                      )
-                    </span>
-                  </div>
-                  <div className="box">
-                    <div className="box-text">
-                      {WalletPaySuccess === 0 ? (
-                        <div
-                          onClick={
-                            items.length > 0
-                              ? () => this.setPopupWalletOpen()
-                              : () =>
-                                  this.setErr(
-                                    "Giỏ hàng trống. Vui lòng đặt hàng."
-                                  )
-                          }
-                        >
-                          <span>Nhập số tiền</span>
-                          <svg
-                            enableBackground="new 0 0 11 11"
-                            viewBox="0 0 11 11"
-                            className="stardust-icon stardust-icon-arrow-right ekGwAM"
-                          >
-                            <path
-                              stroke="none"
-                              d="m2.5 11c .1 0 .2 0 .3-.1l6-5c .1-.1.2-.3.2-.4s-.1-.3-.2-.4l-6-5c-.2-.2-.5-.1-.7.1s-.1.5.1.7l5.5 4.6-5.5 4.6c-.2.2-.2.5-.1.7.1.1.3.2.4.2z"
-                            />
-                          </svg>
-                        </div>
-                      ) : (
-                        <div className="box-vocher-checked">
-                          <span
-                            className="vcode"
-                            onClick={() => this.setPopupWalletOpen()}
-                          >
-                            -{formatPriceVietnamese(WalletPaySuccess)}
-                            <b>₫</b>
-                          </span>
-                          <AiOutlineClose
-                            onClick={() =>
-                              this.setState({
-                                WalletPaySuccess: 0,
-                                WalletPay: 0,
-                              })
-                            }
-                          />
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </li> */}
                 <li className="total">
                   <div className="title">
                     Tổng tiền :

@@ -17,6 +17,7 @@ import { iOS } from "../../constants/helpers";
 import { OPEN_QRCODE, SEND_TOKEN_FIREBASE } from "../../constants/prom21";
 import { ref, set } from "firebase/database";
 import { database } from "../../firebase/firebase";
+import DeviceHelpers from "../../constants/DeviceHelpers";
 
 toast.configure();
 
@@ -43,64 +44,74 @@ export default class extends React.Component {
     }
     const self = this;
     self.$f7.preloader.show();
-    UserService.login(username, password)
-      .then((response) => {
-        if (response.data.error) {
-          self.$f7.preloader.hide();
-          toast.error("Tài khoản & mật khẩu không chính xác !", {
-            position: toast.POSITION.TOP_LEFT,
-            autoClose: 3000,
-          });
-          this.setState({
-            password: "",
-          });
-        } else {
-          if (response?.data?.Status === -1) {
-            self.$f7.preloader.hide();
-            toast.error("Tài khoản của bạn đã bị vô hiệu hóa !", {
-              position: toast.POSITION.TOP_LEFT,
-              autoClose: 3000,
-            });
-            this.setState({
-              password: "",
-            });
-          } else {
-            const userData = response.data;
-            const token = userData.token;
-            setUserStorage(token, userData);
-            SEND_TOKEN_FIREBASE().then(async (response) => {
-              if (!response.error && response.Token) {
-                await UserService.authSendTokenFirebase({
-                  Token: response.Token,
-                  ID: userData.ID,
-                  Type: userData.acc_type,
+    DeviceHelpers.get({
+      success: ({ deviceId }) => {
+        UserService.login(username, password, deviceId)
+          .then((response) => {
+            if (response.data.error) {
+              self.$f7.preloader.hide();
+              toast.error(
+                response?.data?.error === "Thiết bị chưa được cấp phép"
+                  ? response?.data?.error
+                  : "Tài khoản & mật khẩu không chính xác !",
+                {
+                  position: toast.POSITION.TOP_LEFT,
+                  autoClose: 3000,
+                }
+              );
+              this.setState({
+                password: "",
+              });
+            } else {
+              if (response?.data?.Status === -1) {
+                self.$f7.preloader.hide();
+                toast.error("Tài khoản của bạn đã bị vô hiệu hóa !", {
+                  position: toast.POSITION.TOP_LEFT,
+                  autoClose: 3000,
                 });
-                setTimeout(() => {
-                  self.$f7.preloader.hide();
-                  this.$f7router.navigate("/", {
-                    animate: true,
-                    transition: "f7-flip",
-                  });
-                }, 300);
+                this.setState({
+                  password: "",
+                });
               } else {
-                setSubscribe(userData, () => {
-                  setTimeout(() => {
-                    self.$f7.preloader.hide();
-                    this.$f7router.navigate("/", {
-                      animate: true,
-                      transition: "f7-flip",
+                const userData = response.data;
+                const token = userData.token;
+                setUserStorage(token, userData);
+                SEND_TOKEN_FIREBASE().then(async (response) => {
+                  if (!response.error && response.Token) {
+                    await UserService.authSendTokenFirebase({
+                      Token: response.Token,
+                      ID: userData.ID,
+                      Type: userData.acc_type,
                     });
-                  }, 300);
+                    setTimeout(() => {
+                      self.$f7.preloader.hide();
+                      this.$f7router.navigate("/", {
+                        animate: true,
+                        transition: "f7-flip",
+                      });
+                    }, 300);
+                  } else {
+                    setSubscribe(userData, () => {
+                      setTimeout(() => {
+                        self.$f7.preloader.hide();
+                        this.$f7router.navigate("/", {
+                          animate: true,
+                          transition: "f7-flip",
+                        });
+                      }, 300);
+                    });
+                  }
+                  userData?.ByStockID && setStockIDStorage(userData.ByStockID);
+                  userData?.StockName &&
+                    setStockNameStorage(userData.StockName);
+                  setUserLoginStorage(username, password);
                 });
               }
-              userData?.ByStockID && setStockIDStorage(userData.ByStockID);
-              userData?.StockName && setStockNameStorage(userData.StockName);
-              setUserLoginStorage(username, password);
-            });
-          }
-        }
-      })
-      .catch((e) => console.log(e));
+            }
+          })
+          .catch((e) => console.log(e));
+      },
+    });
   };
 
   handleChangeInput = (event) => {
@@ -126,63 +137,79 @@ export default class extends React.Component {
         const qrcodeLogin = qrcode.split("&")[0];
         const qrcodeStock = qrcode.split("&")[1];
         self.$f7.dialog.preloader(`Đang xử lý ...`);
-        UserService.QRCodeLogin(qrcodeLogin)
-          .then(({ data }) => {
-            if (data.error) {
-              toast.error("Mã QR Code không hợp lệ hoặc hết hạn.", {
-                position: toast.POSITION.TOP_LEFT,
-                autoClose: 3000,
-              });
-              self.$f7.dialog.close();
-            } else {
-              if (data?.Status === -1) {
-                toast.error("Tài khoản của bạn đã bị vô hiệu hóa !", {
-                  position: toast.POSITION.TOP_LEFT,
-                  autoClose: 3000,
-                });
-              } else {
-                setUserStorage(data.token, data);
-                SEND_TOKEN_FIREBASE().then(async (response) => {
-                  if (!response.error && response.Token) {
-                    await UserService.authSendTokenFirebase({
-                      Token: response.Token,
-                      ID: data.ID,
-                      Type: data.acc_type,
-                    });
-                    set(
-                      ref(database, `/qrcode/${qrcodeStock}/${qrcodeLogin}`),
-                      null
-                    ).then(() => {
-                      if (data?.acc_type === "M") {
-                        setUserLoginStorage(data?.MobilePhone, null);
-                      }
-                      self.$f7.dialog.close();
-                      this.$f7router.navigate("/", {
-                        animate: true,
-                        transition: "f7-flip",
-                      });
+
+        DeviceHelpers.get({
+          success: ({ deviceId }) => {
+            UserService.QRCodeLogin(qrcodeLogin, deviceId)
+              .then(({ data }) => {
+                if (data.error) {
+                  toast.error(
+                    response?.data?.error === "Thiết bị chưa được cấp phép"
+                      ? response?.data?.error
+                      : "Mã QR Code không hợp lệ hoặc hết hạn.",
+                    {
+                      position: toast.POSITION.TOP_LEFT,
+                      autoClose: 3000,
+                    }
+                  );
+                  self.$f7.dialog.close();
+                } else {
+                  if (data?.Status === -1) {
+                    toast.error("Tài khoản của bạn đã bị vô hiệu hóa !", {
+                      position: toast.POSITION.TOP_LEFT,
+                      autoClose: 3000,
                     });
                   } else {
-                    setSubscribe(data, () => {
-                      set(
-                        ref(database, `/qrcode/${qrcodeStock}/${qrcodeLogin}`),
-                        null
-                      ).then(() => {
-                        self.$f7.dialog.close();
-                        this.$f7router.navigate("/", {
-                          animate: true,
-                          transition: "f7-flip",
+                    setUserStorage(data.token, data);
+                    SEND_TOKEN_FIREBASE().then(async (response) => {
+                      if (!response.error && response.Token) {
+                        await UserService.authSendTokenFirebase({
+                          Token: response.Token,
+                          ID: data.ID,
+                          Type: data.acc_type,
                         });
-                      });
+                        set(
+                          ref(
+                            database,
+                            `/qrcode/${qrcodeStock}/${qrcodeLogin}`
+                          ),
+                          null
+                        ).then(() => {
+                          if (data?.acc_type === "M") {
+                            setUserLoginStorage(data?.MobilePhone, null);
+                          }
+                          self.$f7.dialog.close();
+                          this.$f7router.navigate("/", {
+                            animate: true,
+                            transition: "f7-flip",
+                          });
+                        });
+                      } else {
+                        setSubscribe(data, () => {
+                          set(
+                            ref(
+                              database,
+                              `/qrcode/${qrcodeStock}/${qrcodeLogin}`
+                            ),
+                            null
+                          ).then(() => {
+                            self.$f7.dialog.close();
+                            this.$f7router.navigate("/", {
+                              animate: true,
+                              transition: "f7-flip",
+                            });
+                          });
+                        });
+                      }
                     });
+                    data?.ByStockID && setStockIDStorage(data.ByStockID);
+                    data?.StockName && setStockNameStorage(data.StockName);
                   }
-                });
-                data?.ByStockID && setStockIDStorage(data.ByStockID);
-                data?.StockName && setStockNameStorage(data.StockName);
-              }
-            }
-          })
-          .catch((err) => self.$f7.dialog.close());
+                }
+              })
+              .catch((err) => self.$f7.dialog.close());
+          },
+        });
       })
       .catch((error) => console.log(error));
   };

@@ -20,6 +20,7 @@ import { iOS } from "../constants/helpers";
 import { ref, onValue, set } from "firebase/database";
 import { database } from "../firebase/firebase";
 import { QueryClient, QueryClientProvider } from "react-query";
+import DeviceHelpers from "../constants/DeviceHelpers";
 
 const queryClient = new QueryClient();
 
@@ -67,6 +68,38 @@ export default class extends React.Component {
                   setUserStorage(data.token, data);
                 } else {
                   // Không phải lỗi Token
+                }
+
+                if (
+                  window?.GlobalConfig?.APP?.DeviceCheck &&
+                  data?.Status !== -1
+                ) {
+                  DeviceHelpers.get({
+                    success: ({ deviceId }) => {
+                      if (data?.DeviceIDs && data?.DeviceIDs !== deviceId) {
+                        this.dialog.alert(
+                          "Phiên đăng nhập của bạn đã hết hạn.",
+                          () => {
+                            SEND_TOKEN_FIREBASE().then(async (response) => {
+                              if (!response.error && response.Token) {
+                                const { ID, acc_type } = data;
+                                await UserService.authRemoveFirebase({
+                                  Token: response.Token,
+                                  ID: ID,
+                                  Type: acc_type,
+                                });
+                              } else {
+                                app_request("unsubscribe", "");
+                              }
+                              iOS() && REMOVE_BADGE();
+                              await localStorage.clear();
+                              location.reload();
+                            });
+                          }
+                        );
+                      }
+                    },
+                  });
                 }
               });
             }

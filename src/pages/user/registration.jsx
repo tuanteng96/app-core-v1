@@ -1,66 +1,73 @@
-import React from 'react'
-import { SERVER_APP } from './../../constants/config'
-import { Page, Link, Toolbar } from 'framework7-react'
-import UserService from '../../service/user.service'
-import { toast } from 'react-toastify'
-import 'react-toastify/dist/ReactToastify.css'
-import { getStockIDStorage, setStockIDStorage, setStockNameStorage, setUserLoginStorage, setUserStorage } from '../../constants/user'
-import SelectStock from '../../components/SelectStock'
-import { SEND_TOKEN_FIREBASE } from '../../constants/prom21'
-import { setSubscribe } from '../../constants/subscribe'
+import React from "react";
+import { SERVER_APP } from "./../../constants/config";
+import { Page, Link, Toolbar } from "framework7-react";
+import UserService from "../../service/user.service";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import {
+  getStockIDStorage,
+  setStockIDStorage,
+  setStockNameStorage,
+  setUserLoginStorage,
+  setUserStorage,
+} from "../../constants/user";
+import SelectStock from "../../components/SelectStock";
+import { SEND_TOKEN_FIREBASE } from "../../constants/prom21";
+import { setSubscribe } from "../../constants/subscribe";
+import DeviceHelpers from "../../constants/DeviceHelpers";
 
-toast.configure()
+toast.configure();
 export default class extends React.Component {
   constructor() {
-    super()
+    super();
     this.state = {
       isLoading: false,
-      fullname: '',
-      password: '',
-      phone: '',
+      fullname: "",
+      password: "",
+      phone: "",
       arrNews: [],
       arrBanner: [],
       isOpenStock: false,
       isReload: 0,
-    }
+    };
   }
   componentDidMount() {}
   registrationSubmit = () => {
-    const fullname = this.state.fullname
-    const password = this.state.password
-    const phone = this.state.phone
-    const stockId = getStockIDStorage()
+    const fullname = this.state.fullname;
+    const password = this.state.password;
+    const phone = this.state.phone;
+    const stockId = getStockIDStorage();
 
     if (!stockId) {
       this.setState({
         isOpenStock: !this.state.isOpenStock,
-      })
-      return
+      });
+      return;
     }
 
-    const phone_regex = /((09|03|07|08|05)+([0-9]{8})\b)/g
-    if (fullname === '' || password === '' || phone === '') {
-      toast.error('Vui lòng nhập đầy đủ thông tin!', {
+    const phone_regex = /((09|03|07|08|05)+([0-9]{8})\b)/g;
+    if (fullname === "" || password === "" || phone === "") {
+      toast.error("Vui lòng nhập đầy đủ thông tin!", {
         position: toast.POSITION.TOP_LEFT,
         autoClose: 3000,
-      })
+      });
       this.setState({
-        phone: '',
-      })
-      return
+        phone: "",
+      });
+      return;
     }
     if (phone_regex.test(phone) === false) {
-      toast.error('Số điện thoại không hợp lệ !', {
+      toast.error("Số điện thoại không hợp lệ !", {
         position: toast.POSITION.TOP_LEFT,
         autoClose: 3000,
-      })
+      });
       this.setState({
-        phone: '',
-      })
-      return
+        phone: "",
+      });
+      return;
     }
-    const self = this
-    self.$f7.preloader.show()
+    const self = this;
+    self.$f7.preloader.show();
 
     UserService.register(fullname, password, phone, stockId)
       .then((repsonse) => {
@@ -68,114 +75,118 @@ export default class extends React.Component {
           toast.error(repsonse.data.error, {
             position: toast.POSITION.TOP_LEFT,
             autoClose: 3000,
-          })
-          self.$f7.preloader.hide()
+          });
+          self.$f7.preloader.hide();
         } else {
-          toast.success('Đăng ký thành công.', {
+          toast.success("Đăng ký thành công.", {
             position: toast.POSITION.TOP_LEFT,
             autoClose: 500,
             onClose: () => {
-              this.onLogin(phone, password)
+              this.onLogin(phone, password);
             },
-          })
+          });
         }
       })
-      .catch((e) => console.log(e))
-  }
+      .catch((e) => console.log(e));
+  };
 
   onLogin = (username, password) => {
-    const self = this
-    UserService.login(username, password)
-      .then(({ data }) => {
-        if (data.error) {
-          self.$f7.preloader.hide()
-          toast.error('Tài khoản & mật khẩu không chính xác !', {
-            position: toast.POSITION.TOP_LEFT,
-            autoClose: 3000,
-          })
-          this.setState({
-            password: '',
-          })
-        } else {
-          const userData = data
-          const token = userData.token
-          setUserStorage(token, userData)
-          SEND_TOKEN_FIREBASE().then(async (response) => {
-            if (!response.error && response.Token) {
-              await UserService.authSendTokenFirebase({
-                Token: response.Token,
-                ID: userData.ID,
-                Type: userData.acc_type,
-              })
-              setTimeout(() => {
-                self.$f7.preloader.hide()
-                this.$f7router.navigate('/', {
-                  animate: true,
-                  transition: 'f7-flip',
-                })
-              }, 300)
+    const self = this;
+    DeviceHelpers.get({
+      success: ({ deviceId }) => {
+        UserService.login(username, password, deviceId)
+          .then(({ data }) => {
+            if (data.error) {
+              self.$f7.preloader.hide();
+              toast.error("Tài khoản & mật khẩu không chính xác !", {
+                position: toast.POSITION.TOP_LEFT,
+                autoClose: 3000,
+              });
+              this.setState({
+                password: "",
+              });
             } else {
-              setSubscribe(userData, () => {
-                setTimeout(() => {
-                  self.$f7.preloader.hide()
-                  this.$f7router.navigate('/', {
-                    animate: true,
-                    transition: 'f7-flip',
-                  })
-                }, 300)
-              })
+              const userData = data;
+              const token = userData.token;
+              setUserStorage(token, userData);
+              SEND_TOKEN_FIREBASE().then(async (response) => {
+                if (!response.error && response.Token) {
+                  await UserService.authSendTokenFirebase({
+                    Token: response.Token,
+                    ID: userData.ID,
+                    Type: userData.acc_type,
+                  });
+                  setTimeout(() => {
+                    self.$f7.preloader.hide();
+                    this.$f7router.navigate("/", {
+                      animate: true,
+                      transition: "f7-flip",
+                    });
+                  }, 300);
+                } else {
+                  setSubscribe(userData, () => {
+                    setTimeout(() => {
+                      self.$f7.preloader.hide();
+                      this.$f7router.navigate("/", {
+                        animate: true,
+                        transition: "f7-flip",
+                      });
+                    }, 300);
+                  });
+                }
+                userData?.ByStockID && setStockIDStorage(userData.ByStockID);
+                userData?.StockName && setStockNameStorage(userData.StockName);
+                setUserLoginStorage(username, password);
+              });
             }
-            userData?.ByStockID && setStockIDStorage(userData.ByStockID)
-            userData?.StockName && setStockNameStorage(userData.StockName)
-            setUserLoginStorage(username, password)
           })
-        }
-      })
-      .catch((e) => console.log(e))
-  }
+          .catch((e) => console.log(e));
+      },
+    });
+  };
 
   handleChangeInput = (event) => {
-    const target = event.target
-    const value = target.value
-    const name = target.name
+    const target = event.target;
+    const value = target.value;
+    const name = target.name;
 
     this.setState({
       [name]: value,
-    })
-  }
+    });
+  };
 
   phoneChange = (e) => {
-    const val = e.target.value
-    if (e.target.validity.valid) this.setState({ phone: e.target.value })
-    else if (val === '' || val === '-') this.setState({ phone: val })
-  }
+    const val = e.target.value;
+    if (e.target.validity.valid) this.setState({ phone: e.target.value });
+    else if (val === "" || val === "-") this.setState({ phone: val });
+  };
 
   isImage = (icon) => {
-    const ext = ['.jpg', '.jpeg', '.bmp', '.gif', '.png', '.svg']
-    return ext.some((el) => icon.endsWith(el))
-  }
+    const ext = [".jpg", ".jpeg", ".bmp", ".gif", ".png", ".svg"];
+    return ext.some((el) => icon.endsWith(el));
+  };
 
   getClassStyle = () => {
     if (window?.GlobalConfig?.APP?.Login?.Background) {
       if (this.isImage(window?.GlobalConfig?.APP?.Login?.Background)) {
         document.documentElement.style.setProperty(
-          '--login-background',
-          `url(${window?.GlobalConfig?.APP?.Login?.Background})`,
-        )
-        return 'bg-login-img'
+          "--login-background",
+          `url(${window?.GlobalConfig?.APP?.Login?.Background})`
+        );
+        return "bg-login-img";
       } else {
         document.documentElement.style.setProperty(
-          '--login-background',
-          window?.GlobalConfig?.APP?.Login?.Background,
-        )
-        return 'bg-login'
+          "--login-background",
+          window?.GlobalConfig?.APP?.Login?.Background
+        );
+        return "bg-login";
       }
     }
-    return ''
-  }
+    return "";
+  };
 
   render() {
-    const { isLoading, isOpenStock, password, isReload } = this.state
+    const { isLoading, isOpenStock, password, isReload } = this.state;
     return (
       <Page noNavbar noToolbar name="login">
         <div className="page-wrapper page-login">
@@ -189,7 +200,7 @@ export default class extends React.Component {
               <div className="logo">
                 <img
                   className="logo-reg"
-                  src={SERVER_APP + '/app/images/logo-app.png'}
+                  src={SERVER_APP + "/app/images/logo-app.png"}
                 />
               </div>
               <div className="title">Xin chào, Bắt đầu tạo tài khoản nào</div>
@@ -230,8 +241,8 @@ export default class extends React.Component {
                     type="button"
                     onClick={() => this.registrationSubmit()}
                     className={
-                      'btn-login btn-me' +
-                      (isLoading === true ? ' loading' : '')
+                      "btn-login btn-me" +
+                      (isLoading === true ? " loading" : "")
                     }
                   >
                     <span>Đăng ký</span>
@@ -250,6 +261,6 @@ export default class extends React.Component {
           isReload={isReload}
         />
       </Page>
-    )
+    );
   }
 }
