@@ -475,6 +475,7 @@ export default class extends React.Component {
             isUpdate: false,
             voucherList: data.vouchers,
             TotalOrder: data.order?.ToPay,
+            VCode: data?.order?.VoucherCode || ''
           });
           if (data.errors && data.errors.length > 0) {
             toast.error(data.errors.join(", "), {
