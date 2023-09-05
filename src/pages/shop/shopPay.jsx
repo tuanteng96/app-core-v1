@@ -445,7 +445,7 @@ export default class extends React.Component {
     callback
   ) => {
     const { ItemsEdit } = obj;
-    const { deletedsOrder, editsOrder, items } = this.state;
+    const { deletedsOrder, editsOrder, items, VCode } = this.state;
     const infoUser = getUser();
 
     this.setState({
@@ -475,7 +475,7 @@ export default class extends React.Component {
             isUpdate: false,
             voucherList: data.vouchers,
             TotalOrder: data.order?.ToPay,
-            VCode: data?.order?.VoucherCode || ''
+            VCode: data?.order?.VoucherCode || "",
           });
           if (data.errors && data.errors.length > 0) {
             toast.error(data.errors.join(", "), {
@@ -485,6 +485,13 @@ export default class extends React.Component {
             this.setState({
               VCode: "",
             });
+          } else {
+            if (VCode && !data?.order?.VoucherCode) {
+              toast.warning("Mã giảm giá bị loại bỏ.", {
+                position: toast.POSITION.TOP_LEFT,
+                autoClose: 1500,
+              });
+            }
           }
           callback && callback();
         }
