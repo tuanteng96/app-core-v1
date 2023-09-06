@@ -20,7 +20,7 @@ function ReportKGList({ onEdit, f7, selected }) {
         pi: 1,
         ps: 10,
         filter: {
-          MemberID: 32877,
+          MemberID: Member?.ID,
           CreateDate: [startOfMonth, endOfMonth],
         },
       });

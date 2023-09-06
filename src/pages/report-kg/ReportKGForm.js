@@ -1,13 +1,17 @@
 import { Form, Formik } from "formik";
 import moment from "moment";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import NumberFormat from "react-number-format";
 import { getUser } from "../../constants/user";
 import { useMutation, useQueryClient } from "react-query";
 import MemberAPI from "../../service/member.service";
 import { toast } from "react-toastify";
 import clsx from "clsx";
-import { useEffect } from "react";
+import * as Yup from "yup";
+
+const AddSchema = Yup.object().shape({
+  Value: Yup.string().required("Vui lòng nhập số KG"),
+});
 
 function ReportKGForm({ onClose, initial }) {
   const Member = getUser();
@@ -63,22 +67,30 @@ function ReportKGForm({ onClose, initial }) {
       initialValues={initialValues}
       onSubmit={onSubmit}
       enableReinitialize={true}
+      validationSchema={AddSchema}
     >
       {(formikProps) => {
-        const { values, setFieldValue } = formikProps;
+        const { values, setFieldValue, errors, touched } = formikProps;
 
         return (
           <Form>
             <div className="p-15px">
               <div className="fw-700 text-center font-size-md mb-15px">
                 Số KG ngày{" "}
-                {moment(initial ? initial.CreateDate : "").format("DD/MM/YYYY")}
+                {initial?.CreateDate
+                  ? moment(initial?.CreateDate).format("DD/MM/YYYY")
+                  : moment().format("DD/MM/YYYY")}
               </div>
               <div>
                 <div>Số KG</div>
                 <div className="position-relative">
                   <NumberFormat
-                    className={`dialog-confirm-input `}
+                    className={clsx(
+                      "dialog-confirm-input",
+                      errors.Value &&
+                        touched.Value &&
+                        "is-invalid solid-invalid"
+                    )}
                     value={values.Value}
                     thousandSeparator={false}
                     placeholder="Nhập số Kilogram"
@@ -101,6 +113,11 @@ function ReportKGForm({ onClose, initial }) {
                     KG
                   </div>
                 </div>
+                {errors.Value && touched.Value && (
+                  <div className="text-danger font-size-min mt-3px">
+                    {errors.Value}
+                  </div>
+                )}
               </div>
               <button
                 type="submit"
