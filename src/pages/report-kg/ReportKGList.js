@@ -64,6 +64,13 @@ function ReportKGList({ onEdit, f7, selected }) {
               <div
                 className="p-15px border-bottom d-flex justify-content-between align-items-center"
                 key={index}
+                style={{
+                  backgroundColor:
+                    moment(item.CreateDate).format("DD/MM/YYYY") ===
+                    moment().format("DD/MM/YYYY")
+                      ? "rgb(255, 250, 223)"
+                      : "",
+                }}
               >
                 <div>
                   <div className="text-muted font-size-sm">

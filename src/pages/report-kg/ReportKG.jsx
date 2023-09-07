@@ -3,6 +3,10 @@ import { Link, Navbar, Page, Sheet, Toolbar } from "framework7-react";
 import ReportKGForm from "./ReportKGForm";
 import ReportKGList from "./ReportKGList";
 import DatePicker from "react-mobile-datepicker";
+import MemberAPI from "../../service/member.service";
+import { getUser } from "../../constants/user";
+import moment from "moment";
+import { toast } from "react-toastify";
 
 export default class extends React.Component {
   constructor() {
@@ -12,13 +16,47 @@ export default class extends React.Component {
       initial: null,
       isOpen: false,
       selected: new Date(),
+      loading: false,
     };
   }
 
   componentDidMount() {}
 
+  onReportKg = async () => {
+    this.setState({ loading: true });
+    const Member = getUser();
+    const startOfMonth = moment().startOf("month").format("MM/DD/YYYY");
+    const endOfMonth = moment().endOf("month").format("MM/DD/YYYY");
+    const { data } = await MemberAPI.listNoteKg({
+      pi: 1,
+      ps: 31,
+      filter: {
+        MemberID: Member?.ID,
+        CreateDate: [startOfMonth, endOfMonth],
+      },
+    });
+    let index =
+      data.list &&
+      data.list.findIndex(
+        (x) =>
+          moment(x.CreateDate).format("MM/DD/YYYY") ===
+          moment().format("MM/DD/YYYY")
+      );
+    if (index > -1) {
+      toast.warning("Hôm nay bạn đã thực hiện báo KG rồi.");
+      this.setState({
+        loading: false
+      });
+    } else {
+      this.setState({
+        opened: true,
+        loading: false,
+      });
+    }
+  };
+
   render() {
-    const { opened, initial, isOpen, selected } = this.state;
+    const { opened, initial, isOpen, selected, loading } = this.state;
 
     const dateConfig = {
       month: {
@@ -42,8 +80,14 @@ export default class extends React.Component {
                 <i className="las la-arrow-left"></i>
               </Link>
             </div>
-            <div className="page-navbar__title">
+            <div className="page-navbar__title" style={{
+              flexDirection: "column"
+            }}>
               <span className="title">Báo Kilogram</span>
+              <div style={{
+                fontSize: "11px",
+                opacity: "0.7"
+              }}>{moment(selected).format("MM-YYYY")}</div>
             </div>
             <div
               className="page-navbar__back"
@@ -115,13 +159,10 @@ export default class extends React.Component {
         <Toolbar tabbar position="bottom">
           <button
             className="page-btn-order btn-submit-order"
-            onClick={() =>
-              this.setState({
-                opened: true,
-              })
-            }
+            onClick={this.onReportKg}
+            disabled={loading}
           >
-            Báo KG hôm nay
+            {loading ? "Đang kiểm tra ..." : "Báo KG hôm nay"}
           </button>
         </Toolbar>
       </Page>
