@@ -96,9 +96,11 @@ class UserService {
       `/api/v3/member23?cmd=da_mua&memberid=${memberid}&ps=${Ps}`
     );
   }
-  getNotification(acctype, accid, offset, next) {
+  getNotification(acctype, accid, offset, next, refresh) {
     return http.get(
-      `/api/v3/noti2?cmd=nextoffset&acctype=${acctype}&accid=${accid}&offset=${offset}&next=${next}`
+      `/api/v3/noti2?cmd=nextoffset&acctype=${acctype}&accid=${accid}&offset=${offset}&next=${next}${
+        refresh ? "&refresh=1" : ""
+      }`
     );
   }
   getNotiDetail(Id) {

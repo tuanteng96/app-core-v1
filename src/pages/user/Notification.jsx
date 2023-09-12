@@ -41,7 +41,7 @@ export default class extends React.Component {
     this.getNotification();
   }
 
-  getNotification = () => {
+  getNotification = (refresh = false) => {
     const infoUser = getUser();
 
     if (!infoUser) {
@@ -53,7 +53,13 @@ export default class extends React.Component {
       isLoading: true,
     });
 
-    UserService.getNotification(infoUser.acc_type, infoUser.acc_id, 0, 200)
+    UserService.getNotification(
+      infoUser.acc_type,
+      infoUser.acc_id,
+      0,
+      200,
+      refresh
+    )
       .then((response) => {
         const data = response.data.data;
         const dataNew = [];
@@ -190,7 +196,7 @@ export default class extends React.Component {
   };
 
   async loadRefresh(done) {
-    this.getNotification();
+    this.getNotification(true);
     await new Promise((resolve) => setTimeout(resolve, 1000));
     done();
   }
