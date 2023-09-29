@@ -104,6 +104,9 @@ var routes = [
     path: "/bao-kg/",
     asyncComponent: () => ReportKGPage,
     beforeEnter: checkAuth,
+    options: {
+      transition: "f7-cover",
+    },
   },
   {
     path: "/news/",

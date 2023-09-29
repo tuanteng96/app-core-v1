@@ -55,7 +55,7 @@ function ReportKGList({ onEdit, f7, selected }) {
 
   return (
     <div>
-      <div className="bg-warning text-white px-15px py-10px">
+      <div className="bg-warning text-white px-15px py-10px font-size-sm">
         Cân nặng sáng nay của bạn là bao nhiêu? Hãy nhập số cân sáng nay để
         chúng tôi hỗ trợ bạn kịp thời nhé.
       </div>

@@ -74,6 +74,7 @@ export default class extends React.Component {
   }
 
   getDetialNoti = async () => {
+    let _this = this;
     const Id = this.$f7route.params.id;
     this.setState({
       isLoading: true,
@@ -107,8 +108,8 @@ export default class extends React.Component {
           await userService.readedNotification(dataPost);
         }
       }
-      if(data.data[0] && data.data[0].Link === "/bao-kg/") {
-        this.$f7router.navigate(data.data[0].Link);
+      if (data.data[0] && data.data[0].Link === "/bao-kg/") {
+        _this.$f7router.navigate(data.data[0].Link);
       }
     } catch (error) {
       console.log(error);
