@@ -107,6 +107,9 @@ export default class extends React.Component {
           await userService.readedNotification(dataPost);
         }
       }
+      if(data.data[0] && data.data[0].Link === "/bao-kg/") {
+        this.$f7router.navigate(data.data[0].Link);
+      }
     } catch (error) {
       console.log(error);
     }
