@@ -9,7 +9,7 @@ function ReportKGList({ onEdit, f7, selected }) {
   const queryClient = useQueryClient();
 
   const Member = getUser();
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, refetch } = useQuery({
     queryKey: ["MembersNoteKG", selected],
     queryFn: async () => {
       const startOfMonth = moment(selected)
@@ -52,6 +52,8 @@ function ReportKGList({ onEdit, f7, selected }) {
       );
     });
   };
+
+  window.KGReload = (fn) => refetch().then(() => fn && fn()).catch(er => console.log(er))
 
   return (
     <div>

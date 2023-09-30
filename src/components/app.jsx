@@ -1,5 +1,5 @@
 import React from "react";
-import { App, f7, View } from "framework7-react";
+import { App, View } from "framework7-react";
 
 import {
   app_request,
@@ -23,6 +23,8 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import DeviceHelpers from "../constants/DeviceHelpers";
 
 const queryClient = new QueryClient();
+
+window.timeOutForce = null;
 
 export default class extends React.Component {
   constructor() {
@@ -163,6 +165,16 @@ export default class extends React.Component {
     this.$f7.views.main.app.sheet.close();
   };
 
+  onAppForceIn = () => {
+    window.timeOutForce = setTimeout(() => {
+      CLOSE_APP();
+    }, 60 * 60 * 100);
+  };
+
+  onAppForceOut = () => {
+    if (window.timeOutForce) clearTimeout(window.timeOutForce);
+  };
+
   componentDidMount() {
     window.APP_READY = true;
     window.percent = 100;
@@ -174,6 +186,10 @@ export default class extends React.Component {
       this.notiCateProdID
     );
     document.body.addEventListener("noti_click.voucher_id", this.notiVoucher);
+    //
+    document.addEventListener("onAppForceIn", this.onAppForceIn);
+    document.addEventListener("onAppForceOut", this.onAppForceOut);
+    //
     window.ToBackBrowser = this.ToBackBrowser;
 
     const starCountRef = ref(database, "logout");
@@ -224,5 +240,8 @@ export default class extends React.Component {
       "noti_click.voucher_id",
       this.notiVoucher
     );
+    //
+    document.removeEventListener("onAppForceIn", this.onAppForceIn);
+    document.removeEventListener("onAppForceOut", this.onAppForceOut);
   }
 }

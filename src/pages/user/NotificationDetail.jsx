@@ -70,11 +70,21 @@ export default class extends React.Component {
   }
 
   componentDidMount() {
+    
     this.getDetialNoti();
   }
 
+
+  componentDidUpdate(prevProps, prevState) {
+    // console.log(this.$f7route)
+      if(prevState.data !== this.state.data) {
+        if (this.state.data && this.state.data.Link === "/bao-kg/") {
+          this.$f7router.navigate(this.state.data.Link);
+        }
+      }
+  }
+
   getDetialNoti = async () => {
-    let _this = this;
     const Id = this.$f7route.params.id;
     this.setState({
       isLoading: true,
@@ -107,9 +117,6 @@ export default class extends React.Component {
         if (!isExpected(data.data[0].Title)) {
           await userService.readedNotification(dataPost);
         }
-      }
-      if (data.data[0] && data.data[0].Link === "/bao-kg/") {
-        _this.$f7router.navigate(data.data[0].Link);
       }
     } catch (error) {
       console.log(error);
@@ -209,6 +216,7 @@ export default class extends React.Component {
       .catch((error) => console.log(error));
   };
 
+
   render() {
     const {
       isLoading,
@@ -219,6 +227,7 @@ export default class extends React.Component {
       show,
       btnLoadingReg,
     } = this.state;
+    
     return (
       <Page ptr onPtrRefresh={this.loadRefresh.bind(this)}>
         <Navbar>
