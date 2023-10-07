@@ -13,6 +13,7 @@ import routes from "../js/routes";
 import { NAME_APP } from "../constants/config";
 import {
   CLOSE_APP,
+  RELOAD_APP,
   REMOVE_BADGE,
   SEND_TOKEN_FIREBASE,
 } from "../constants/prom21";
@@ -167,8 +168,8 @@ export default class extends React.Component {
 
   onAppForceIn = () => {
     window.timeOutForce = setTimeout(() => {
-      CLOSE_APP();
-    }, 60 * 60 * 100);
+      RELOAD_APP();
+    },  30 * 60 * 100); //3 * 60 * 60 * 100
   };
 
   onAppForceOut = () => {

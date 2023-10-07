@@ -12,13 +12,11 @@ function ReportKGList({ onEdit, f7, selected }) {
   const { data, isLoading, refetch } = useQuery({
     queryKey: ["MembersNoteKG", selected],
     queryFn: async () => {
-      const startOfMonth = moment(selected)
-        .startOf("month")
-        .format("MM/DD/YYYY");
+      const startOfMonth = moment(selected).subtract(3, 'month').format("MM/DD/YYYY");
       const endOfMonth = moment(selected).endOf("month").format("MM/DD/YYYY");
       const { data } = await MemberAPI.listNoteKg({
         pi: 1,
-        ps: 10,
+        ps: 100,
         filter: {
           MemberID: Member?.ID,
           CreateDate: [startOfMonth, endOfMonth],
@@ -26,7 +24,6 @@ function ReportKGList({ onEdit, f7, selected }) {
       });
       return data?.list || [];
     },
-    onSuccess: (data) => {},
     enabled: Boolean(Member?.ID),
   });
 
@@ -56,7 +53,7 @@ function ReportKGList({ onEdit, f7, selected }) {
   window.KGReload = (fn) => refetch().then(() => fn && fn()).catch(er => console.log(er))
 
   return (
-    <div>
+    <div className="h-100">
       <div className="bg-warning text-white px-15px py-10px font-size-sm">
         Cân nặng sáng nay của bạn là bao nhiêu? Hãy nhập số cân sáng nay để
         chúng tôi hỗ trợ bạn kịp thời nhé.

@@ -17,7 +17,7 @@ export default class extends React.Component {
       isOpen: false,
       selected: new Date(),
       loading: false,
-      isZ: true
+      isZ: true,
     };
   }
 
@@ -57,26 +57,24 @@ export default class extends React.Component {
   };
 
   loadRefresh(done) {
-    if(window.KGReload) {
-      window.KGReload(done)
-    }
-    else {
-      done()
+    if (window.KGReload) {
+      window.KGReload(done);
+    } else {
+      done();
     }
   }
 
   onPageBeforeOut() {
     this.setState({
       isZ: false,
-    })
+    });
   }
 
   onPageBeforeIn() {
     this.setState({
       isZ: true,
-    })
+    });
   }
-
 
   render() {
     const { opened, initial, isOpen, selected, loading, isZ } = this.state;
@@ -95,21 +93,29 @@ export default class extends React.Component {
     };
 
     return (
-      <Page ptr className="bg-white" onPtrRefresh={this.loadRefresh.bind(this)} onPageBeforeOut={this.onPageBeforeOut.bind(this)} onPageBeforeIn={this.onPageBeforeIn.bind(this)}>
+      <Page
+        ptr
+        className="bg-white"
+        onPtrRefresh={this.loadRefresh.bind(this)}
+        onPageBeforeOut={this.onPageBeforeOut.bind(this)}
+        onPageBeforeIn={this.onPageBeforeIn.bind(this)}
+      >
         <Navbar className={isZ && "z-20"}>
           <div className="page-navbar">
             <div className="page-navbar__back">
-              <Link onClick={() => {
-                if (
-                  this.$f7router.history[
-                    this.$f7router.history.length - 2
-                  ]?.indexOf("/notification/") > -1
-                ) {
-                  this.$f7router.navigate(`/notification/`);
-                } else {
-                  this.$f7router.back();
-                }
-              }}>
+              <Link
+                onClick={() => {
+                  if (
+                    this.$f7router.history[
+                      this.$f7router.history.length - 2
+                    ]?.indexOf("/notification/") > -1
+                  ) {
+                    this.$f7router.navigate(`/notification/`);
+                  } else {
+                    this.$f7router.back();
+                  }
+                }}
+              >
                 <i className="las la-arrow-left"></i>
               </Link>
             </div>

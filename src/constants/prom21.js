@@ -115,6 +115,14 @@ export const CLOSE_APP = () => {
     return t.prom("FINISH_ACTIVITY");
   }
 };
+
+export const RELOAD_APP = () => {
+  var t = window.app21 || {};
+  if (typeof t.prom !== "undefined") {
+    return t.prom("REBOOT");
+  }
+};
+
 export const HIDE_STATUSBAR = () => {
   var t = window.app21 || {};
   if (typeof t.prom !== "undefined") {

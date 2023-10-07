@@ -245,23 +245,26 @@ export default class extends React.Component {
         <div
           className={`page-wrapper page-login ${iOS() && "page-login-iphone"}`}
         >
-          <div className="page-login__back">
-            <Link
-              onClick={() => {
-                if (
-                  this.$f7router.history[
-                    this.$f7router.history.length - 2
-                  ]?.indexOf("/profile/") > -1
-                ) {
-                  this.$f7router.navigate(`/`);
-                } else {
-                  this.$f7router.back();
-                }
-              }}
-            >
-              <i className="las la-arrow-left"></i>
-            </Link>
-          </div>
+          {!window?.GlobalConfig?.APP?.OnlyStaff && (
+            <div className="page-login__back">
+              <Link
+                onClick={() => {
+                  if (
+                    this.$f7router.history[
+                      this.$f7router.history.length - 2
+                    ]?.indexOf("/profile/") > -1
+                  ) {
+                    this.$f7router.navigate(`/`);
+                  } else {
+                    this.$f7router.back();
+                  }
+                }}
+              >
+                <i className="las la-arrow-left"></i>
+              </Link>
+            </div>
+          )}
+
           <div className={`page-login__content ${this.getClassStyle()}`}>
             <div className="page-login__logo">
               <div className="logo">
@@ -326,27 +329,34 @@ export default class extends React.Component {
                   >
                     <span>Đăng nhập</span>
                   </button>
-                  <div className="or">
-                    <button
-                      className="btn-qr"
-                      type="button"
-                      onClick={() => this.openQRCode()}
-                    >
-                      <i className="las la-qrcode"></i>
-                    </button>
-                  </div>
-                  <div className="forgot">
-                    <Link href="/forgot/">Quên mật khẩu ?</Link>
-                  </div>
+                  {!window?.GlobalConfig?.APP?.OnlyStaff && (
+                    <>
+                      <div className="or">
+                        <button
+                          className="btn-qr"
+                          type="button"
+                          onClick={() => this.openQRCode()}
+                        >
+                          <i className="las la-qrcode"></i>
+                        </button>
+                      </div>
+                      <div className="forgot">
+                        <Link href="/forgot/">Quên mật khẩu ?</Link>
+                      </div>
+                    </>
+                  )}
                 </div>
               </form>
             </div>
           </div>
-          <div className="page-login__alert">
-            <div className="ft">
-              Bạn chưa có tài khoản ? <Link href="/registration/">Đăng ký</Link>
+          {!window?.GlobalConfig?.APP?.OnlyStaff && (
+            <div className="page-login__alert">
+              <div className="ft">
+                Bạn chưa có tài khoản ?{" "}
+                <Link href="/registration/">Đăng ký</Link>
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </Page>
     );

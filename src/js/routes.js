@@ -74,6 +74,9 @@ const checkRouterHome = () => {
   const infoUser = getUser();
 
   const ACC_TYPE = infoUser && infoUser.acc_type;
+  if(window?.GlobalConfig?.APP?.OnlyStaff && !infoUser) {
+    return LoginPage
+  }
   if (ACC_TYPE === "M") {
     return HomeIndex;
   }
