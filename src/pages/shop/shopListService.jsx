@@ -22,6 +22,11 @@ import CategoriesList from "./components/CategoriesList/CategoriesList/Categorie
 import ShopListServiceItem from "./shopListServiceItem";
 import NoProduct from "../../assets/images/no-product.png";
 import clsx from "clsx";
+import axios from "axios";
+
+const CancelToken = axios.CancelToken;
+let cancel;
+
 
 export default class extends React.Component {
   constructor(props) {
@@ -45,6 +50,7 @@ export default class extends React.Component {
     this.delayedCallback = _.debounce(this.inputCallback, 400);
   }
   getService = (id) => {
+    if (cancel !== undefined) cancel();
     var $$ = this.Dom7;
     var container = $$(".page-content");
     container.scrollTop(0, 300);
@@ -55,7 +61,17 @@ export default class extends React.Component {
     this.setState({
       isLoading: true,
     });
-    ShopDataService.getServiceParent(CateID, stockid, Pi, window?.GlobalConfig?.APP?.UIBase ? 6 : 2, 1)
+    ShopDataService.getServiceParentCancel(
+      CateID,
+      stockid,
+      Pi,
+      window?.GlobalConfig?.APP?.UIBase ? 6 : 2,
+      1,
+      "",
+      {
+        cancelToken: new CancelToken(c => cancel = c),
+      }
+    )
       .then(({ data }) => {
         const { lst, pcount, pi } = data;
         this.setState({
@@ -65,7 +81,9 @@ export default class extends React.Component {
           Pi: pi,
         });
       })
-      .catch((e) => console.log(e));
+      .catch((e) => {
+        console.log(e)
+      });
   };
 
   getTitleCate = (id) => {

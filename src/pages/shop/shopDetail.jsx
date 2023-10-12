@@ -447,7 +447,6 @@ export default class extends React.Component {
       copied,
       OriginalCurrent,
     } = this.state;
-
     return (
       <Page
         onPageBeforeOut={this.onPageBeforeOut}
@@ -624,7 +623,8 @@ export default class extends React.Component {
                   {arrRelProds && arrRelProds.length > 0
                     ? this.probablyHTML()
                     : ""}
-                  {window.GlobalConfig?.APP?.AFF && aff &&
+                  {window.GlobalConfig?.APP?.AFF &&
+                    aff &&
                     aff.aff_link &&
                     aff.aff_value && (
                       <li className="content">
@@ -910,22 +910,63 @@ export default class extends React.Component {
 
         <Toolbar tabbar position="bottom">
           <div className="page-toolbar">
-            <div className="page-toolbar__order">
-              <button
-                className={`page-btn-order btn-submit-order ${
-                  statusLoading ? "loading" : ""
-                } ${arrProductCurrent.IsDisplayPrice === 0 && "btn-no-click"}`}
-                onClick={() => this.openSheet()}
-              >
-                <span>Đặt hàng</span>
-                <div className="loading-icon">
-                  <div className="loading-icon__item item-1"></div>
-                  <div className="loading-icon__item item-2"></div>
-                  <div className="loading-icon__item item-3"></div>
-                  <div className="loading-icon__item item-4"></div>
-                </div>
-              </button>
-            </div>
+            {arrProduct?.IsService === 1 &&
+            arrCombos &&
+            arrCombos.length === 1 ? (
+              <div className="page-toolbar__order d-flex">
+                <button
+                  className={`page-btn-order btn-submit-order bg-success ${
+                    statusLoading ? "loading" : ""
+                  } ${
+                    arrProductCurrent.IsDisplayPrice === 0 && "btn-no-click"
+                  }`}
+                  onClick={() =>
+                    this.$f7.views.main.router.navigate(
+                      getUser()
+                        ? `/schedule/?SelectedTitle=${arrCombos[0].Product.Title}&SelectedId=${arrCombos[0].Product.ID}`
+                        : `/login/`
+                    )
+                  }
+                >
+                  <span>Đặt lịch ngay</span>
+                </button>
+                <button
+                  className={`page-btn-order btn-submit-order ${
+                    statusLoading ? "loading" : ""
+                  } ${
+                    arrProductCurrent.IsDisplayPrice === 0 && "btn-no-click"
+                  }`}
+                  onClick={() => this.openSheet()}
+                >
+                  <span>Đặt hàng</span>
+                  <div className="loading-icon">
+                    <div className="loading-icon__item item-1"></div>
+                    <div className="loading-icon__item item-2"></div>
+                    <div className="loading-icon__item item-3"></div>
+                    <div className="loading-icon__item item-4"></div>
+                  </div>
+                </button>
+              </div>
+            ) : (
+              <div className="page-toolbar__order">
+                <button
+                  className={`page-btn-order btn-submit-order ${
+                    statusLoading ? "loading" : ""
+                  } ${
+                    arrProductCurrent.IsDisplayPrice === 0 && "btn-no-click"
+                  }`}
+                  onClick={() => this.openSheet()}
+                >
+                  <span>Đặt hàng</span>
+                  <div className="loading-icon">
+                    <div className="loading-icon__item item-1"></div>
+                    <div className="loading-icon__item item-2"></div>
+                    <div className="loading-icon__item item-3"></div>
+                    <div className="loading-icon__item item-4"></div>
+                  </div>
+                </button>
+              </div>
+            )}
           </div>
         </Toolbar>
 

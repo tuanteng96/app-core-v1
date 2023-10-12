@@ -1,4 +1,6 @@
-import { getToken } from "../constants/user";
+import {
+    getToken
+} from "../constants/user";
 import http from "../service/http-common";
 
 class ShopDataService {
@@ -21,7 +23,10 @@ class ShopDataService {
         return http.get(`/api/v3/prod?cmd=getid&id=${id}&mid=${userId}&token=${getToken()}`);
     }
     getServiceParent(id, stock, pi, ps, ignorepublic, original) {
-            return http.get(`/api/v3/app2?get=sv&cid=${id}&token=${getToken()}&stockid=${stock}&takes=Detail,Desc&pi=${pi}&ps=${ps}${ignorepublic ? `&ignorepublic=${ignorepublic}` : ""}${original? `&rootIds=${original}` : ""}`);
+        return http.get(`/api/v3/app2?get=sv&cid=${id}&token=${getToken()}&stockid=${stock}&takes=Detail,Desc&pi=${pi}&ps=${ps}${ignorepublic ? `&ignorepublic=${ignorepublic}` : ""}${original? `&rootIds=${original}` : ""}`);
+    }
+    getServiceParentCancel(id, stock, pi, ps, ignorepublic, original, cancelToken) {
+        return http.get(`/api/v3/app2?get=sv&cid=${id}&token=${getToken()}&stockid=${stock}&takes=Detail,Desc&pi=${pi}&ps=${ps}${ignorepublic ? `&ignorepublic=${ignorepublic}` : ""}${original? `&rootIds=${original}` : ""}`, cancelToken);
     }
     getServiceParentID(id, stockid) {
         return http.get(`/app/index.aspx?cmd=service_parentid&token=${getToken()}&id=${id}&stockid=${stockid}`);
