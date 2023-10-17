@@ -66,7 +66,7 @@ export default class NewsList extends React.Component {
         <div className="page-news__list">
           <div className="page-news__list-head">
             <h5>
-              <Link href="/news-list/">
+              <Link href={`/news-list/${NewTitle && NewTitle.length > 0 && NewTitle[0].ID}`}>
                 {NewTitle && NewTitle.length > 0 && NewTitle[0].Title}{" "}
                 <i className="las la-angle-right"></i>
               </Link>

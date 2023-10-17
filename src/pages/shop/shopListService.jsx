@@ -23,10 +23,10 @@ import ShopListServiceItem from "./shopListServiceItem";
 import NoProduct from "../../assets/images/no-product.png";
 import clsx from "clsx";
 import axios from "axios";
+import PickerDetail from "./components/PickerDetail";
 
 const CancelToken = axios.CancelToken;
 let cancel;
-
 
 export default class extends React.Component {
   constructor(props) {
@@ -69,7 +69,7 @@ export default class extends React.Component {
       1,
       "",
       {
-        cancelToken: new CancelToken(c => cancel = c),
+        cancelToken: new CancelToken((c) => (cancel = c)),
       }
     )
       .then(({ data }) => {
@@ -82,7 +82,7 @@ export default class extends React.Component {
         });
       })
       .catch((e) => {
-        console.log(e)
+        console.log(e);
       });
   };
 
@@ -359,15 +359,15 @@ export default class extends React.Component {
                                       {ReactHtmlParser(item.root.Desc)}
                                     </div>
                                   )}
-                                  <Button
-                                    fill
-                                    sheetOpen={`.demo-sheet-${item.root.ID}`}
-                                    className="show-more"
-                                  >
-                                    Chi tiết{" "}
-                                    <i className="las la-angle-right"></i>
-                                  </Button>
-                                  <Sheet
+                                  <PickerDetail item={item}>
+                                    {({ open }) => (
+                                      <Button fill className="show-more" onClick={open}>
+                                        Chi tiết{" "}
+                                        <i className="las la-angle-right"></i>
+                                      </Button>
+                                    )}
+                                  </PickerDetail>
+                                  {/* <Sheet
                                     opened={Number(idOpen) === item.root.ID}
                                     className={`demo-sheet-${item.root.ID} sheet-detail`}
                                     style={{
@@ -401,7 +401,7 @@ export default class extends React.Component {
                                         </div>
                                       </div>
                                     </PageContent>
-                                  </Sheet>
+                                  </Sheet> */}
                                 </div>
                               ) : (
                                 ""

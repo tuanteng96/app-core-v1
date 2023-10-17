@@ -130,6 +130,10 @@ var routes = [
     asyncComponent: () => NewsListPage,
   },
   {
+    path: "/news-list/:id",
+    asyncComponent: () => NewsListPage,
+  },
+  {
     path: "/news/detail/:postId/",
     asyncComponent: () => NewsDetailPage,
   },

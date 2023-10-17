@@ -218,7 +218,13 @@ export default class extends React.Component {
                   ) {
                     this.$f7router.navigate(`/`);
                   } else {
-                    this.$f7router.back();
+                    this.$f7router.back({
+                      url: this.$f7router.history[
+                        this.$f7router.history.length - 1
+                      ],
+                      force: true,
+                      ignoreCache: true,
+                    });
                   }
                 }}
               >
@@ -271,7 +277,9 @@ export default class extends React.Component {
               <React.Fragment>
                 {arrNoti && arrNoti.length === 0 && (
                   <div className="no-notification">
-                    <img src={`${SERVER_APP}/app2021/images/no-notification.png`} />
+                    <img
+                      src={`${SERVER_APP}/app2021/images/no-notification.png`}
+                    />
                   </div>
                 )}
                 <ul className="page-noti__list">

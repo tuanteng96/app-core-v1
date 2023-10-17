@@ -61,7 +61,8 @@ export default class extends React.Component {
     try {
       const { data: result } = await ShopDataService.getDetailFull(
         cateID,
-        userId
+        userId,
+        getStockIDStorage() || 0
       );
       const resultRes = result.data;
       const { images, combos } = resultRes;
@@ -598,7 +599,8 @@ export default class extends React.Component {
                       <div className="content-post content-post-combo">
                         <div className="content-combo">
                           {arrCombos.map((item, index) => (
-                            <Link href={`/shop/detail/${item.Id}/`} key={index}>
+                            <Link key={index}>
+                              {/* href={`/shop/detail/${item.Id}/`} */}
                               <div className="img">
                                 <img
                                   src={

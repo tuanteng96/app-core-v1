@@ -177,6 +177,7 @@ export default class extends React.Component {
   };
 
   componentDidMount() {
+    window.Dialog = this.$f7.dialog
     window.APP_READY = true;
     window.percent = 100;
     document.body.addEventListener("noti_click.go_noti", this.notiDefault);

@@ -72,6 +72,7 @@ export default class ListImage extends React.Component {
       slidesToShow: 1,
       centerPadding: "20px",
       variableWidth: true,
+      slidesToScroll: 5,
     };
     
     if (arrPhotoCustomer && arrPhotoCustomer.length > 0) {

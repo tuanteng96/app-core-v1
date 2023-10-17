@@ -909,18 +909,35 @@ export default class extends React.Component {
                           Mã <span>{item.Code}</span>
                         </div>
                         <div className="coupon-value">
-                          Ưu đãi
-                          <span>
-                            {item.Discount > 100
-                              ? `${formatPriceVietnamese(item.Discount)} Vnd`
-                              : `${item.Discount} %`}
-                          </span>
+                          {item?.ValueType === 2 ? (
+                            <>
+                              Đồng giá{" "}
+                              <span>
+                                {formatPriceVietnamese(item.Discount)} VND
+                              </span>
+                            </>
+                          ) : (
+                            <>
+                              Ưu đãi
+                              <span>
+                                {item.Discount > 100
+                                  ? `${formatPriceVietnamese(
+                                      item.Discount
+                                    )} Vnd`
+                                  : `${item.Discount} %`}
+                              </span>
+                            </>
+                          )}
                         </div>
                         <div className="coupon-end">
                           HSD :{" "}
                           {item.EndDate === null
                             ? "Không giới hạn"
-                            : `Còn ${checkDateDiff(item.EndDate)} ngày`}
+                            : `Còn ${
+                                checkDateDiff(item.EndDate) === 0
+                                  ? "1"
+                                  : checkDateDiff(item.EndDate)
+                              } ngày`}
                         </div>
                       </div>
                       <div

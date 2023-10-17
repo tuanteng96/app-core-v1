@@ -26,11 +26,6 @@ export default class quickAction extends React.Component {
             response.data.data &&
             response.data.data.length > 1 &&
             response.data.data[1].ValueText,
-          mess:
-            response.data.data &&
-            response.data.data.length > 0 &&
-            response.data.data[0].ValueText &&
-            `https://m.me/${response.data.data[0].ValueText}`,
           zalo:
             response.data.data &&
             response.data.data.length > 2 &&

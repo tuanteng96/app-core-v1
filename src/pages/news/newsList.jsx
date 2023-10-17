@@ -18,7 +18,7 @@ export default class extends React.Component {
   }
 
   componentDidMount() {
-    NewsDataService.getNewsIdCate("835")
+    NewsDataService.getNewsIdCate(this.$f7route?.params?.id || "835")
       .then((response) => {
         const arrNews = response.data.data;
         this.setState({
@@ -33,7 +33,7 @@ export default class extends React.Component {
   }
 
   getInfoCate = () => {
-    NewsDataService.getInfoCate("835")
+    NewsDataService.getInfoCate(this.$f7route?.params?.id || "835")
       .then(({ data }) => {
         this.setState({ NewTitle: data.data });
       })
@@ -43,7 +43,7 @@ export default class extends React.Component {
   };
 
   loadRefresh(done) {
-    NewsDataService.getNewsIdCate("835")
+    NewsDataService.getNewsIdCate(this.$f7route?.params?.id || "835")
       .then((response) => {
         setTimeout(() => {
           const arrNews = response.data.data;

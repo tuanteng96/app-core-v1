@@ -142,12 +142,20 @@ export default class extends React.Component {
                             <span>{item.ma}</span>
                           </div>
                           <div className="voucher-value">
-                            Giảm tối đa{" "}
-                            {item.gia_tri.Phan_tram > 0
-                              ? `${item.gia_tri.Phan_tram}%`
-                              : `${formatPriceVietnamese(
-                                  item.gia_tri.Tien
-                                )} VND`}
+                            {item?.Voucher?.ValueType === 2 ? (
+                              <>Đồng giá {formatPriceVietnamese(
+                                item.gia_tri.Tien
+                              )} VND</>
+                            ) : (
+                              <>
+                                Giảm tối đa{" "}
+                                {item.gia_tri.Phan_tram > 0
+                                  ? `${item.gia_tri.Phan_tram}%`
+                                  : `${formatPriceVietnamese(
+                                      item.gia_tri.Tien
+                                    )} VND`}
+                              </>
+                            )}
                           </div>
                           <ul>
                             <li>
@@ -156,7 +164,7 @@ export default class extends React.Component {
                                 "Không giới hạn"
                               ) : (
                                 <React.Fragment>
-                                  Còn <b>{checkDateDiff(item.ngay.To)}</b> ngày
+                                  Còn <b>{checkDateDiff(item.ngay.To) === 0 ? "1" : checkDateDiff(item.ngay.To)}</b> ngày
                                 </React.Fragment>
                               )}
                             </li>
@@ -207,7 +215,7 @@ export default class extends React.Component {
                                   </div>
                                   <div className="item-sub">
                                     <div className="item-sub__box">
-                                      <h5>Giá trị giảm giá</h5>
+                                      <h5>{item?.Voucher?.ValueType === 2 ? "Đồng giá" : "Giá trị giảm giá" }</h5>
                                       <div className="price">
                                         {item.gia_tri.Phan_tram > 0
                                           ? `${item.gia_tri.Phan_tram}%`
@@ -244,7 +252,9 @@ export default class extends React.Component {
                                       <div className="price">
                                         {item?.so_luong_mua_tung_san_pham ||
                                           "Không giới hạn"}
-                                        <span style={{padding: "0 3px"}}>/</span>
+                                        <span style={{ padding: "0 3px" }}>
+                                          /
+                                        </span>
                                         {item?.so_luong_mua_tung_don ||
                                           "Không giới hạn"}
                                       </div>
