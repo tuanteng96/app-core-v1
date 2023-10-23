@@ -932,22 +932,24 @@ export default class extends React.Component {
                 >
                   <span>Đặt lịch ngay</span>
                 </button>
-                <button
-                  className={`page-btn-order btn-submit-order ${
-                    statusLoading ? "loading" : ""
-                  } ${
-                    arrProductCurrent.IsDisplayPrice === 0 && "btn-no-click"
-                  }`}
-                  onClick={() => this.openSheet()}
-                >
-                  <span>Đặt hàng</span>
-                  <div className="loading-icon">
-                    <div className="loading-icon__item item-1"></div>
-                    <div className="loading-icon__item item-2"></div>
-                    <div className="loading-icon__item item-3"></div>
-                    <div className="loading-icon__item item-4"></div>
-                  </div>
-                </button>
+                {!window?.GlobalConfig?.APP?.Services?.HideButtonOrder && (
+                  <button
+                    className={`page-btn-order btn-submit-order ${
+                      statusLoading ? "loading" : ""
+                    } ${
+                      arrProductCurrent.IsDisplayPrice === 0 && "btn-no-click"
+                    }`}
+                    onClick={() => this.openSheet()}
+                  >
+                    <span>Đặt hàng</span>
+                    <div className="loading-icon">
+                      <div className="loading-icon__item item-1"></div>
+                      <div className="loading-icon__item item-2"></div>
+                      <div className="loading-icon__item item-3"></div>
+                      <div className="loading-icon__item item-4"></div>
+                    </div>
+                  </button>
+                )}
               </div>
             ) : (
               <div className="page-toolbar__order">
