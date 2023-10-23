@@ -143,9 +143,10 @@ export default class extends React.Component {
                           </div>
                           <div className="voucher-value">
                             {item?.Voucher?.ValueType === 2 ? (
-                              <>Đồng giá {formatPriceVietnamese(
-                                item.gia_tri.Tien
-                              )} VND</>
+                              <>
+                                Đồng giá{" "}
+                                {formatPriceVietnamese(item.gia_tri.Tien)} VND
+                              </>
                             ) : (
                               <>
                                 Giảm tối đa{" "}
@@ -164,7 +165,13 @@ export default class extends React.Component {
                                 "Không giới hạn"
                               ) : (
                                 <React.Fragment>
-                                  Còn <b>{checkDateDiff(item.ngay.To) === 0 ? "1" : checkDateDiff(item.ngay.To)}</b> ngày
+                                  Còn{" "}
+                                  <b>
+                                    {checkDateDiff(item.ngay.To) === 0
+                                      ? "1"
+                                      : checkDateDiff(item.ngay.To)}
+                                  </b>{" "}
+                                  ngày
                                 </React.Fragment>
                               )}
                             </li>
@@ -215,7 +222,11 @@ export default class extends React.Component {
                                   </div>
                                   <div className="item-sub">
                                     <div className="item-sub__box">
-                                      <h5>{item?.Voucher?.ValueType === 2 ? "Đồng giá" : "Giá trị giảm giá" }</h5>
+                                      <h5>
+                                        {item?.Voucher?.ValueType === 2
+                                          ? "Đồng giá"
+                                          : "Giá trị giảm giá"}
+                                      </h5>
                                       <div className="price">
                                         {item.gia_tri.Phan_tram > 0
                                           ? `${item.gia_tri.Phan_tram}%`
@@ -364,6 +375,14 @@ export default class extends React.Component {
                                         </div>
                                       </div>
                                     )}
+                                  {item.desc && (
+                                    <div className="item-sub">
+                                      <div className="item-sub__box">
+                                        <h5>Mô tả</h5>
+                                        <div className="price">{item.desc}</div>
+                                      </div>
+                                    </div>
+                                  )}
                                 </div>
                               </div>
                             </div>

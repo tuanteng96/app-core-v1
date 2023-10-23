@@ -89,6 +89,10 @@ export default class extends React.Component {
       isParams: true,
       options: [],
       StaffSelected: "",
+      AmountPeople: {
+        label: "1 khách",
+        value: 1,
+      },
     };
   }
 
@@ -128,6 +132,24 @@ export default class extends React.Component {
       BookDataService.getBookId(ID)
         .then(({ data }) => {
           const currentBook = data.data;
+          let serviceNotes = currentBook.Desc;
+          let AmountPeople = {
+            label: "1 khách",
+            value: 1,
+          };
+          if (
+            currentBook.Desc &&
+            currentBook.Desc.includes("Số lượng khách:")
+          ) {
+            let descSplit = currentBook.Desc.split("\n");
+            let SL = Number(descSplit[0].match(/\d+/)[0]);
+
+            serviceNotes = descSplit[1].replaceAll("Ghi chú: ", "")
+            AmountPeople = {
+              label: SL + " khách",
+              value: SL,
+            }
+          }
           if (currentBook) {
             this.setState({
               DateTimeBook: {
@@ -138,8 +160,9 @@ export default class extends React.Component {
                 AtHome: currentBook.AtHome,
                 isOther: this.isOther(currentBook.BookDate),
               },
-              serviceNote: currentBook.Desc,
+              serviceNote: serviceNotes,
               selectedService: currentBook.Roots,
+              AmountPeople
             });
           }
 
@@ -228,8 +251,13 @@ export default class extends React.Component {
   };
 
   submitBooks = () => {
-    const { DateTimeBook, serviceNote, selectedService, StaffSelected } =
-      this.state;
+    const {
+      DateTimeBook,
+      serviceNote,
+      selectedService,
+      StaffSelected,
+      AmountPeople,
+    } = this.state;
     const infoUser = getUser();
     const self = this;
     if (!infoUser) {
@@ -252,7 +280,10 @@ export default class extends React.Component {
           MemberID: infoUser.ID,
           RootIdS: selectedService.map((item) => item.ID).toString(),
           BookDate: date,
-          Desc: serviceNote,
+          Desc:
+            window.GlobalConfig?.APP?.SL_khach && AmountPeople
+              ? `Số lượng khách: ${AmountPeople.value}. \nGhi chú: ${serviceNote}`
+              : serviceNote,
           StockID: DateTimeBook.stock || 0,
           AtHome: DateTimeBook.AtHome,
           UserServiceIDs: StaffSelected ? StaffSelected.value : "",
@@ -422,6 +453,7 @@ export default class extends React.Component {
       serviceNote,
       options,
       StaffSelected,
+      AmountPeople,
     } = this.state;
     return (
       <Page
@@ -652,6 +684,33 @@ export default class extends React.Component {
                         this.setState({ StaffSelected: value })
                       }
                       components={{ Option: CustomOption }}
+                      blurInputOnSelect={true}
+                      noOptionsMessage={() => "Không có nhân viên."}
+                      //menuIsOpen
+                      //menuPosition="fixed"
+                    />
+                  </div>
+                )}
+                {window.GlobalConfig?.APP?.SL_khach && (
+                  <div className="sheet-service-body__content">
+                    <div className="fw-500 mb-5px font-size-xs">
+                      Số lượng khách
+                    </div>
+                    <Select
+                      //isSearchable
+                      isClearable
+                      classNamePrefix="select"
+                      options={Array(10)
+                        .fill()
+                        .map((_, x) => ({
+                          label: x + 1 + " khách",
+                          value: x + 1,
+                        }))}
+                      placeholder="Chọn số khách"
+                      value={AmountPeople}
+                      onChange={(value) =>
+                        this.setState({ AmountPeople: value })
+                      }
                       blurInputOnSelect={true}
                       noOptionsMessage={() => "Không có nhân viên."}
                       //menuIsOpen
