@@ -369,7 +369,7 @@ export default class employeeStatistical extends React.Component {
                         formatPriceVietnamese(dataSalary.LUONG_CO_BAN)}
                     </div>
                   </div>
-                  <div className="tr">
+                  {/* <div className="tr">
                     <div className="td w-1">2</div>
                     <div
                       className="td w-2"
@@ -388,7 +388,7 @@ export default class employeeStatistical extends React.Component {
                           this.numTotal(dataSalary?.NGAY_NGHI)
                         )}
                     </div>
-                  </div>
+                  </div> */}
                   <div className="tr">
                     <div className="td w-1">3</div>
                     <div className="td w-2">Phụ cấp</div>
