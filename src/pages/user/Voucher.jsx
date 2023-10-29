@@ -379,7 +379,7 @@ export default class extends React.Component {
                                     <div className="item-sub">
                                       <div className="item-sub__box">
                                         <h5>Mô tả</h5>
-                                        <div className="price">{item?.Voucher?.Desc}</div>
+                                        <div className="price">{item?.Voucher?.Desc.replaceAll("\n", "<br />")}</div>
                                       </div>
                                     </div>
                                   )}

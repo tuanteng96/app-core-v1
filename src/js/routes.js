@@ -29,7 +29,7 @@ import DetailProfilePage from "../pages/user/DetailProfile";
 import CardServicePage from "../pages/user/cardService"; //Thẻ dịch vụ
 import SchedulePage from "../pages/user/Schedule"; //Đặt lịch
 import ScheduleManagePage from "../pages/user/SchedulesManage"; // Quản lí đặt lịch
-import VoucherPage from "../pages/user/voucher"; // Mã giảm giá
+import VoucherPage from "../pages/user/Voucher"; // Mã giảm giá
 import WalletPage from "../pages/user/Wallet"; // Ví điện tử
 import DiaryPage from "../pages/user/Diary"; // Nhật ký
 import RatingListPage from "../pages/user/RatingList";
