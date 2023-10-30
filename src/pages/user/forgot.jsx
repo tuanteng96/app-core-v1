@@ -112,6 +112,9 @@ export default class extends React.Component {
           if (data.error === "FORGET_METHOD_OVER_SECTION") {
             TextErr = "Vượt quá số lượng đổi mật khẩu trong ngày.";
           }
+          if(data.error === "PHONE_NOT_REG") {
+            TextErr = "Số điện thoại chưa được đăng ký."
+          }
           toast.error(TextErr, {
             position: toast.POSITION.TOP_LEFT,
             autoClose: 3000,
