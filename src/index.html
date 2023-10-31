@@ -44,6 +44,11 @@
                     document.documentElement.style.setProperty(key, data.APP.Css[key]);
                 }
             }
+            if(data.APP.FontSize && data.APP.FontSize.length > 0) {
+                for (let key of data.APP.FontSize) {
+                    document.documentElement.style.setProperty(key.name, key.size);
+                }
+            }
             window.GlobalConfig = data;
         });
     </script>

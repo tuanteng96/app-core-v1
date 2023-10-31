@@ -76,7 +76,7 @@
             }
             h3 {
                 margin: 8px 0 10px 0;
-                font-size: 18px;
+                font-size: var(--font-size-xl, $size-xl);
                 text-transform: capitalize;
             }
             ul {
@@ -86,7 +86,7 @@
                         span {
                             position: relative;
                             color: #00c851;
-                            font-size: 12px;
+                            font-size: var(--font-size-base, $size-base);
                             font-weight: 400;
                             padding-left: 10px;
                             font-weight: 300;
@@ -104,7 +104,7 @@
                     }
                     &.address,
                     &.phone {
-                        font-size: 14px;
+                        font-size: var(--font-size-base, $size-base);
                         font-weight: 500;
                         line-height: 20px;
                         i {

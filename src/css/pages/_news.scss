@@ -101,7 +101,7 @@
             margin-bottom: 14px;
             h5 {
                 margin: 0;
-                font-size: 15px;
+                font-size: var(--font-size-xl, $size-lg);
                 text-transform: uppercase;
                 a {
                     color: #000;
@@ -128,7 +128,7 @@
                 }
                 h6 {
                     margin: 0 0 0 0;
-                    font-size: 15px;
+                    font-size: var(--font-size-lg, $size-medium);
                     color: #000;
                     font-weight: 600;
                     @include cut-text-to(2);
@@ -136,7 +136,6 @@
                 .desc {
                     margin-top: 8px;
                     color: $color-gray-app;
-                    font-size: 13px;
                     line-height: 20px;
                     p {
                         margin: 0;
@@ -182,7 +181,10 @@
             text-align: justify;
             background: $white;
             line-height: 24px;
-            font-size: 15px;
+            font-size: var(--font-size-lg, $size-medium);
+            h1, h2, h3, h4, h5 {
+                line-height: 32px;
+            }
             blockquote {
                 background: #f1f1f1;
                 margin: 0;

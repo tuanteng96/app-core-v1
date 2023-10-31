@@ -5,11 +5,12 @@
             border-bottom: 1px solid #f1f1f1;
             background: $white;
             padding: 12px 0;
+            font-size: var(--font-size-lg, $size-medium);
             &.title {
                 h5 {
                     margin: 0;
                     text-align: center;
-                    font-size: 15px;
+                    font-size: var(--font-size-lg, $size-medium);
                     text-transform: uppercase
                 }
             }
@@ -25,7 +26,7 @@
             label {
                 text-align: center;
                 display: block;
-                font-size: 15px;
+                font-size: var(--font-size-base, $size-base);
                 font-weight: 500;
                 i {
                     margin-left: 4px;

@@ -19,7 +19,7 @@
                         padding-left: 4px;
                         font-weight: 500;
                         line-height: 20px;
-                        font-size: 14px;
+                        font-size: var(--font-size-base, $size-base);
                         color: $white;
                     }
                     svg {
@@ -75,12 +75,13 @@
                 display: flex;
                 align-items: center;
                 z-index: 1;
-                line-height: 36px;
+                line-height: 40px;
                 padding: 0px 12px;
                 background-color: rgb(255, 255, 255);
                 border-radius: 3px;
                 transition-duration: 0.3s;
                 box-sizing: border-box;
+                
                 button {
                     width: 25px;
                     height: 25px;
@@ -91,12 +92,13 @@
                 }
                 input {
                     border: 0px;
-                    height: 36px;
-                    line-height: 36px;
+                    height: 40px;
+                    line-height: 40px;
                     margin: 0px 0px 0px 8px;
                     outline: 0px;
                     width: 100%;
                     padding: 0px;
+                    font-size: var(--font-size-base, $size-base);
                 }
             }
             &-slide {
@@ -121,7 +123,7 @@
                     .text {
                         @include cut-text();
                         color: $black;
-                        font-size: 12px;
+                        font-size: var(--font-size-medium, $size-xs);
                         font-weight: 500;
                         line-height: 20px;
                         padding-top: 8px;
@@ -136,8 +138,9 @@
         background: $white;
         .title {
             font-weight: 600;
+            text-transform: uppercase;
             margin-bottom: 10px;
-            font-size: 15px;
+            font-size: var(--font-size-xl, $size-lg);
         }
         .box {
             border-radius: 6px;
@@ -151,7 +154,7 @@
             span {
                 text-transform: uppercase;
                 font-weight: 600;
-                font-size: 12px;
+                font-size: var(--font-size-base, $size-base);
                 &:first-child {
                     color: $color-app;
                 }
@@ -237,7 +240,7 @@
             padding: 15px 15px 14px 15px;
             h5 {
                 margin: 0;
-                font-size: 15px;
+                font-size: var(--font-size-xl, $size-lg);
                 text-transform: uppercase;
                 a {
                     color: #000;
@@ -262,7 +265,7 @@
                 }
                 .page-shop__list-text {
                     h3 {
-                        font-size: 13px;
+                        font-size: var(--font-size-base, $size-base);
                     }
                 }
             }
@@ -414,6 +417,7 @@
         &__title {
             font-weight: 600;
             color: #0e3d60;
+            font-size: var(--font-size-medium,$size-medium);
         }
         &__sub {
             color: #821e2c;

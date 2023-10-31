@@ -89,17 +89,18 @@
                         h3 {
                             margin: 0;
                             color: $white;
-                            font-size: 20px;
+                            font-size: var(--font-size-xxl, $size-xxl);
                             font-weight: 500;
                             text-transform: uppercase;
                         }
-                        &-desc {
+                        &-desc,
+                        &-desc p {
                             color: $white;
                             text-align: center;
                             font-weight: 300;
                             line-height: 22px;
                             margin-top: 10px;
-                            font-size: 14px;
+                            font-size: var(--font-size-medium, $size-base);
                             @include cut-text-to(2);
                             p {
                                 margin: 0;
@@ -145,7 +146,7 @@
             position: relative;
             box-sizing: border-box;
             h3 {
-                font-size: 15px;
+                font-size: var(--font-size-base, $size-base);
                 font-weight: 600;
                 margin: 0;
                 @include cut-text;
@@ -192,7 +193,7 @@
             @include justify-content(center);
             h3 {
                 color: #000;
-                font-size: 14px;
+                font-size: var(--font-size-base, $size-base);
                 //@include cut-text();
                 margin: 0;
                 padding: 0 10px;
@@ -227,7 +228,7 @@
             }
             span {
                 font-family: $font-app;
-                font-size: 14px;
+                font-size: var(--font-size-xl, $size-base);
                 font-weight: 700;
                 margin: 0 4px;
                 b {
@@ -270,16 +271,18 @@
                     @include align-items(center);
                     @include justify-content(space-between);
                     padding: 10px 10px;
-                    font-size: 14px;
+                    font-size: var(--font-size-medium, $size-medium);
                     background: $white;
                     margin-top: 8px;
                     box-shadow: 0 3px 20px #0000000a;
                     .title {
                         color: #5a5a5a;
+                        font-size: var(--font-size-medium, $size-base);
                     }
                     .text {
                         font-weight: 700;
                         color: $black;
+                        font-size: var(--font-size-medium, $size-base);
                         b {
                             font-size: 12px;
                             margin-left: 2px;
@@ -291,11 +294,12 @@
                         padding: 0;
                         @include flex-direction(column);
                         @include align-items(end);
+                        font-size: var(--font-size-medium, $size-base);
                         .content-title {
                             width: 100%;
                             padding: 10px 10px;
                             border-bottom: 1px solid rgba(0, 0, 0, .09);
-                            line-height: 20px;
+                            line-height: 22px;
                             box-sizing: border-box;
                             font-weight: 700;
                         }
