@@ -6,12 +6,9 @@ import ShopDataService from "./../../service/shop.service";
 import { Page, Link, Navbar } from "framework7-react";
 import NotificationIcon from "../../components/NotificationIcon";
 import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import { FaShippingFast } from "react-icons/fa";
 import SkeletonPayInfo from "./components/Pay/SkeletonPayInfo";
 import clsx from "clsx";
-
-toast.configure();
 
 export default class extends React.Component {
   constructor() {

@@ -134,12 +134,5 @@ export const GET_DEVICE = () => {
   var t = window.app21 || {};
   if (typeof t.prom !== "undefined") {
     return t.prom("GET_INFO");
-  } else {
-    return new Promise((resolve, reject) => {
-        resolve({
-          success: true,
-          data: ``,
-        });
-    });
   }
 };

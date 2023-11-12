@@ -18,7 +18,6 @@ import CardSchedulingComponent from "./SchedulesManage/CardSchedulingComponent";
 import { getUser } from "../../constants/user";
 import { groupbyDDHHMM2 } from "../../constants/format";
 import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 
 export default class extends React.Component {
   constructor() {

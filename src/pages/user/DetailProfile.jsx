@@ -16,7 +16,6 @@ import {
 import UserService from "../../service/user.service";
 import DatePicker from "react-mobile-datepicker";
 import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import { NAME_APP, VERSION_APP } from "../../constants/config";
 import {
   PHOTO_TO_SERVER,

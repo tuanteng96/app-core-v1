@@ -115,7 +115,7 @@
         @media (max-width: 375px) {
             padding: 0 20px;
         }
-        form {
+        form:first-child {
             background: $white;
             box-shadow: -8px 8px 14px 0 rgb(25 42 70 / 11%);
             padding: 35px 20px;

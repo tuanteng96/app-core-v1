@@ -16,7 +16,6 @@ import {
   setStockNameStorage,
 } from "../constants/user";
 import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 
 export default class SelectStock extends React.Component {
   constructor() {
@@ -93,7 +92,7 @@ export default class SelectStock extends React.Component {
         if (this.props.fnSuccess !== undefined) {
           this.props.fnSuccess(true);
         }
-        this.props.nameStock(NameStock);
+        this.props.nameStock && this.props.nameStock(NameStock);
         this.$f7.views.main.router.navigate(this.$f7.views.main.router.url, {
           reloadCurrent: true,
         });

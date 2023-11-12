@@ -1,9 +1,7 @@
 import React from "react";
 import { Link, Page } from "framework7-react";
-import IconForgot from "../../assets/images/forgot-password.png";
 import userService from "../../service/user.service";
 import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import IframeResizer from "iframe-resizer-react";
 import { auth, database } from "../../firebase/firebase";
 import { ref, onValue, set } from "firebase/database";
@@ -11,7 +9,7 @@ import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
 import { iOS } from "../../constants/helpers";
 import { SERVER_APP } from "../../constants/config";
 import { uuid } from "../../constants/helpers";
-toast.configure();
+import { FormForgotSMS } from "./components";
 
 export default class extends React.Component {
   constructor() {
@@ -45,7 +43,7 @@ export default class extends React.Component {
       }
     });
 
-    if (!iOS()) {
+    if (!iOS() && !window?.GlobalConfig?.SMSOTP) {
       window.recaptchaVerifier = new RecaptchaVerifier(
         "sign-in-button",
         {
@@ -59,7 +57,7 @@ export default class extends React.Component {
       window.recaptchaVerifier.render().then((widgetId) => {
         window.recaptchaWidgetId = widgetId;
       });
-    } else {
+    } else if (!window?.GlobalConfig?.SMSOTP) {
       this.setState({ Uuid: uuid() });
       this.$f7.dialog.preloader("Đang tải ...");
     }
@@ -112,8 +110,8 @@ export default class extends React.Component {
           if (data.error === "FORGET_METHOD_OVER_SECTION") {
             TextErr = "Vượt quá số lượng đổi mật khẩu trong ngày.";
           }
-          if(data.error === "PHONE_NOT_REG") {
-            TextErr = "Số điện thoại chưa được đăng ký."
+          if (data.error === "PHONE_NOT_REG") {
+            TextErr = "Số điện thoại chưa được đăng ký.";
           }
           toast.error(TextErr, {
             position: toast.POSITION.TOP_LEFT,
@@ -175,44 +173,50 @@ export default class extends React.Component {
             <div className="page-forgot-about">
               <h4>Quên mật khẩu</h4>
               <div className="desc">
-                Nhập địa chỉ email hoặc số điện thoại và chúng tôi sẽ gửi cho
-                bạn một liên kết để đặt lại mật khẩu.
+                Nhập số điện thoại hoặc email chúng tôi sẽ gửi cho
+                bạn một mã OTP hoặc liên kết đặt lại mật khẩu.
               </div>
               <img
                 className="logo-reg"
                 src={`${SERVER_APP}/app2021/images/forgot-password.png`}
               />
             </div>
-            {iOS() && Uuid && (
-              <IframeResizer
-                heightCalculationMethod="bodyScroll"
-                src={`${SERVER_APP}/App2021/forgotUI?uuid=${Uuid}&color=${window?.GlobalConfig?.APP?.Css[
-                  "--ezs-color"
-                ].replaceAll("#", "")}`}
-                style={{ border: 0 }}
-                onLoad={() => this.$f7.dialog.close()}
-              />
+            {window?.GlobalConfig?.SMSOTP ? (
+              <FormForgotSMS f7={this.$f7} f7router={this.$f7router} />
+            ) : (
+              <>
+                {iOS() && Uuid && (
+                  <IframeResizer
+                    heightCalculationMethod="bodyScroll"
+                    src={`${SERVER_APP}/App2021/forgotUI?uuid=${Uuid}&color=${window?.GlobalConfig?.APP?.Css[
+                      "--ezs-color"
+                    ].replaceAll("#", "")}`}
+                    style={{ border: 0 }}
+                    onLoad={() => this.$f7.dialog.close()}
+                  />
+                )}
+                <div className={`${iOS() && "d-none"}`}>
+                  <div className="page-login__form-item">
+                    <input
+                      type="text"
+                      name="input"
+                      autoComplete="off"
+                      placeholder="Số điện thoại hoặc Email"
+                      onChange={this.handleChangeInput}
+                    />
+                  </div>
+                  <div className="page-login__form-item">
+                    <button
+                      type="submit"
+                      className={`btn-login btn-me ${loading ? "loading" : ""}`}
+                      id="sign-in-button"
+                    >
+                      <span>Nhận mã</span>
+                    </button>
+                  </div>
+                </div>
+              </>
             )}
-            <div className={`${iOS() && "d-none"}`}>
-              <div className="page-login__form-item">
-                <input
-                  type="text"
-                  name="input"
-                  autoComplete="off"
-                  placeholder="Số điện thoại hoặc Email"
-                  onChange={this.handleChangeInput}
-                />
-              </div>
-              <div className="page-login__form-item">
-                <button
-                  type="submit"
-                  className={`btn-login btn-me ${loading ? "loading" : ""}`}
-                  id="sign-in-button"
-                >
-                  <span>Nhận mã</span>
-                </button>
-              </div>
-            </div>
           </div>
         </div>
       </Page>

@@ -5,6 +5,9 @@
     &.solid-invalid {
         border: 1px solid #F64E60 !important;
     }
+    &:focus {
+        border: 1px solid var(--ezs-color) !important;
+    }
 }
 
 .form-group {

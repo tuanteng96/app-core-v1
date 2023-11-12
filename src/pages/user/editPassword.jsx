@@ -5,7 +5,6 @@ import IconChangePassword from "../../assets/images/edit-password.svg";
 import { getUser } from "../../constants/user";
 import UserService from "../../service/user.service";
 import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 
 export default class extends React.Component {
   constructor() {

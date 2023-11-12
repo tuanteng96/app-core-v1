@@ -1,4 +1,6 @@
-import { getToken } from "../constants/user";
+import {
+  getToken
+} from "../constants/user";
 import http from "../service/http-common";
 
 class UserService {
@@ -11,7 +13,7 @@ class UserService {
       }`
     );
   }
-  QRCodeLogin(qrcode, deviceid) {
+  QRCodeLogin(qrcode, deviceid = '') {
     return http.get(
       `/api/v3/qcode?cmd=login&token=${qrcode}&deviceid=${deviceid}&v=${
         window?.GlobalConfig?.APP?.DeviceCheck ? "2" : ""
@@ -23,8 +25,10 @@ class UserService {
       `/app/index.aspx?Fn=${fullname}&Phone=${phone}&NewPWD=${password}&cmd=reg&ByStock=${stock}&USN=${phone}&Gender=-1`
     );
   }
-  getInfo() {
-    return http.get(`/app/index.aspx?cmd=authen&token=${getToken()}`);
+  getInfo(Token, deviceid = '') {
+    return http.get(`/app/index.aspx?cmd=authen&token=${Token || getToken()}&deviceid=${deviceid}&v=${
+      window?.GlobalConfig?.APP?.DeviceCheck ? "2" : ""
+    }`);
   }
   getSubscribe(usn, isUser, token) {
     return http.get(
@@ -138,12 +142,20 @@ class UserService {
   authForgetReset(data) {
     return http.post(`/api/v3/authen?cmd=reset`, data);
   }
-  authSendTokenFirebase({ Token, Type, ID }) {
+  authSendTokenFirebase({
+    Token,
+    Type,
+    ID
+  }) {
     return http.get(
       `/api/v3/apptoken?cmd=call&token=${Token}&accid=${ID}&acctype=${Type}`
     );
   }
-  authRemoveFirebase({ Token, Type, ID }) {
+  authRemoveFirebase({
+    Token,
+    Type,
+    ID
+  }) {
     return http.get(
       `/api/v3/apptoken?cmd=call&token=${Token}&accid=${ID}&acctype=${Type}&logout=1`
     );
@@ -153,6 +165,15 @@ class UserService {
       `/api/v3/in4@edit?token=${getToken()}`,
       JSON.stringify(data)
     );
+  }
+  sendStringee(body) {
+    return http.post('/api/v3/Stringee24@send', JSON.stringify(body))
+  }
+  verifyStringee(body) {
+    return http.post('/api/v3/Stringee24@get', JSON.stringify(body))
+  }
+  existPhone(phone) {
+    return http.get(`/api/gl/select2?cmd=member&q=${phone}&CurrentStockID=&member=`)
   }
 }
 

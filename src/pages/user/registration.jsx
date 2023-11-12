@@ -3,7 +3,6 @@ import { SERVER_APP } from "./../../constants/config";
 import { Page, Link, Toolbar } from "framework7-react";
 import UserService from "../../service/user.service";
 import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import {
   getStockIDStorage,
   setStockIDStorage,
@@ -15,8 +14,8 @@ import SelectStock from "../../components/SelectStock";
 import { SEND_TOKEN_FIREBASE } from "../../constants/prom21";
 import { setSubscribe } from "../../constants/subscribe";
 import DeviceHelpers from "../../constants/DeviceHelpers";
+import { FormRegistration } from "./components";
 
-toast.configure();
 export default class extends React.Component {
   constructor() {
     super();
@@ -189,7 +188,7 @@ export default class extends React.Component {
     const { isLoading, isOpenStock, password, isReload } = this.state;
     return (
       <Page noNavbar noToolbar name="login">
-        <div className="page-wrapper page-login">
+        <div className="page-wrapper page-login page-login-iphone">
           <div className="page-login__back">
             <Link onClick={() => this.$f7router.back()}>
               <i className="las la-arrow-left"></i>
@@ -206,49 +205,15 @@ export default class extends React.Component {
               <div className="title">Xin chào, Bắt đầu tạo tài khoản nào</div>
             </div>
             <div className="page-login__form">
-              <form>
-                <div className="title">Tạo tài khoản mới</div>
-                <div className="page-login__form-item">
-                  <input
-                    type="text"
-                    name="fullname"
-                    autoComplete="off"
-                    onChange={this.handleChangeInput}
-                    placeholder="Họ và tên"
-                  />
-                </div>
-                <div className="page-login__form-item">
-                  <input
-                    type="tel"
-                    value={this.state.phone}
-                    onChange={this.phoneChange}
-                    pattern="^-?[0-9]\d*\.?\d*$"
-                    placeholder="Số điện thoại"
-                  />
-                </div>
-                <div className="page-login__form-item">
-                  <input
-                    type="password"
-                    value={password}
-                    name="password"
-                    autoComplete="off"
-                    onChange={this.handleChangeInput}
-                    placeholder="Mật khẩu"
-                  />
-                </div>
-                <div className="page-login__form-item">
-                  <button
-                    type="button"
-                    onClick={() => this.registrationSubmit()}
-                    className={
-                      "btn-login btn-me" +
-                      (isLoading === true ? " loading" : "")
-                    }
-                  >
-                    <span>Đăng ký</span>
-                  </button>
-                </div>
-              </form>
+              <FormRegistration
+                f7={this.$f7}
+                f7router={this.$f7router}
+                openSelectStock={() =>
+                  this.setState({
+                    isOpenStock: !this.state.isOpenStock,
+                  })
+                }
+              />
             </div>
           </div>
           <div className="page-login__alert">

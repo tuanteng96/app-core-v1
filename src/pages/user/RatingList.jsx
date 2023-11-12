@@ -9,13 +9,10 @@ import AvatarGroup from "@material-ui/lab/AvatarGroup";
 import { getDateFacebook, checkAvt2 } from "../../constants/format";
 import { getUser } from "../../constants/user";
 import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import Skeleton from "react-loading-skeleton";
 import moment from 'moment';
 import 'moment/locale/vi';
 moment.locale('vi');
-
-toast.configure();
 
 export default class extends React.Component {
   constructor() {

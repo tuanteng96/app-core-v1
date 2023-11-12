@@ -19,6 +19,7 @@ import ShopPaySuccessPage from "../pages/shop/shopPaySuccess";
 import MapsPage from "../pages/maps/maps";
 
 import LoginPage from "../pages/user/login";
+import LoginOTPPage from "../pages/user/loginOTP";
 import RegistrationPage from "../pages/user/registration";
 import ForgotPage from "../pages/user/forgot";
 import ForgotChangePage from "../pages/user/forgot-change";
@@ -211,6 +212,13 @@ var routes = [
   {
     path: "/login/",
     asyncComponent: () => LoginPage,
+    options: {
+      transition: "f7-cover",
+    },
+  },
+  {
+    path: "/login-otp/",
+    asyncComponent: () => LoginOTPPage,
     options: {
       transition: "f7-cover",
     },

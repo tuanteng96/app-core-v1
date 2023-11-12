@@ -44,6 +44,7 @@ export default class extends React.Component {
         },
         on: {
           init: function () {
+            
             const infoUser = getUser();
             if (infoUser) {
               UserService.getInfo().then(({ data }) => {
@@ -72,7 +73,6 @@ export default class extends React.Component {
                 } else {
                   // Không phải lỗi Token
                 }
-
                 if (
                   window?.GlobalConfig?.APP?.DeviceCheck &&
                   data?.Status !== -1
@@ -169,7 +169,7 @@ export default class extends React.Component {
   onAppForceIn = () => {
     window.timeOutForce = setTimeout(() => {
       RELOAD_APP();
-    },  30 * 60 * 100); //3 * 60 * 60 * 100
+    }, 30 * 60 * 100); //3 * 60 * 60 * 100
   };
 
   onAppForceOut = () => {
@@ -177,7 +177,7 @@ export default class extends React.Component {
   };
 
   componentDidMount() {
-    window.Dialog = this.$f7.dialog
+    window.Dialog = this.$f7.dialog;
     window.APP_READY = true;
     window.percent = 100;
     document.body.addEventListener("noti_click.go_noti", this.notiDefault);

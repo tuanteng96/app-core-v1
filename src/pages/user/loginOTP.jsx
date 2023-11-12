@@ -1,8 +1,8 @@
 import React from "react";
-import { SERVER_APP } from "./../../constants/config";
+import { SERVER_APP } from "../../constants/config";
 import { Page, Link } from "framework7-react";
 import { iOS } from "../../constants/helpers";
-import { FormLogin } from "./components";
+import { FormLoginSMS } from "./components";
 
 export default class extends React.Component {
   constructor() {
@@ -38,7 +38,7 @@ export default class extends React.Component {
     return (
       <Page noNavbar noToolbar name="login">
         <div
-          className="page-wrapper page-login page-login-iphone"
+          className={`page-wrapper page-login d--f fd--c jc--sb ${iOS() && "page-login-iphone"}`}
         >
           {!window?.GlobalConfig?.APP?.OnlyStaff && (
             <div className="page-login__back">
@@ -68,7 +68,7 @@ export default class extends React.Component {
               <div className="title">Xin chào, Bắt đầu đăng nhập nào</div>
             </div>
             <div className="page-login__form">
-              <FormLogin f7={this.$f7} f7router={this.$f7router} />
+              <FormLoginSMS f7={this.$f7} f7router={this.$f7router} />
             </div>
           </div>
           {!window?.GlobalConfig?.APP?.OnlyStaff && (

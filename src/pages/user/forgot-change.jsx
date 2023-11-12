@@ -3,10 +3,8 @@ import { Link, Page } from "framework7-react";
 import IconForgot from "../../assets/images/forgot-change.png";
 import userService from "../../service/user.service";
 import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import { SERVER_APP } from "../../constants/config";
-
-toast.configure();
+import { FormForgotChange } from "./components";
 
 export default class extends React.Component {
   constructor() {
@@ -117,7 +115,7 @@ export default class extends React.Component {
     const { loading } = this.state;
     return (
       <Page noNavbar noToolbar name="forgot">
-        <div className="page-forgot h-100">
+        <div className="page-forgot page-forgot-change h-100">
           <div className="to-back">
             <Link onClick={() => this.$f7router.back()}>
               <i className="las la-arrow-left"></i>
@@ -133,43 +131,7 @@ export default class extends React.Component {
               className="logo-reg"
               src={`${SERVER_APP}/app2021/images/forgot-password.png`}
             />
-            <form onSubmit={this.handleSubmit}>
-              <div className="page-login__form-item">
-                <input
-                  type="text"
-                  name="secure"
-                  autoComplete="off"
-                  placeholder="Mã xác thực"
-                  onChange={this.handleChangeInput}
-                />
-              </div>
-              <div className="page-login__form-item">
-                <input
-                  type="password"
-                  name="new_password"
-                  autoComplete="off"
-                  placeholder="Mật khẩu mới"
-                  onChange={this.handleChangeInput}
-                />
-              </div>
-              <div className="page-login__form-item">
-                <input
-                  type="password"
-                  name="re_newpassword"
-                  autoComplete="off"
-                  placeholder="Nhập lại mật khẩu mới"
-                  onChange={this.handleChangeInput}
-                />
-              </div>
-              <div className="page-login__form-item">
-                <button
-                  type="submit"
-                  className={`btn-login btn-me ${loading ? "loading" : ""}`}
-                >
-                  <span>Đổi mật khẩu</span>
-                </button>
-              </div>
-            </form>
+            <FormForgotChange f7={this.$f7} f7route={this.$f7route} f7router={this.$f7router}/>
           </div>
         </div>
       </Page>

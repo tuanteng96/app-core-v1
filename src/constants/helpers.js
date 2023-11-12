@@ -46,3 +46,17 @@ export const checkSLDisabled = (prodid) => {
   }
   return result;
 };
+
+export const checkDevices = ({ Auth, deviceId }) =>
+  new Promise((resolve, reject) => {
+    //Auth.DeviceIDs
+    if (window?.GlobalConfig?.APP?.DeviceCheck) {
+      if (Auth.DeviceIDs && Auth.DeviceIDs === deviceId) {
+        resolve("");
+      } else {
+        reject("Tài khoản của bạn đang đăng nhập tại thiết bị khác.");
+      }
+    } else {
+      resolve("");
+    }
+  });

@@ -15,7 +15,6 @@ import ToolBarBottom from "../../components/ToolBarBottom";
 import UserService from "../../service/user.service";
 import { getUser } from "../../constants/user";
 import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import Skeleton from "react-loading-skeleton";
 
 import moment from "moment";

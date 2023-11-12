@@ -4,7 +4,6 @@ import { Page, Link, Toolbar, f7, Sheet, Button } from "framework7-react";
 import UserService from "../../service/user.service";
 import IconSearch from "../../assets/images/icon-search.png";
 import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import { FaRegUser, FaMapMarkerAlt, FaChevronDown } from "react-icons/fa";
 // const ModalReviews = React.lazy(() => import("../../components/ModalReviews"));
 // const SelectStock = React.lazy(() => import("../../components/SelectStock"));

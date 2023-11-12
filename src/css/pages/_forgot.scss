@@ -25,6 +25,14 @@
         height: 2px;
         background: $white;
     }
+    &.page-forgot-change {
+        &::after {
+            height: 42%;
+        }
+        &::before {
+            top: calc(42% - 1px);
+        }
+    }
     .to-back {
         position: absolute;
         top: 0;

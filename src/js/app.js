@@ -13,6 +13,8 @@ import 'framework7/css/framework7.bundle.css';
 
 import 'react-perfect-scrollbar/dist/css/styles.css';
 
+import "react-toastify/dist/ReactToastify.css";
+
 // Import Icons and App Custom Styles
 import '../css/icons.css';
 

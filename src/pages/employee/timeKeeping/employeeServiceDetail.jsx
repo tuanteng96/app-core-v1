@@ -21,7 +21,6 @@ import { formatPriceVietnamese } from "../../../constants/format";
 import staffService from "../../../service/staff.service";
 import userService from "../../../service/user.service";
 import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import { SERVER_APP } from "../../../constants/config";
 import { VscChromeClose, VscCloudUpload } from "react-icons/vsc";
 import { TiCameraOutline } from "react-icons/ti";

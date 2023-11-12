@@ -14,10 +14,7 @@ import NotificationIcon from "../../components/NotificationIcon";
 import SkeletonPay from "./components/Pay/SkeletonPay";
 import NumberFormat from "react-number-format";
 import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import clsx from "clsx";
-
-toast.configure();
 
 export default class extends React.Component {
   constructor() {
