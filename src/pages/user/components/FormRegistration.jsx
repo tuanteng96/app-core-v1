@@ -21,7 +21,7 @@ import DeviceHelpers from "../../../constants/DeviceHelpers";
 const phoneRegExp = /((09|03|07|08|05)+([0-9]{8})\b)/g;
 
 const regSchema = Yup.object().shape({
-  fullname: Yup.string().required("Vui lòng nhập họ tên."),
+  fullname: Yup.string().min(4, "Họ tên phải có ít nhất 4 kí tự.").required("Vui lòng nhập họ tên."),
   password: Yup.string()
     .min(4, "Mật khẩu phải có ít nhất 4 kí tự.")
     .required("Vui lòng nhập mật khẩu."),
@@ -31,7 +31,7 @@ const regSchema = Yup.object().shape({
 });
 
 function FormRegistration({ f7, f7router, openSelectStock }) {
-  const CrStocks = getStockIDStorage();
+  
   const [initialValues] = useState({
     fullname: "",
     password: "",
@@ -69,10 +69,11 @@ function FormRegistration({ f7, f7router, openSelectStock }) {
   });
 
   const onSubmit = (values, { open, ...formikProps }) => {
+    const CrStocks = getStockIDStorage();
     if (!CrStocks) {
       openSelectStock();
     } else {
-      if (window?.GlobalConfig?.SMSOTP) {
+      if (!window?.GlobalConfig?.SMSOTP) {
         f7.dialog.preloader("Đang gửi OTP ...");
         existPhoneMutation.mutate(
           { phone: values.phone },
@@ -219,7 +220,6 @@ function FormRegistration({ f7, f7router, openSelectStock }) {
       },
     });
   };
-
   return (
     <PickerVerify f7={f7}>
       {({ open }) => (

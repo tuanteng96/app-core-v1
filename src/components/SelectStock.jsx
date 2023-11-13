@@ -93,9 +93,11 @@ export default class SelectStock extends React.Component {
           this.props.fnSuccess(true);
         }
         this.props.nameStock && this.props.nameStock(NameStock);
-        this.$f7.views.main.router.navigate(this.$f7.views.main.router.url, {
-          reloadCurrent: true,
-        });
+        if(!this.props?.noReload) {
+          this.$f7.views.main.router.navigate(this.$f7.views.main.router.url, {
+            reloadCurrent: true,
+          });
+        }
       })
       .catch((err) => console.log(err));
   };

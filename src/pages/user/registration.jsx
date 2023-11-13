@@ -224,6 +224,7 @@ export default class extends React.Component {
           isOpenStock={isOpenStock}
           //nameStock={(name) => this.nameStock(name)}
           isReload={isReload}
+          noReload={true}
         />
       </Page>
     );
