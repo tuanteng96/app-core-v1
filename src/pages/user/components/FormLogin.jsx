@@ -19,7 +19,7 @@ import { toast } from "react-toastify";
 import { ref, set } from "firebase/database";
 import { database } from "../../../firebase/firebase";
 import DeviceHelpers from "../../../constants/DeviceHelpers";
-import { checkDevices } from "../../../constants/helpers";
+import { checkDevices, iOS } from "../../../constants/helpers";
 
 const loginSchema = Yup.object().shape({
   username: Yup.string()
@@ -133,7 +133,7 @@ function FormLogin({ f7, f7router }) {
               onSettled: ({ data }) => {
                 if (data.error || data?.Status === -1) {
                   if (data.error === "Thiết bị chưa được cấp phép") {
-                    f7.preloader.hide();
+                    f7.dialog.close();
                     f7.dialog.alert(
                       "Tài khoản của bạn đang đăng nhập tại thiết bị khác."
                     );

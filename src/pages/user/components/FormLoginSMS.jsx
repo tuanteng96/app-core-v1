@@ -20,6 +20,7 @@ import { database } from "../../../firebase/firebase";
 import PickerVerify from "./PickerVerify";
 import NumberFormat from "react-number-format";
 import DeviceHelpers from "../../../constants/DeviceHelpers";
+import { iOS } from "../../../constants/helpers";
 
 const phoneRegExp = /((09|03|07|08|05)+([0-9]{8})\b)/g;
 
@@ -248,7 +249,7 @@ function FormLoginSMS({ f7, f7router }) {
               onSettled: ({ data }) => {
                 if (data.error || data?.Status === -1) {
                   if (data.error === "Thiết bị chưa được cấp phép") {
-                    f7.preloader.hide();
+                    f7.dialog.close();
                     f7.dialog.alert(
                       "Tài khoản của bạn đang đăng nhập tại thiết bị khác."
                     );

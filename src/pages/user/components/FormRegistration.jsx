@@ -73,7 +73,7 @@ function FormRegistration({ f7, f7router, openSelectStock }) {
     if (!CrStocks) {
       openSelectStock();
     } else {
-      if (!window?.GlobalConfig?.SMSOTP) {
+      if (window?.GlobalConfig?.SMSOTP) {
         f7.dialog.preloader("Đang gửi OTP ...");
         existPhoneMutation.mutate(
           { phone: values.phone },
