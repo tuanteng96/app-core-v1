@@ -71,6 +71,13 @@
         outline: none !important;
         position: relative;
         -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
+        &.voucher {
+            svg {
+                width: 24px;
+                transform: rotate(-45deg);
+                fill: #bbbbbb;
+            }
+        }
         i {
             font-size: 26px;
             color: $color-gray-menu;
@@ -84,6 +91,9 @@
             }
             span {
                 color: $color-app;
+            }
+            svg {
+                fill: $color-app;
             }
         }
         span {

@@ -44,11 +44,7 @@ export default class extends React.Component {
   getInfoMember = () => {
     const infoUser = getUser();
     if (!infoUser) return false;
-    const username = infoUser.MobilePhone
-      ? infoUser.MobilePhone
-      : infoUser.UserName;
-    const password = getPassword();
-    UserService.getInfo(username, password)
+    UserService.getInfo()
       .then((response) => {
         if (response.error) {
           this.$f7router.navigate("/login/");

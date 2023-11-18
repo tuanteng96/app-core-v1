@@ -12,7 +12,11 @@ import { Page, Link, Toolbar, Row, Col, f7 } from "framework7-react";
 import ToolBarBottom from "../../components/ToolBarBottom";
 import UserService from "../../service/user.service";
 import Skeleton from "react-loading-skeleton";
-import { REMOVE_BADGE, SEND_TOKEN_FIREBASE, SET_BADGE } from "../../constants/prom21";
+import {
+  REMOVE_BADGE,
+  SEND_TOKEN_FIREBASE,
+  SET_BADGE,
+} from "../../constants/prom21";
 import { iOS } from "../../constants/helpers";
 
 export default class extends React.Component {
@@ -213,14 +217,16 @@ export default class extends React.Component {
                 <span>Mã giảm giá</span>
               </Link>
             </Col>
-            <Col width="33">
-              <Link noLinkClass href="/rating/">
-                <div className="image">
-                  <img src={imgEvaluate} />
-                </div>
-                <span>Đánh giá</span>
-              </Link>
-            </Col>
+            {!window?.GlobalConfig?.APP?.isSell && (
+              <Col width="33">
+                <Link noLinkClass href="/rating/">
+                  <div className="image">
+                    <img src={imgEvaluate} />
+                  </div>
+                  <span>Đánh giá</span>
+                </Link>
+              </Col>
+            )}
             <Col width="33">
               <Link noLinkClass href="/maps/">
                 <div className="image">
@@ -229,6 +235,7 @@ export default class extends React.Component {
                 <span>Liên hệ</span>
               </Link>
             </Col>
+            {window?.GlobalConfig?.APP?.isSell && <Col width="33"></Col>}
           </Row>
         </div>
         <Toolbar tabbar position="bottom">

@@ -25,9 +25,11 @@ import ToolBarBottom from "../../components/ToolBarBottom";
 import Skeleton from "react-loading-skeleton";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { toast } from "react-toastify";
+import { SERVER_APP } from "../../constants/config";
+
 import moment from "moment";
 import "moment/locale/vi";
-import { SERVER_APP } from "../../constants/config";
+import clsx from "clsx";
 moment.locale("vi");
 
 export default class extends React.Component {
@@ -131,6 +133,7 @@ export default class extends React.Component {
                         <div className="voucher-icon">
                           <div className="voucher-icon__text">
                             <img
+                              className={clsx(window?.GlobalConfig?.APP?.notFilterVoucher && "no-filter")}
                               src={SERVER_APP + "/app/images/logo-app.png"}
                             />
                           </div>
