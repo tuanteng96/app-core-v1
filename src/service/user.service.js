@@ -84,9 +84,9 @@ class UserService {
   getDiary(username, password) {
     return http.post(`/app/index.aspx?cmd=noti&token=${getToken()}`);
   }
-  getReviews(memberid) {
+  getReviews(memberid, params = '') {
     return http.get(
-      `/api/v3/OrderService?cmd=get_service_unrate&mid=${memberid}`
+      `/api/v3/OrderService?cmd=get_service_unrate&mid=${memberid}${params}`
     );
   }
   postReviews(memberid, data) {
