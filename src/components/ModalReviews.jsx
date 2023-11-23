@@ -4,8 +4,6 @@ import { Link, Page, Sheet } from "framework7-react";
 import UserService from "../service/user.service";
 import { getUser } from "../constants/user";
 import { checkAvt2 } from "../constants/format";
-import Avatar from "@material-ui/core/Avatar";
-import AvatarGroup from "@material-ui/lab/AvatarGroup";
 import { toast } from "react-toastify";
 import moment from "moment";
 
@@ -114,11 +112,11 @@ export default class ModalReviews extends React.Component {
             <div className="close" onClick={() => this.closeReviews()}>
               <img src={IconBlackClose} alt="Đóng" />
             </div>
-            <div className="title">Đánh giá dịch vụ</div>
+            <div className="title">Đánh giá dịch vụ ({arrReview && moment(arrReview[0]?.os?.BookDate).format("DD/MM/YYYY")})</div>
           </div>
           <div className="content">
             <div className="content-box">
-              <div className="content-box__user">
+              <div className="content-box__user text-center px-15px">
                 {/* <div className="avatar">
                         <AvatarGroup max={3}>
                           {item.staff.map((user, i) => (

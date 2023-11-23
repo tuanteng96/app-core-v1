@@ -188,7 +188,7 @@ export default class extends React.Component {
                       ))}
                     </div>
                     <div className="time">
-                      Hoàn thành lúc {moment(item.os.UseDate).format("HH:mm DD/MM/YYYY")}
+                      Hoàn thành lúc {moment(item.os.BookDate).format("HH:mm DD/MM/YYYY")}
                     </div>
                     <div className="rating">
                       <StarComponent
