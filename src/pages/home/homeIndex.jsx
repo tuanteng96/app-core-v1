@@ -268,7 +268,6 @@ export default class extends React.Component {
                 OpenStock={this.handleStock}
               />
               <ServiceHot f7router={this.$f7router} />
-              <ListImage />
               <SlideList
                 className={`banner-main bg-white ${
                   window.GlobalConfig.APP.Home?.SliderFull
@@ -309,6 +308,7 @@ export default class extends React.Component {
               />
               <ProductList />
               <Reviews />
+              <ListImage />
               <NewsList />
             </div>
           </div>
