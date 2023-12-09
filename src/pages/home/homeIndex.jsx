@@ -42,6 +42,7 @@ import ModalChangePWD from "../../components/ModalChangePWD";
 import ServiceHot2 from "./components/ServiceHot/ServiceHot2";
 import ServiceHot from "./components/ServiceHot/ServiceHot";
 import Reviews from "./components/Reviews/Reviews";
+import PopupImages from "./components/PopupImages";
 
 export default class extends React.Component {
   constructor() {
@@ -313,6 +314,9 @@ export default class extends React.Component {
             </div>
           </div>
         </div>
+        
+        <PopupImages f7={this.$f7}/>
+        
         <Toolbar tabbar position="bottom">
           <ToolBarBottom />
         </Toolbar>

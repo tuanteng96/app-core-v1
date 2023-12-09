@@ -44,7 +44,8 @@ export default class extends React.Component {
         },
         on: {
           init: function () {
-            
+            window.hasPopup = false;
+
             const infoUser = getUser();
             if (infoUser) {
               UserService.getInfo().then(({ data }) => {
