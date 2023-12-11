@@ -2,7 +2,6 @@ import React from 'react';
 import IframeResizer from 'react-iframe-resizer-super';
 
 export default function ForgotIframe({ src }) {
-    console.log(src);
     const iframeResizerOptions = {
         log: true,
         // autoResize: true,

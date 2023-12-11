@@ -129,7 +129,9 @@ function FormForgotSMS({ f7, f7router }) {
             } = formikProps;
 
             return (
-              <Form>
+              <Form style={{
+                padding: "0 20px"
+              }}>
                 <div className="page-login__form-item">
                   <div className="position-relative">
                     <input
