@@ -65,7 +65,7 @@ export default class extends React.Component {
       CateID,
       stockid,
       Pi,
-      window?.GlobalConfig?.APP?.UIBase ? 6 : 2,
+      window?.GlobalConfig?.APP?.UIBase ? 6 : 4,
       1,
       "",
       {
@@ -205,7 +205,7 @@ export default class extends React.Component {
     let stockid = getStockIDStorage();
     stockid ? stockid : 0;
 
-    ShopDataService.getServiceParent(CateID, stockid, Pi + 1, 2, 1)
+    ShopDataService.getServiceParent(CateID, stockid, Pi + 1, window?.GlobalConfig?.APP?.UIBase ? 6 : 4, 1)
       .then(({ data }) => {
         const { lst, pcount, pi } = data;
         const arrServiceNew = [...arrService, ...lst];
