@@ -170,7 +170,7 @@ export default class extends React.Component {
   onAppForceIn = () => {
     window.timeOutForce = setTimeout(() => {
       RELOAD_APP();
-    }, 5 * 60 * 1000); //3 * 60 * 60 * 100
+    }, 2 * 60 * 1000); //3 * 60 * 60 * 100
   };
 
   onAppForceOut = () => {
