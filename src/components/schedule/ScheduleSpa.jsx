@@ -1,5 +1,14 @@
 import React from "react";
-import { Link, Tabs, Tab, Row, Col } from "framework7-react";
+import {
+  Link,
+  Tabs,
+  Tab,
+  Row,
+  Col,
+  ActionsGroup,
+  Actions,
+  ActionsButton,
+} from "framework7-react";
 import UserService from "../../service/user.service";
 import IconLocation from "../../assets/images/location1.svg";
 import SkeletonStock from "./SkeletonStock";
@@ -8,6 +17,8 @@ import DatePicker from "react-mobile-datepicker";
 import _ from "lodash";
 import { clsx } from "clsx";
 import ConfigServiceAPI from "../../service/config.service";
+import Select from "react-select";
+
 import moment from "moment";
 import "moment/locale/vi";
 moment.locale("vi");
@@ -62,6 +73,7 @@ export default class ScheduleSpa extends React.Component {
       isActive: 0,
       isOpen: false,
       indexCurrent: 7,
+      openStock: false,
     };
   }
 
@@ -113,7 +125,13 @@ export default class ScheduleSpa extends React.Component {
       let ListStock = response.data.data.all;
       const StocksNotBook = window?.GlobalConfig?.StocksNotBook || "";
       ListStock = ListStock
-        ? ListStock.filter((o) => o.ID !== 778 && !StocksNotBook.includes(o.ID))
+        ? ListStock.filter(
+            (o) => o.ID !== 778 && !StocksNotBook.includes(o.ID)
+          ).map((o) => ({
+            ...o,
+            label: o.Title,
+            value: o.ID,
+          }))
         : "";
 
       this.setState({
@@ -260,6 +278,7 @@ export default class ScheduleSpa extends React.Component {
       indexCurrent,
       isActive,
       ListChoose,
+      openStock,
     } = this.state;
     const { DateTimeBook } = this.props;
 
@@ -299,37 +318,127 @@ export default class ScheduleSpa extends React.Component {
           <div className="page-schedule__location-list">
             <Row>
               {isLoadingStock && <SkeletonStock />}
-              {!isLoadingStock &&
-                arrStock &&
-                arrStock.map((item, index) => (
-                  <Col width={arrStock.length > 1 ? "50" : "100"} key={index}>
-                    <div className="location">
-                      <div
-                        className="location-item"
-                        onClick={() => this.handleStock(item)}
+              {!isLoadingStock && (
+                <>
+                  {arrStock &&
+                    arrStock.length <= 4 &&
+                    arrStock.map((item, index) => (
+                      <Col
+                        width={arrStock.length > 1 ? "50" : "100"}
+                        key={index}
                       >
-                        <input
-                          id={"location-" + item.ID}
-                          type="radio"
-                          name="checklocation"
-                          value={item.ID}
-                          checked={
-                            parseInt(
-                              DateTimeBook.stock && DateTimeBook.stock
-                            ) === item.ID
-                          }
-                          readOnly
-                        />
-                        <label htmlFor={"location-" + item.ID}>
-                          {item.Title}
-                        </label>
-                        <div className="icon">
-                          <img src={IconLocation} alt="Location" />
+                        <div className="location">
+                          <div
+                            className="location-item"
+                            onClick={() => this.handleStock(item)}
+                          >
+                            <input
+                              id={"location-" + item.ID}
+                              type="radio"
+                              name="checklocation"
+                              value={item.ID}
+                              checked={
+                                parseInt(
+                                  DateTimeBook.stock && DateTimeBook.stock
+                                ) === item.ID
+                              }
+                              readOnly
+                            />
+                            <label htmlFor={"location-" + item.ID}>
+                              {item.Title}
+                            </label>
+                            <div className="icon">
+                              <img src={IconLocation} alt="Location" />
+                            </div>
+                          </div>
                         </div>
+                      </Col>
+                    ))}
+                  {arrStock && arrStock.length > 4 && (
+                    <Col width="100">
+                      <div
+                        style={{
+                          marginBottom: "10px",
+                        }}
+                        onClick={() => this.setState({ openStock: true })}
+                      >
+                        <Select
+                          isDisabled
+                          options={arrStock}
+                          className="select-control"
+                          classNamePrefix="select"
+                          placeholder="Chọn cơ sở"
+                          noOptionsMessage={() => "Không có dữ liệu"}
+                          value={
+                            DateTimeBook?.stock
+                              ? arrStock.filter(
+                                  (x) =>
+                                    parseInt(
+                                      DateTimeBook.stock && DateTimeBook.stock
+                                    ) === x.ID
+                                )[0]
+                              : ""
+                          }
+                          onChange={(val) => this.handleStock(val)}
+                          menuPosition="fixed"
+                          styles={{
+                            menuPortal: (base) => ({
+                              ...base,
+                              zIndex: 9999,
+                            }),
+                          }}
+                          menuPortalTarget={document.body}
+                          menuPlacement="top"
+                        />
                       </div>
-                    </div>
-                  </Col>
-                ))}
+                      <Actions className="action-stock" opened={openStock} onActionsClosed={() => this.setState({ openStock: false })}>
+                        <ActionsGroup>
+                          <div className="action-stock__list">
+                            {arrStock &&
+                              arrStock.map((item) => (
+                                <div
+                                  className={
+                                    "action-stock__list-name " +
+                                    (parseInt(
+                                      DateTimeBook.stock && DateTimeBook.stock
+                                    ) === item.ID
+                                      ? "currentStock"
+                                      : "")
+                                  }
+                                  key={item.ID}
+                                >
+                                  <input
+                                    name="ValueStock"
+                                    type="radio"
+                                    value={item.ID}
+                                    title={item.Title}
+                                    id={"stock" + item.ID}
+                                    checked={
+                                      parseInt(
+                                        DateTimeBook.stock && DateTimeBook.stock
+                                      ) === item.ID
+                                    }
+                                    onChange={(e) => {
+                                      this.handleStock(item);
+                                      this.setState({ openStock: false });
+                                    }}
+                                  />
+                                  <label htmlFor={"stock" + item.ID}>
+                                    {item.Title}{" "}
+                                    <i className="las la-check"></i>
+                                  </label>
+                                </div>
+                              ))}
+                          </div>
+                        </ActionsGroup>
+                        <ActionsGroup>
+                          <ActionsButton color="red">Đóng</ActionsButton>
+                        </ActionsGroup>
+                      </Actions>
+                    </Col>
+                  )}
+                </>
+              )}
             </Row>
           </div>
         </div>

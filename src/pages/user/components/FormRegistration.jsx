@@ -136,7 +136,7 @@ function FormRegistration({ f7, f7router, openSelectStock }) {
           { ...values, stockid: CrStocks },
           {
             onSettled: ({ data }) => {
-              if (data.errors) {
+              if (data.error) {
                 toast.error(data.error, {
                   position: toast.POSITION.TOP_LEFT,
                   autoClose: 3000,

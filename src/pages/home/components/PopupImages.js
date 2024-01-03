@@ -95,7 +95,7 @@ function PopupImages({ f7 }) {
         </div>
         <img
           className="w-100"
-          src={SERVER_APP + "/Upload/image/" + data.FileName2}
+          src={SERVER_APP + "/Upload/image/" + data.FileName}
           alt={data.Title}
         />
       </div>

@@ -109,6 +109,11 @@ html {
     height: 100%;
 }
 
+.action-stock .actions-group:first-child {
+    max-height: calc(100vh - 200px);
+    overflow: auto;
+}
+
 .h-auto {
     height: auto !important;
 }
