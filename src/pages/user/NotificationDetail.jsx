@@ -70,18 +70,16 @@ export default class extends React.Component {
   }
 
   componentDidMount() {
-    
     this.getDetialNoti();
   }
 
-
   componentDidUpdate(prevProps, prevState) {
     // console.log(this.$f7route)
-      if(prevState.data !== this.state.data) {
-        if (this.state.data && this.state.data.Link === "/bao-kg/") {
-          this.$f7router.navigate(this.state.data.Link);
-        }
+    if (prevState.data !== this.state.data) {
+      if (this.state.data && this.state.data.Link === "/bao-kg/") {
+        this.$f7router.navigate(this.state.data.Link);
       }
+    }
   }
 
   getDetialNoti = async () => {
@@ -216,6 +214,27 @@ export default class extends React.Component {
       .catch((error) => console.log(error));
   };
 
+  iconNoti = () => {
+    return (
+      <svg
+        width={25}
+        height={25}
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth={2}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        className="prefix__feather prefix__feather-bell"
+        style={{
+          fill: "var(--ezs-color)",
+          stroke: "var(--ezs-color)",
+        }}
+      >
+        <path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 01-3.46 0" />
+      </svg>
+    );
+  };
 
   render() {
     const {
@@ -227,10 +246,10 @@ export default class extends React.Component {
       show,
       btnLoadingReg,
     } = this.state;
-    
+
     return (
       <Page ptr onPtrRefresh={this.loadRefresh.bind(this)}>
-        <Navbar>
+        <Navbar className="navbar-no-line">
           <div className="page-navbar">
             <div className="page-navbar__back">
               <Link onClick={() => this.$f7router.navigate(`/notification/`)}>
@@ -239,51 +258,90 @@ export default class extends React.Component {
             </div>
             <div className="page-navbar__title">
               <span className="title">
-                {isLoading ? "Đang tải ..." : data && data.Title}
+                Thông báo
+                {/* {isLoading ? "Đang tải ..." : data && data.Title} */}
               </span>
             </div>
 
             <div className="page-navbar__noti"></div>
           </div>
         </Navbar>
-        <div className="page-render no-bg p-0">
+        <div className="page-render bg-white p-0">
           <div className="page-noti">
+            <div
+              style={{
+                backgroundColor: "var(--ezs-color)",
+                height: "80px",
+                marginBottom: "40px",
+                borderRadius: "0 0 40px 40px",
+              }}
+              className="position-relative"
+            >
+              <div
+                className="position-absolute"
+                style={{
+                  width: "55px",
+                  height: "55px",
+                  bottom: "-25px",
+                  background: "#fff",
+                  borderRadius: "100%",
+                  left: "50%",
+                  transform: "translateX(-50%)",
+                  boxShadow: "0 0 40px 0 rgba(82, 63, 105, 0.1)",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                {this.iconNoti()}
+              </div>
+            </div>
             {isLoading ? (
-              <ul className="page-noti__list noti-detail">
-                <li className="readed">
-                  <div>Ngày gửi</div>
-                  <div>
-                    <Skeleton count={1} />
-                  </div>
-                </li>
-                <li className="readed">
-                  <div>Tiêu đề</div>
-                  <div>
-                    <Skeleton count={1} />
-                  </div>
-                </li>
-                <li className="readed">
-                  <div>Nội dung</div>
-                  <div>
-                    <Skeleton count={3} />
-                  </div>
-                </li>
-              </ul>
+              <div className="p-15px">Đang tải ....</div>
             ) : (
-              <ul className="page-noti__list noti-detail">
-                <li className="readed">
-                  <div>Ngày gửi </div>
-                  <div>{data && data.CreateDateVN}</div>
-                </li>
-                <li className="readed">
-                  <div>Nội dung</div>
-                  <div>
-                    {data &&
-                      data.Body &&
-                      ReactHtmlParser(data.Body.replaceAll("\n", "</br>"))}
+              <div className="p-15px">
+                <div className="page-noti-title">{data && data.Title}</div>
+                <div className="page-noti-date">
+                  {data && data.CreateDateVN}
+                </div>
+                {data && data.Thumbnail && (
+                  <div className="mt-15px">
+                    <img
+                      className="w-100"
+                      style={{
+                        borderRadius: "5px",
+                      }}
+                      src={`${SERVER_APP}/upload/image/${data.Thumbnail}`}
+                      alt={data && data.Title}
+                    />
                   </div>
-                </li>
-              </ul>
+                )}
+
+                <div className="page-noti-desc">
+                  {data &&
+                    data.Body &&
+                    ReactHtmlParser(data.Body.replaceAll("\n", "</br>"))}
+                </div>
+                <div className="page-noti-desc">
+                  {data &&
+                    data.Content &&
+                    ReactHtmlParser(data.Content)}
+                </div>
+                {/* <ul className="page-noti__list noti-detail">
+                  <li className="readed">
+                    <div>Ngày gửi </div>
+                    <div>{data && data.CreateDateVN}</div>
+                  </li>
+                  <li className="readed">
+                    <div>Nội dung</div>
+                    <div>
+                      {data &&
+                        data.Body &&
+                        ReactHtmlParser(data.Body.replaceAll("\n", "</br>"))}
+                    </div>
+                  </li>
+                </ul> */}
+              </div>
             )}
           </div>
         </div>

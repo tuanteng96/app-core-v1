@@ -299,14 +299,14 @@ export default class extends React.Component {
                           <div className="text">
                             <h4>{item.Title}</h4>
                             <div className="text-desc">{item.Body}</div>
-                            <div className="text-time">
+                            {/* <div className="text-time">
                               {moment(item.CreateDate).fromNow()}{" "}
                               {item.IsReaded === true ? (
                                 <span>- Đã xem</span>
                               ) : (
                                 ""
                               )}
-                            </div>
+                            </div> */}
                           </div>
                           <Button
                             onClick={() => this.setState({ itemActions: item })}

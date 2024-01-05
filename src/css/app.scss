@@ -122,6 +122,10 @@ html {
     box-sizing: border-box;
 }
 
+.navbar-no-line .navbar-bg {
+    border-bottom: 0;
+}
+
 .ScrollbarsCustom-Track,
 .ScrollbarsCustom-Thumb {
     display: none !important;

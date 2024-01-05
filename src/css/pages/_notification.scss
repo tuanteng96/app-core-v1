@@ -1,4 +1,16 @@
 .page-noti {
+    &-title {
+        font-size: 20px;
+        font-weight: 500;
+    }
+    &-desc {
+        font-size: 15px;
+        margin-top: 15px;
+    }
+    &-date {
+        font-size: 13px;
+        color: #999;
+    }
     &__list {
         li {
             position: relative;
@@ -72,10 +84,12 @@
                     line-height: 22px;
                     overflow: hidden;
                     text-overflow: ellipsis;
-                    -webkit-line-clamp: 3;
-                    max-height: 65px;
+                    -webkit-line-clamp: 2;
+                    max-height: 45px;
                     display: -webkit-box;
                     -webkit-box-orient: vertical;
+                    color: #393939;
+                    font-weight: 300;
                 }
                 .text-time {
                     color: #a0a0a0;
