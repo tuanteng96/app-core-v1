@@ -14,6 +14,7 @@ import BookDataService from "../../service/book.service";
 
 import moment from "moment";
 import "moment/locale/vi";
+import { SERVER_APP } from "../../constants/config";
 
 moment.locale("vi");
 
@@ -236,6 +237,11 @@ export default class extends React.Component {
     );
   };
 
+  fixedContentDomain = (content) => {
+    if (!content) return "";
+    return content.replace(/src=\"\//g, 'src="' + SERVER_APP + "/");
+  };
+
   render() {
     const {
       isLoading,
@@ -311,7 +317,7 @@ export default class extends React.Component {
                       style={{
                         borderRadius: "5px",
                       }}
-                      src={`${SERVER_APP}/upload/image/${data.Thumbnail}`}
+                      src={`${SERVER_APP}/${data.Thumbnail}`}
                       alt={data && data.Title}
                     />
                   </div>
@@ -325,7 +331,7 @@ export default class extends React.Component {
                 <div className="page-noti-desc">
                   {data &&
                     data.Content &&
-                    ReactHtmlParser(data.Content)}
+                    ReactHtmlParser(this.fixedContentDomain(data.Content))}
                 </div>
                 {/* <ul className="page-noti__list noti-detail">
                   <li className="readed">

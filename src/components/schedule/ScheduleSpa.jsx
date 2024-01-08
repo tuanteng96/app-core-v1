@@ -310,6 +310,8 @@ export default class ScheduleSpa extends React.Component {
       beforeChange: (current, next) => {},
     };
 
+    
+
     return (
       <div className="page-schedule__box">
         <div className="pt-8px"></div>

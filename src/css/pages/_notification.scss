@@ -6,6 +6,12 @@
     &-desc {
         font-size: 15px;
         margin-top: 15px;
+        img {
+            width: 100% !important;
+            max-width: 100% !important;
+            height: auto !important;
+            max-height: max-content !important;
+        }
     }
     &-date {
         font-size: 13px;
