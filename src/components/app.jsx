@@ -168,13 +168,13 @@ export default class extends React.Component {
   };
 
   onAppForceIn = () => {
-    window.timeOutForce = setTimeout(() => {
-      RELOAD_APP();
-    }, 2 * 60 * 1000); //3 * 60 * 60 * 100
+    // window.timeOutForce = setTimeout(() => {
+    //   RELOAD_APP();
+    // }, 2 * 60 * 1000); //3 * 60 * 60 * 100
   };
 
   onAppForceOut = () => {
-    if (window.timeOutForce) clearTimeout(window.timeOutForce);
+    //if (window.timeOutForce) clearTimeout(window.timeOutForce);
   };
 
   componentDidMount() {

@@ -27,11 +27,26 @@ function IframeReport({ f7 }) {
       const ListStock = response.data.data.all.filter(
         (item) => item.ID !== 778
       );
+      let InfoU = {...getUser()["Info"]}
+      let rightsSum =  {...InfoU["rightsSum"]}
+      if(InfoU?.rightTree?.groups) {
+        let i = InfoU?.rightTree?.groups.findIndex(x => x.group === "Báo cáo")
+        if(i > -1) {
+          let {hasRight, IsAllStock, stocksList} = InfoU?.rightTree?.groups[i].rights[0]
+          rightsSum['report'] = {
+            IsAllStock,
+            hasRight,
+            stocks: stocksList
+          }
+        }
+      }
       window.Info = {
         ...window.Info,
-        User: getUser(),
-        Stocks: ListStock,
+        
         CrStockID: getStockIDStorage(),
+        rightsSum: rightsSum,
+        Stocks: getUser()["Info"]["StockRights"],
+        ...getUser()
       };
       window.token = localStorage.getItem("token");
       setIsShow(true);
@@ -69,17 +84,5 @@ function IframeReport({ f7 }) {
     />
   );
 }
-
-/* <iframe
-      ref={iframeRef}
-      scrolling={true}
-      heightCalculationMethod="bodyScroll"
-      src={`${SERVER_APP}/App23/index.html`}
-      style={{ border: 0, width: "100%", height: "100%" }}
-      onLoad={() => {
-        f7.dialog.close();
-      }}
-      id="your-frame-id"
-    /> */
 
 export default IframeReport;
