@@ -9,6 +9,7 @@ import { PopupConfirm } from "../PopupConfirm";
 import BookDataService from "../../../../service/book.service";
 import { toast } from "react-toastify";
 import { getStockIDStorage, getUser } from "../../../../constants/user";
+import { OPEN_LINK } from "../../../../constants/prom21";
 
 export default class SlideList extends React.Component {
   constructor() {
@@ -47,11 +48,10 @@ export default class SlideList extends React.Component {
   };
 
   onSubmit = (values) => {
-    let StockID = getStockIDStorage()
-    if(!StockID) {
-      this.props.OpenStock()
-    }
-    else {
+    let StockID = getStockIDStorage();
+    if (!StockID) {
+      this.props.OpenStock();
+    } else {
       this.setState({
         btnLoading: true,
       });
@@ -82,7 +82,9 @@ export default class SlideList extends React.Component {
 
   handleUrl = (item) => {
     const userCurent = getUser();
-    if (item.Link && item.Link.includes("/schedule/")) {
+    if (validURL(item.Link)) {
+      OPEN_LINK(item.Link);
+    } else if (item.Link && item.Link.includes("/schedule/")) {
       const url = `${item.Link}&note=${encodeURIComponent(item.Title)}`;
       this.$f7.views.main.router.navigate(userCurent ? url : "/login/");
     } else if (item.Link && item.Link.includes("/pupup-contact/")) {
@@ -96,7 +98,8 @@ export default class SlideList extends React.Component {
   };
 
   render() {
-    const { arrBanner, isLoading, initialValues, btnLoading, show } = this.state;
+    const { arrBanner, isLoading, initialValues, btnLoading, show } =
+      this.state;
     var settingsBanner = {
       dots: true,
       arrows: false,

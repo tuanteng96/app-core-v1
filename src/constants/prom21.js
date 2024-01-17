@@ -63,6 +63,7 @@ export const CALL_PHONE = (phone) => {
     t.prom("TEL", phone);
   }
 };
+
 export const OPEN_LINK = (link) => {
   var t = window.app21 || {};
   if (typeof t.prom !== "undefined") {
@@ -76,6 +77,7 @@ export const SET_BADGE = (count) => {
     t.prom("SET_BADGE", count);
   }
 };
+
 export const REMOVE_BADGE = (count) => {
   var t = window.app21 || {};
   if (typeof t.prom !== "undefined") {

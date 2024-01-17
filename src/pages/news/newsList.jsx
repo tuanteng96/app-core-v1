@@ -99,7 +99,7 @@ export default class extends React.Component {
                         >
                           <div className="images">
                             <img
-                              src={SERVER_APP + item.source.Thumbnail_web}
+                              src={SERVER_APP + "/upload/image/" + item.source.Thumbnail}
                               alt={item.source.Title}
                             />
                           </div>

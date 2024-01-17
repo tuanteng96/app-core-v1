@@ -242,6 +242,17 @@ export default class extends React.Component {
     return content.replace(/src=\"\//g, 'src="' + SERVER_APP + "/");
   };
 
+  formatHtmlString = (htmlString) => {
+    const oembedRegex = /<oembed[^>]*>/g;
+    const oembedMatch = htmlString.match(oembedRegex);
+    if (oembedMatch) {
+      const oembedUrl = oembedMatch[0].match(/url="([^"]*)"/)[1];
+      const iframeElement = `<iframe src="${oembedUrl}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+      htmlString = htmlString.replace(oembedRegex, iframeElement);
+    }
+    return htmlString
+  };
+
   render() {
     const {
       isLoading,
@@ -331,7 +342,11 @@ export default class extends React.Component {
                 <div className="page-noti-desc">
                   {data &&
                     data.Content &&
-                    ReactHtmlParser(this.fixedContentDomain(data.Content))}
+                    ReactHtmlParser(
+                      this.fixedContentDomain(
+                        this.formatHtmlString(data.Content)
+                      )
+                    )}
                 </div>
                 {/* <ul className="page-noti__list noti-detail">
                   <li className="readed">
