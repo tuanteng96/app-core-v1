@@ -89,7 +89,7 @@ const SheetOrder = ({ item, textPay, loadingText, Banks, MaND }) => {
       item.thanhtoan.thanh_toan_tien -
       item.thanhtoan.thanh_toan_vi -
       item.thanhtoan.thanh_toan_ao
-  )
+  );
 
   return (
     <Sheet
@@ -168,7 +168,7 @@ export default class extends React.Component {
       loadingText: false,
       textPay: "",
       Banks: null,
-      MaND: ''
+      MaND: "",
     };
   }
 
@@ -187,7 +187,7 @@ export default class extends React.Component {
     UserService.getConfig("App.thanhtoan,MA_QRCODE_NGAN_HANG")
       .then(({ data }) => {
         let newBanks = [];
-        let newMaND = ''
+        let newMaND = "";
         if (data.data && data.data.length > 1) {
           let JsonBanks = JSON.parse(data.data[1].Value);
           if (
@@ -200,7 +200,7 @@ export default class extends React.Component {
               value: x.stk,
               label: this.getName(x),
             }));
-            newMaND = JsonBanks.ma_nhan_dien
+            newMaND = JsonBanks.ma_nhan_dien;
           }
         }
 
@@ -219,19 +219,22 @@ export default class extends React.Component {
     UserService.getOrderAll2()
       .then((response) => {
         const data = response.data;
-        const TongNo = data
-          ? data.reduce(
-              (n, { thanhtoan }) =>
-                n +
-                Math.abs(
-                  thanhtoan.tong_gia_tri_dh -
-                    thanhtoan.thanh_toan_tien -
-                    thanhtoan.thanh_toan_vi -
-                    thanhtoan.thanh_toan_ao
-                ),
-              0
-            )
-          : 0;
+        const TongNo =
+          data && data.length > 0
+            ? data
+                .map((x) => x.Status !== "cancel")
+                .reduce(
+                  (n, { thanhtoan }) =>
+                    n +
+                    Math.abs(
+                      (thanhtoan?.tong_gia_tri_dh || 0) -
+                        (thanhtoan?.thanh_toan_tien || 0) -
+                        (thanhtoan?.thanh_toan_vi || 0) -
+                        (thanhtoan?.thanh_toan_ao || 0)
+                    ),
+                  0
+                )
+            : 0;
         this.setState({
           arrOder: data,
           loading: false,
@@ -284,12 +287,12 @@ export default class extends React.Component {
             <div className="page-navbar__title">
               <span className="title">
                 Đơn hàng
-                {TongNo && (
+                {TongNo && Number(TongNo) > 0 ? (
                   <span className="pl-2px font-size-sm">
                     {" "}
                     - Nợ {formatPriceVietnamese(TongNo)}
                   </span>
-                )}
+                ) : ""}
               </span>
             </div>
             <div className="page-navbar__noti">
