@@ -222,15 +222,15 @@ export default class extends React.Component {
         const TongNo =
           data && data.length > 0
             ? data
-                .map((x) => x.Status !== "cancel")
+                .filter((x) => x.Status !== "cancel")
                 .reduce(
                   (n, { thanhtoan }) =>
                     n +
                     Math.abs(
-                      (thanhtoan?.tong_gia_tri_dh || 0) -
-                        (thanhtoan?.thanh_toan_tien || 0) -
-                        (thanhtoan?.thanh_toan_vi || 0) -
-                        (thanhtoan?.thanh_toan_ao || 0)
+                      (thanhtoan?.tong_gia_tri_dh) -
+                        (thanhtoan?.thanh_toan_tien) -
+                        (thanhtoan?.thanh_toan_vi) -
+                        (thanhtoan?.thanh_toan_ao)
                     ),
                   0
                 )
