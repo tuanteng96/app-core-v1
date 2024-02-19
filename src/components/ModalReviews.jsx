@@ -34,7 +34,7 @@ export default class ModalReviews extends React.Component {
     UserService.getReviews(memberid, "&popup=1")
       .then((response) => {
         const arrReview = response.data.data;
-        
+
         if (arrReview.length > 0) {
           setTimeout(() => {
             this.setState({
@@ -66,11 +66,11 @@ export default class ModalReviews extends React.Component {
 
   postReviews = () => {
     const { arrReview, Rate, RateNote, memberid } = this.state;
-    const data = arrReview.map(x => ({
+    const data = arrReview.map((x) => ({
       ID: x.os.ID,
       Rate,
-      RateNote
-    }))
+      RateNote,
+    }));
     var bodyFormData = new FormData();
     bodyFormData.append("rates", JSON.stringify(data));
 
@@ -112,7 +112,12 @@ export default class ModalReviews extends React.Component {
             <div className="close" onClick={() => this.closeReviews()}>
               <img src={IconBlackClose} alt="Đóng" />
             </div>
-            <div className="title">Đánh giá dịch vụ ({arrReview && moment(arrReview[0]?.os?.BookDate).format("DD/MM/YYYY")})</div>
+            <div className="title">
+              Đánh giá dịch vụ (
+              {arrReview &&
+                moment(arrReview[0]?.os?.BookDate).format("DD/MM/YYYY")}
+              )
+            </div>
           </div>
           <div className="content">
             <div className="content-box">
@@ -469,14 +474,17 @@ export default class ModalReviews extends React.Component {
                   </div>
                 </div>
               </div>
-              {/* <div className="content-box__text">
-                      <textarea
-                        name="RateNote"
-                        onChange={this.onChangeRateNote}
-                        placeholder="Chia sẻ đánh giá của bạn. Đánh giá của bạn sẽ được giữ dưới chế độ ẩn danh."
-                        rows="2"
-                      ></textarea>
-                    </div> */}
+              {window.GlobalConfig?.APP?.isRateNote && (
+                <div className="content-box__text">
+                  <textarea
+                    name="RateNote"
+                    onChange={this.onChangeRateNote}
+                    placeholder="Chia sẻ đánh giá của bạn. Đánh giá của bạn sẽ được giữ dưới chế độ ẩn danh."
+                    rows="2"
+                  ></textarea>
+                </div>
+              )}
+
               <div className="content-box__btn pt-15px">
                 <button
                   type="button"
