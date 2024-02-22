@@ -92,6 +92,7 @@ export default class extends React.Component {
       .then(({ data }) => {
         let newBanks = [];
         let newMaND = "";
+
         if (data.data && data.data.length > 1) {
           let JsonBanks = JSON.parse(data.data[1].Value);
           if (
@@ -108,7 +109,7 @@ export default class extends React.Component {
           }
         }
         this.setState({
-          textPay: data.data && data.data[0]?.ValueLines,
+          textPay: data.data && data.data[0]?.Value,
           loadingText: false,
           Banks: newBanks,
           MaND: newMaND,
@@ -120,7 +121,7 @@ export default class extends React.Component {
 
   render() {
     const { loadingText, textPay, Banks, ValueBank, MaND } = this.state;
-    
+
     return (
       <Page
         onPageBeforeOut={this.onPageBeforeOut}
@@ -170,31 +171,31 @@ export default class extends React.Component {
                       Math.abs(this.$f7route.query.money)
                     )} ₫</b>`
                   )
-                  .replaceAll(
-                    "ID_DH",
-                    `<b class="fw-600 text-danger">${this.$f7route.params.orderID}</b>`
-                  )
+                  .replaceAll("ID_DH", `${this.$f7route.params.orderID}`)
               )}
-            <div className="mt-10px">
-              <Select
-                options={Banks}
-                className="select-control"
-                classNamePrefix="select"
-                placeholder="Chọn ngân hàng"
-                noOptionsMessage={() => "Không có dữ liệu"}
-                value={ValueBank}
-                onChange={(val) => this.setState({ ValueBank: val })}
-                isClearable={true}
-                menuPosition="fixed"
-                styles={{
-                  menuPortal: (base) => ({
-                    ...base,
-                    zIndex: 9999,
-                  }),
-                }}
-                menuPortalTarget={document.body}
-              />
-            </div>
+            {Banks && Banks.length > 1 && (
+              <div className="mt-10px">
+                <Select
+                  options={Banks}
+                  className="select-control"
+                  classNamePrefix="select"
+                  placeholder="Chọn ngân hàng"
+                  noOptionsMessage={() => "Không có dữ liệu"}
+                  value={ValueBank}
+                  onChange={(val) => this.setState({ ValueBank: val })}
+                  isClearable={true}
+                  menuPosition="fixed"
+                  styles={{
+                    menuPortal: (base) => ({
+                      ...base,
+                      zIndex: 9999,
+                    }),
+                  }}
+                  menuPortalTarget={document.body}
+                />
+              </div>
+            )}
+
             {ValueBank && (
               <RenderQR
                 ValueBank={ValueBank}
