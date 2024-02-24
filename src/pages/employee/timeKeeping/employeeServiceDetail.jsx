@@ -27,6 +27,7 @@ import { TiCameraOutline } from "react-icons/ti";
 import SkeletonDetail from "./skeleton/SkeletonDetail";
 import { CALL_PHONE, PHOTO_TO_SERVER } from "../../../constants/prom21";
 import Resizer from "react-image-file-resizer";
+import ReactStars from "react-rating-stars-component";
 
 import moment from "moment";
 import "moment/locale/vi";
@@ -148,13 +149,16 @@ export default class employeeServiceDetail extends React.Component {
 
     try {
       const response = await staffService.getServiceStaff(user, data);
-      
+
       const { result, mBook } = {
         result:
           response?.data?.data && response.data.data.length > 0
             ? response.data.data[0]
             : null,
-        mBook: response?.data?.mBook && response.data.mBook.length > 0 ? response.data.mBook[0] : null,
+        mBook:
+          response?.data?.mBook && response.data.mBook.length > 0
+            ? response.data.mBook[0]
+            : null,
       };
       const itemDetail = isOs ? result : mBook;
       const dataPP = {
@@ -595,7 +599,39 @@ export default class employeeServiceDetail extends React.Component {
                     Xem hình ảnh
                   </span>
                 </li>
-
+                {itemDetail?.Status === "done" ? (
+                  <>
+                    <li>
+                      <span>Đánh giá</span>
+                      <span className="d--f jc--e">
+                        {itemDetail?.Rate ? (
+                          <ReactStars
+                            count={5}
+                            size={20}
+                            activeColor="#f3cd00"
+                            value={
+                              Number(itemDetail?.Rate) > 5
+                                ? 5
+                                : Number(itemDetail?.Rate)
+                            }
+                            edit={false}
+                            isHalf={true}
+                          />
+                        ) : (
+                          "Chưa đánh giá"
+                        )}
+                      </span>
+                    </li>
+                    <li>
+                      <span className="w-100">Ghi chú đánh giá</span>
+                      <span className="w-100">
+                        {itemDetail?.RateNote || "Chưa cos"}
+                      </span>
+                    </li>
+                  </>
+                ) : (
+                  ""
+                )}
                 {"Desc" in itemDetail && (
                   <li>
                     <span className="w-100">Ghi chú</span>
@@ -770,10 +806,7 @@ export default class employeeServiceDetail extends React.Component {
             </>
           )}
           {isLoading && (
-            <button
-              className={`page-btn-order btn-submit-order`}
-              disabled
-            >
+            <button className={`page-btn-order btn-submit-order`} disabled>
               <span>Đang tải ...</span>
             </button>
           )}
