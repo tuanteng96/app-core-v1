@@ -650,3 +650,47 @@
         font-size: 20px;
     }
 }
+
+.item-checkbox {
+    position: relative;
+    input {
+        display: none;
+        &:checked~label {
+            &:before {
+                opacity: 1;
+            }
+        }
+    }
+    label {
+        font-size: 14px;
+        font-weight: 500;
+        position: relative;
+        padding-left: 25px;
+        margin-bottom: 10px;
+        &:after {
+            position: absolute;
+            border: 1px solid #ddd;
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+            content: "";
+            left: 0;
+            top: 0px;
+            z-index: 1;
+        }
+        &:before {
+            position: absolute;
+            opacity: 0;
+            content: '\2714';
+            box-sizing: border-box;
+            background: transparent;
+            color: $color-app;
+            font-size: 14px;
+            line-height: 1;
+            top: 3px;
+            left: 4px;
+            z-index: 2;
+            transition: border-color 0.2s ease-in-out, opacity 0.2s ease-in-out;
+        }
+    }
+}

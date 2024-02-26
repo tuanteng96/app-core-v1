@@ -442,7 +442,7 @@ export default class employeeStatistical extends React.Component {
                       </div>
                     </div>
                     <div className="tbody">
-                      {dataSalary.THU_GIU_LUONG &&
+                      {dataSalary?.THU_GIU_LUONG &&
                         dataSalary.THU_GIU_LUONG.map((item, idx) => (
                           <div className="tr" key={idx}>
                             <div className="td w-1">{idx + 1}</div>

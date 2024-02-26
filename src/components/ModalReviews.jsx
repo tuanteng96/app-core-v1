@@ -7,6 +7,68 @@ import { checkAvt2 } from "../constants/format";
 import { toast } from "react-toastify";
 import moment from "moment";
 
+let ItemsIpad = [
+  {
+    value: 1,
+    desc: "Rất không hài lòng",
+    feedbacks: [
+      "Thất vọng về thái độ phục vụ của nhân viên",
+      "Chất lượng dịch vụ kém",
+      "Trang thiết bị nghèo nàn lạc hậu",
+      "Không gian và lối kiến trúc mờ nhạt, không ấn tượng",
+      "Chất lượng vệ sinh không đạt yêu cầu",
+    ],
+    feedSelected: [],
+  },
+  {
+    value: 2,
+    desc: "Chưa được tốt",
+    feedbacks: [
+      "Thất vọng về thái độ phục vụ của nhân viên",
+      "Chất lượng dịch vụ kém",
+      "Trang thiết bị nghèo nàn lạc hậu",
+      "Không gian và lối kiến trúc mờ nhạt, không ấn tượng",
+      "Chất lượng vệ sinh không đạt yêu cầu",
+    ],
+    feedSelected: [],
+  },
+  {
+    value: 3,
+    desc: "Bình thường",
+    feedbacks: [
+      "Thái độ phục vụ của nhân viên không thân thiện",
+      "Chất lượng dịch vụ ở mức trung bình",
+      "Trang thiết bị chưa đạt chuẩn",
+      "Không gian chưa đủ ấn tượng",
+      "Chất lượng vệ sinh chưa tốt",
+    ],
+    feedSelected: [],
+  },
+  {
+    value: 4,
+    desc: "Gần như hoàn hảo",
+    feedbacks: [
+      "Nhân viên phục vụ thân thiện",
+      "Trang thiết bị hiện đại",
+      "Thời gian chờ phục vụ hơi lâu",
+      "Trang thiết bị hiện đại",
+      "Không gian đẹp, tạo cảm giác thoải mái",
+    ],
+    feedSelected: [],
+  },
+  {
+    value: 5,
+    desc: "Hoàn hảo",
+    feedbacks: [
+      "Thái độ nhân viên rất tốt",
+      "Rất hài lòng về chất lượng dịch vụ",
+      "Phục vụ khách hàng siêu nhanh không phải chờ đợi",
+      "Không gian thoáng đẹp, kiến trúc thu hút",
+      "Rất hài lòng và sẽ quay trở lại cùng bạn bè",
+    ],
+  },
+];
+
 export default class ModalReviews extends React.Component {
   constructor() {
     super();
@@ -15,6 +77,8 @@ export default class ModalReviews extends React.Component {
       arrReview: [],
       Rate: null,
       RateNote: "",
+      Feedbacks: null,
+      FeedbacksSelected: [],
     };
   }
   componentDidMount() {
@@ -51,8 +115,24 @@ export default class ModalReviews extends React.Component {
   changeRating = (event) => {
     const target = event.target;
     const value = target.value;
+    let fbs = null;
+    let IpadConfigItems =
+      window.GlobalConfig?.IPAD?.Items &&
+      window.GlobalConfig?.IPAD?.Items.length > 0
+        ? window.GlobalConfig?.IPAD?.Items
+        : ItemsIpad;
+    if (IpadConfigItems && IpadConfigItems.length > 0) {
+      let index = IpadConfigItems.findIndex(
+        (item) => item.value === Number(value)
+      );
+      if (index > -1) {
+        fbs = IpadConfigItems[index].feedbacks;
+      }
+    }
     this.setState({
       Rate: value,
+      Feedbacks: fbs,
+      FeedbacksSelected: [],
     });
   };
 
@@ -65,12 +145,18 @@ export default class ModalReviews extends React.Component {
   };
 
   postReviews = () => {
-    const { arrReview, Rate, RateNote, memberid } = this.state;
+    const { arrReview, Rate, RateNote, memberid, FeedbacksSelected } =
+      this.state;
+    let Note = RateNote ? [RateNote] : [];
+    if (FeedbacksSelected && FeedbacksSelected.length > 0) {
+      Note = [...Note, ...FeedbacksSelected];
+    }
     const data = arrReview.map((x) => ({
       ID: x.os.ID,
       Rate,
-      RateNote,
+      RateNote: Note.toString(),
     }));
+
     var bodyFormData = new FormData();
     bodyFormData.append("rates", JSON.stringify(data));
 
@@ -96,8 +182,18 @@ export default class ModalReviews extends React.Component {
     this.$f7.views.main.router.navigate(`/rating/`);
   };
 
+  handleCheck = (event) => {
+    var updatedList = [...this.state.FeedbacksSelected];
+    if (event.target.checked) {
+      updatedList = [...updatedList, event.target.value];
+    } else {
+      updatedList.splice(updatedList.indexOf(event.target.value), 1);
+    }
+    this.setState({ FeedbacksSelected: updatedList });
+  };
+
   render() {
-    const { isReview, arrReview } = this.state;
+    const { isReview, arrReview, Feedbacks, FeedbacksSelected } = this.state;
     return (
       <Sheet
         className="sheet-reviews-service"
@@ -119,7 +215,13 @@ export default class ModalReviews extends React.Component {
               )
             </div>
           </div>
-          <div className="content">
+          <div
+            className="content"
+            style={{
+              maxHeight: "60vh",
+              overflow: "auto",
+            }}
+          >
             <div className="content-box">
               <div className="content-box__user text-center px-15px">
                 {/* <div className="avatar">
@@ -474,6 +576,33 @@ export default class ModalReviews extends React.Component {
                   </div>
                 </div>
               </div>
+              {window.GlobalConfig?.APP?.isRateNotetickchon &&
+                Feedbacks &&
+                Feedbacks.length > 0 && (
+                  <div className="bg-white mt-3px p-15px">
+                    {Feedbacks.map((item, index) => (
+                      <div key={index}>
+                        <div className="item-checkbox d--f">
+                          <input
+                            id={`fb-${index}`}
+                            type="checkbox"
+                            name="isPublic"
+                            value={item}
+                            checked={
+                              FeedbacksSelected &&
+                              FeedbacksSelected.includes(item)
+                            }
+                            onChange={this.handleCheck}
+                          />
+                          <label htmlFor={`fb-${index}`}>
+                            <span>{item}</span>
+                          </label>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
               {window.GlobalConfig?.APP?.isRateNote && (
                 <div className="content-box__text">
                   <textarea
@@ -484,21 +613,20 @@ export default class ModalReviews extends React.Component {
                   ></textarea>
                 </div>
               )}
-
-              <div className="content-box__btn pt-15px">
-                <button
-                  type="button"
-                  className="btn-reviews"
-                  onClick={() => this.postReviews()}
-                >
-                  Gửi đánh giá
-                </button>
-                <div className="text-center mt-10px py-5px">
-                  <Link onClick={() => this.viewRating()}>
-                    Đánh giá theo từng dịch vụ
-                  </Link>
-                </div>
-              </div>
+            </div>
+          </div>
+          <div className="content-box__btn pt-15px">
+            <button
+              type="button"
+              className="btn-reviews"
+              onClick={() => this.postReviews()}
+            >
+              Gửi đánh giá
+            </button>
+            <div className="text-center mt-10px py-5px">
+              <Link onClick={() => this.viewRating()}>
+                Đánh giá theo từng dịch vụ
+              </Link>
             </div>
           </div>
         </div>

@@ -98,9 +98,13 @@ export default class extends React.Component {
               position: toast.POSITION.TOP_LEFT,
               autoClose: 3000,
             });
-            this.$f7router.navigate(
-              "/pay-success/" + data.order.ID + `/?money=${data.order.ToPay}`
-            );
+            if (data.order.ToPay > 0) {
+              this.$f7router.navigate(
+                "/pay-success/" + data.order.ID + `/?money=${data.order.ToPay}`
+              );
+            } else {
+              this.$f7router.navigate("/order/");
+            }
           }
           self.$f7.preloader.hide();
         }
