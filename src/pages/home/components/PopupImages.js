@@ -19,7 +19,7 @@ function PopupImages({ f7 }) {
 
   const onClose = () => {
     setVisible(false);
-    window.hasPopup = true;
+    // window.hasPopup = true;
   };
 
   const handleUrl = (item) => {

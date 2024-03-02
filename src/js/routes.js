@@ -53,6 +53,8 @@ import ReportKGPage from "../pages/report-kg/ReportKG";
 // Thống kê
 import ReportPage from "../pages/report/index";
 
+import WheelSpinPage from "../pages/user/WheelSpin.jsx";
+
 // Pos bán hàng
 import PosPage from "../pages/pos/Pos";
 
@@ -75,8 +77,8 @@ const checkRouterHome = () => {
   const infoUser = getUser();
 
   const ACC_TYPE = infoUser && infoUser.acc_type;
-  if(window?.GlobalConfig?.APP?.OnlyStaff && !infoUser) {
-    return LoginPage
+  if (window?.GlobalConfig?.APP?.OnlyStaff && !infoUser) {
+    return LoginPage;
   }
   if (ACC_TYPE === "M") {
     return HomeIndex;
@@ -162,6 +164,12 @@ var routes = [
     path: "/pay-success/:orderID",
     component: ShopPaySuccessPage,
   },
+  {
+    path: "/vong-quay/",
+    component: WheelSpinPage,
+    beforeEnter: checkAuth,
+  },
+
   {
     path: "/shop/:cateId",
     async(routeTo, routeFrom, resolve, reject) {
