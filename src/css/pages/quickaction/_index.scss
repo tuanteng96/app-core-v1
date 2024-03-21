@@ -3,6 +3,10 @@
     right: 12px;
     bottom: calc(var(--f7-toolbar-height) + var(--f7-safe-area-bottom) + 15px);
     z-index: 100005;
+    .btn-quick-img {
+        display: flex;
+        transition: transform 150ms ease;
+    }
     &.open {
         .page-quick-list {
             visibility: visible;
@@ -24,6 +28,9 @@
                 .times {
                     opacity: 1;
                 }
+            }
+            .btn-quick-img {
+                transform: translateX(-53px);
             }
         }
     }
@@ -54,7 +61,7 @@
         }
     }
     .call {
-        background: linear-gradient( 0deg, #00B100, #09db09);
+        background: linear-gradient( 0deg, $color-app, $color-app);
         position: relative;
         &:before {
             position: absolute;
@@ -62,7 +69,7 @@
             z-index: -1;
             top: -12px;
             left: -12px;
-            background: linear-gradient( 0deg, #00B100, #09db09);
+            background: linear-gradient( 0deg, $color-app, $color-app);
             width: 72px;
             height: 72px;
             border-radius: 100%;

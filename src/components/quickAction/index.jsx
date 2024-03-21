@@ -60,7 +60,14 @@ export default class quickAction extends React.Component {
               className="item call"
               onClick={() => this.handleCall(phone && phone)}
             >
-              <FaWhatsapp />
+              {window?.GlobalConfig?.APP?.isIconSocial ? (
+                <img
+                  className="icon-social w-100 h-100 rounded-circle"
+                  src={SERVER_APP + "/app2021/images/icon-social/phone.png"}
+                />
+              ) : (
+                <FaWhatsapp />
+              )}
             </div>
           )}
           {mess && (
@@ -90,20 +97,40 @@ export default class quickAction extends React.Component {
                 </Link>
               ) : (
                 <div className="item" onClick={() => this.handleLink(zalo)}>
-                  <img
-                    src={SERVER_APP + ZaloIcon}
-                    style={{ borderRadius: "100%" }}
-                  />
+                  {window?.GlobalConfig?.APP?.isIconSocial ? (
+                    <img
+                      className="icon-social w-100 h-100 rounded-circle"
+                      src={SERVER_APP + "/app2021/images/icon-social/zalo.png"}
+                    />
+                  ) : (
+                    <img
+                      src={SERVER_APP + ZaloIcon}
+                      style={{ borderRadius: "100%" }}
+                    />
+                  )}
                 </div>
               )}
             </>
           )}
         </div>
         <div className="btn-quick" onClick={this.onOpen}>
-          <div className="btn-quick-trans">
-            <FaWhatsapp />
-            <i className="las la-times times"></i>
-          </div>
+          {window?.GlobalConfig?.APP?.isIconSocial ? (
+            <div className="btn-quick-img">
+              <img
+                className="icon-social w-100 h-100 rounded-circle"
+                src={SERVER_APP + "/app2021/images/icon-social/quick.png"}
+              />
+              <img
+                className="icon-social w-100 h-100 rounded-circle"
+                src={SERVER_APP + "/app2021/images/icon-social/close.png"}
+              />
+            </div>
+          ) : (
+            <div className="btn-quick-trans">
+              <FaWhatsapp />
+              <i className="las la-times times"></i>
+            </div>
+          )}
         </div>
       </div>
     );
