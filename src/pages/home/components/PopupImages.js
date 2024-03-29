@@ -3,6 +3,9 @@ import { createPortal } from "react-dom";
 import NewsDataService from "../../../service/news.service";
 import { SERVER_APP } from "../../../constants/config";
 import { getUser } from "../../../constants/user";
+import userService from "../../../service/user.service";
+
+window.PopUpVQMM = localStorage.getItem("_vqmm") || true;
 
 function PopupImages({ f7 }) {
   const [data, setData] = useState(null);
@@ -10,9 +13,33 @@ function PopupImages({ f7 }) {
 
   useEffect(() => {
     NewsDataService.getBannerName("APP.POPUP").then(({ data }) => {
-      if (data && data.data && data.data.length > 0) {
-        setData(data.data[0]);
-        setVisible(true);
+      if (window?.GlobalConfig?.vong_quay_may_man) {
+        if (data && data.data && data.data.length > 0) {
+          if (getUser() && window.PopUpVQMM) {
+            let { ID } = getUser();
+            let res = data.data[0];
+            userService
+              .checkAuthenVQMM({
+                Title: "",
+                MemberID: ID || "",
+              })
+              .then(({ data }) => {
+                setData(res);
+                if (!data?.contact) {
+                  setData(res);
+                  setVisible(true);
+                } else {
+                  localStorage.setItem("_vqmm", false);
+                }
+              });
+          }
+        }
+      } else {
+        if (data && data.data && data.data.length > 0) {
+          setData(data.data[0]);
+          setVisible(true);
+          localStorage.removeItem("_vqmm")
+        }
       }
     });
   }, []);

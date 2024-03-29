@@ -175,6 +175,9 @@ class UserService {
   existPhone(phone) {
     return http.get(`/api/gl/select2?cmd=member&q=${phone}&CurrentStockID=&member=`)
   }
+  checkAuthenVQMM(body) {
+    return http.post(`/api/v3/contact23@checkContact`, JSON.stringify(body))
+  }
 }
 
 export default new UserService();
